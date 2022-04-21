@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TangerineRatioInfoAttribute
+    <title>Class Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TangerineRatioInfoAttribute
+    <meta name="title" content="Class Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,10 +78,10 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.TangerineRatioInfoAttribute">
+            <article class="content wrap" id="_content" data-uid="Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute">
   
   
-  <h1 id="Lime_TangerineRatioInfoAttribute" data-uid="Lime.TangerineRatioInfoAttribute" class="text-break">Class TangerineRatioInfoAttribute
+  <h1 id="Lime_Validation_EnsureOnlyOneAnimatorPerPropertyAttribute" data-uid="Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute" class="text-break">Class Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
@@ -89,15 +89,15 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">System.Attribute</span></div>
-    <div class="level2"><a class="xref" href="Lime.TangerineValidationAttribute.html">TangerineValidationAttribute</a></div>
-    <div class="level3"><a class="xref" href="Lime.TangerineTextureInfoAttribute.html">TangerineTextureInfoAttribute</a></div>
-    <div class="level4"><span class="xref">TangerineRatioInfoAttribute</span></div>
+    <div class="level2"><span class="xref">Validation.EnsureOnlyOneAnimatorPerPropertyAttribute</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator</a>&lt;<a class="xref" href="Lime.AnimatorList.html">AnimatorList</a>&gt;</div>
+    <div><a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_IsValid_System_Object_System_Object_System_String__">TangerineTextureInfoAttribute.IsValid(Object, Object, String)</a>
-    </div>
     <div>
       <span class="xref">System.Attribute.Equals(System.Object)</span>
     </div>
@@ -227,50 +227,21 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_TangerineRatioInfoAttribute_syntax">Syntax</h5>
+  <h5 id="Lime_Validation_EnsureOnlyOneAnimatorPerPropertyAttribute_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TangerineRatioInfoAttribute : TangerineTextureInfoAttribute</code></pre>
+    <pre><code class="lang-csharp hljs">public class EnsureOnlyOneAnimatorPerPropertyAttribute : Attribute, Validation.IValidator&lt;AnimatorList&gt;, Validation.IValidator</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="Lime_TangerineRatioInfoAttribute__ctor_" data-uid="Lime.TangerineRatioInfoAttribute.#ctor*"></a>
-  <h4 id="Lime_TangerineRatioInfoAttribute__ctor_System_Type___" data-uid="Lime.TangerineRatioInfoAttribute.#ctor(System.Type[])">TangerineRatioInfoAttribute(Type[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TangerineRatioInfoAttribute(params Type[] validatableTypes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Type</span>[]</td>
-        <td><span class="parametername">validatableTypes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   
   
-  <a id="Lime_TangerineRatioInfoAttribute_Validate_" data-uid="Lime.TangerineRatioInfoAttribute.Validate*"></a>
-  <h4 id="Lime_TangerineRatioInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__" data-uid="Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)">Validate(ITexture, Object, out String)</h4>
+  <a id="Lime_Validation_EnsureOnlyOneAnimatorPerPropertyAttribute_Validate_" data-uid="Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate*"></a>
+  <h4 id="Lime_Validation_EnsureOnlyOneAnimatorPerPropertyAttribute_Validate_Lime_AnimatorList_" data-uid="Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate(Lime.AnimatorList)">Validate(AnimatorList)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override ValidationResult Validate(ITexture texture, object value, out string message)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;(Validation.Result Result, string Message)&gt; Validate(AnimatorList animators)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -283,18 +254,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">value</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">message</span></td>
+        <td><a class="xref" href="Lime.AnimatorList.html">AnimatorList</a></td>
+        <td><span class="parametername">animators</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -309,13 +270,18 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ValidationResult.html">ValidationResult</a></td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<a class="xref" href="Lime.Validation.Result.html">Validation.Result</a>, <span class="xref">System.String</span>&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__">TangerineTextureInfoAttribute.Validate(ITexture, Object, out String)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a>
+  </div>
 </article>
           </div>
           

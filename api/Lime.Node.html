@@ -462,7 +462,7 @@ public double AnimationTime { get; set; }</code></pre>
   
   <a id="Lime_Node_Animators_" data-uid="Lime.Node.Animators*"></a>
   <h4 id="Lime_Node_Animators" data-uid="Lime.Node.Animators">Animators</h4>
-  <div class="markdown level1 summary"><p>Collections of Animators.</p>
+  <div class="markdown level1 summary"><p>Collection of Animators.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -629,6 +629,7 @@ the node children are replaced by the external scene nodes.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
+[Validation.DefaultCharset]
 public string ContentsPath { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -893,6 +894,7 @@ public FolderList Folders { get; }</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
+[Validation.DefaultCharset]
 public string Id { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -1262,7 +1264,7 @@ TODO: Add Add/RemovePresenter methods. Remove CompoundPresenter property and Pre
   <a id="Lime_Node_Tag_" data-uid="Lime.Node.Tag*"></a>
   <h4 id="Lime_Node_Tag" data-uid="Lime.Node.Tag">Tag</h4>
   <div class="markdown level1 summary"><p>Custom data. Can be set via Tangerine (this way it will contain path to external scene).
-Can't use obsolete attribute because of Yuzu Generated Binary Deserializers. But its obsolete, dont use it.
+Can't use obsolete attribute because of Yuzu Generated Binary Deserializers. But its obsolete, don't use it.
 Use Node Components instead.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1349,8 +1351,7 @@ it automatically runs the child animation from the given marker id.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[TangerineKeyframeColor(1)]
-public string Trigger { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string Trigger { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

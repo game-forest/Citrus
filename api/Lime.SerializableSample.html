@@ -94,6 +94,7 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
+    <div><a class="xref" href="Lime.ISerializableAsset.html">ISerializableAsset</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -132,7 +133,8 @@
   <h6><strong>Assembly</strong>: Lime.dll</h6>
   <h5 id="Lime_SerializableSample_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SerializableSample : Animable, IAnimable</code></pre>
+    <pre><code class="lang-csharp hljs">[SerializableAsset(new string[]{&quot;ogg&quot;, &quot;sound&quot;})]
+public class SerializableSample : Animable, IAnimable, ISerializableAsset</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -319,6 +321,9 @@ public string SerializationPath { get; set; }</code></pre>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="Lime.IAnimable.html">IAnimable</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.ISerializableAsset.html">ISerializableAsset</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>

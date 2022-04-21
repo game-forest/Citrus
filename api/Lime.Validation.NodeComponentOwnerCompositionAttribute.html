@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TangerineValidationAttribute
+    <title>Class Validation.NodeComponentOwnerCompositionAttribute
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TangerineValidationAttribute
+    <meta name="title" content="Class Validation.NodeComponentOwnerCompositionAttribute
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,25 +78,24 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.TangerineValidationAttribute">
+            <article class="content wrap" id="_content" data-uid="Lime.Validation.NodeComponentOwnerCompositionAttribute">
   
   
-  <h1 id="Lime_TangerineValidationAttribute" data-uid="Lime.TangerineValidationAttribute" class="text-break">Class TangerineValidationAttribute
+  <h1 id="Lime_Validation_NodeComponentOwnerCompositionAttribute" data-uid="Lime.Validation.NodeComponentOwnerCompositionAttribute" class="text-break">Class Validation.NodeComponentOwnerCompositionAttribute
   </h1>
-  <div class="markdown level0 summary"><p>Everything that leads to exception is Error, except if exception throw is
-influenced by something from outside (e.g. another property).
-Otherwise it's Warning.</p>
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">System.Attribute</span></div>
-    <div class="level2"><span class="xref">TangerineValidationAttribute</span></div>
-      <div class="level3"><a class="xref" href="Lime.TangerineDefaultCharsetAttribute.html">TangerineDefaultCharsetAttribute</a></div>
-      <div class="level3"><a class="xref" href="Lime.TangerineTextureInfoAttribute.html">TangerineTextureInfoAttribute</a></div>
-      <div class="level3"><a class="xref" href="Lime.TangerineTileImageTextureAttribute.html">TangerineTileImageTextureAttribute</a></div>
-      <div class="level3"><a class="xref" href="Lime.TangerineValidRangeAttribute.html">TangerineValidRangeAttribute</a></div>
+    <div class="level2"><span class="xref">Validation.NodeComponentOwnerCompositionAttribute</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lime.Validation.IPassThroughEnumerable.html">Validation.IPassThroughEnumerable</a></div>
+    <div><a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator</a>&lt;<a class="xref" href="Lime.NodeComponent.html">NodeComponent</a>&gt;</div>
+    <div><a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -229,21 +228,22 @@ Otherwise it's Warning.</p>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_TangerineValidationAttribute_syntax">Syntax</h5>
+  <h5 id="Lime_Validation_NodeComponentOwnerCompositionAttribute_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class TangerineValidationAttribute : Attribute</code></pre>
+    <pre><code class="lang-csharp hljs">[AttributeUsage(AttributeTargets.Property)]
+public class NodeComponentOwnerCompositionAttribute : Attribute, Validation.IPassThroughEnumerable, Validation.IValidator&lt;NodeComponent&gt;, Validation.IValidator</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   
   
-  <a id="Lime_TangerineValidationAttribute_IsValid_" data-uid="Lime.TangerineValidationAttribute.IsValid*"></a>
-  <h4 id="Lime_TangerineValidationAttribute_IsValid_System_Object_System_Object_System_String__" data-uid="Lime.TangerineValidationAttribute.IsValid(System.Object,System.Object,System.String@)">IsValid(Object, Object, out String)</h4>
+  <a id="Lime_Validation_NodeComponentOwnerCompositionAttribute_Validate_" data-uid="Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate*"></a>
+  <h4 id="Lime_Validation_NodeComponentOwnerCompositionAttribute_Validate_Lime_NodeComponent_" data-uid="Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate(Lime.NodeComponent)">Validate(NodeComponent)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract ValidationResult IsValid(object owner, object value, out string message)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;(Validation.Result Result, string Message)&gt; Validate(NodeComponent component)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -256,18 +256,8 @@ Otherwise it's Warning.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">owner</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">value</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">message</span></td>
+        <td><a class="xref" href="Lime.NodeComponent.html">NodeComponent</a></td>
+        <td><span class="parametername">component</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -282,11 +272,21 @@ Otherwise it's Warning.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ValidationResult.html">ValidationResult</a></td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<a class="xref" href="Lime.Validation.Result.html">Validation.Result</a>, <span class="xref">System.String</span>&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lime.Validation.IPassThroughEnumerable.html">Validation.IPassThroughEnumerable</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a>
+  </div>
 </article>
           </div>
           

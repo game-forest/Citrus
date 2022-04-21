@@ -222,7 +222,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animation.html",
-          "hash": "dNBglTVEohNIa3yWUKDEZ6ghFUB1er3SxcOS767PE04="
+          "hash": "JwpqlnhBl9dI+AtMKZ/Ny0v62uVrsZ+NOaosVCpgDfM="
         }
       },
       "is_incremental": false,
@@ -258,7 +258,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimationClip.html",
-          "hash": "GClofP4V56Ag0nx/I4JomrV0vQoCDr5JDg/1p/75G5Q="
+          "hash": "o8mZINtIxpCM51RvjxlPvAutSpDdFGLHrCRbnzl5eo4="
         }
       },
       "is_incremental": false,
@@ -366,7 +366,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimationTrack.html",
-          "hash": "FzwGfervJN5gZwDbO64t9gqSKixiCD7HlSiMl4xdCuo="
+          "hash": "4slZZ8AEKOHVqOgkXo6OvyoCIyWFvmEe527oQcSlW9M="
         }
       },
       "is_incremental": false,
@@ -618,7 +618,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Audio.html",
-          "hash": "sbNeU3IKpGcRYhD+QApuSdBjNLEMXG5iZynvKHhujt8="
+          "hash": "DfhtHJVjrtvkdMg4vZ8snAIcPhNuW6sFrGyVuAgYsvc="
         }
       },
       "is_incremental": false,
@@ -1374,7 +1374,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Color4.html",
-          "hash": "IT30/mL33mg9f/4Y/ZMFzU42yt1tHssI3lUdm1Tk/p4="
+          "hash": "IxZ1Dj5msnumFFpWcj59GDTsBXh1kWUn6UixkxkhPsM="
         }
       },
       "is_incremental": false,
@@ -3542,6 +3542,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.ISerializableAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.ISerializableAsset.html",
+          "hash": "+Cxalx9Typq9ojn2yCLFcZDsgetMIhWPWtOScLAlhdY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.ISoftKeyboard.yml",
       "output": {
         ".html": {
@@ -4230,7 +4242,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Marker.html",
-          "hash": "ZfeKBtZ5Y+DEG5XE1nequnutgDflWlgc1evF9gK4I9g="
+          "hash": "IG+MihhEHRP2HyhrOuauN1wx/o3oX8bEDU+N5urlN4k="
         }
       },
       "is_incremental": false,
@@ -5022,7 +5034,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Node.html",
-          "hash": "MacHr/LRJht8e67aNbeDXpjFD8060RsyctEYqj1VL10="
+          "hash": "WluZfdadoAsARDlwM0kgLt6uMOCqMJh3VWxNuz6ckmA="
         }
       },
       "is_incremental": false,
@@ -5226,7 +5238,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeReference-1.html",
-          "hash": "puGAqODzohEAMSzVPGD7AKtuOItTh5nkOrnKCAkhoMk="
+          "hash": "0gmFXMrba2pI9vqQQrZejrtil0MS2RPxqWqEHq5M1fk="
         }
       },
       "is_incremental": false,
@@ -5430,7 +5442,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleEmitter.html",
-          "hash": "V9medU1LKkTQMOrp+Jz9X1crx7s3167Ow/++jr5ca4s="
+          "hash": "0+f8cmu9Bep4zGL/JxCyqxFJxRS7WX8BPLfES7uk37Q="
         }
       },
       "is_incremental": false,
@@ -5478,7 +5490,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleModifier.html",
-          "hash": "wLa1OxW2Cm+pUp1ZedMBEEFL9XWoGyLqUwiAZlESOKQ="
+          "hash": "tt/uL8Xa4T4S897aNecd6nEtMfDNVtN3p/+UUp43bZk="
         }
       },
       "is_incremental": false,
@@ -5682,7 +5694,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PostProcessingComponent.html",
-          "hash": "80osZMZ2mp5Ni/YcsGyto1pxWnhRXOc0G0ErY0TXMLk="
+          "hash": "QoDsAONd4syrCYaPDCmZI2OJqci7Y/y1HmuP3SbCwfA="
         }
       },
       "is_incremental": false,
@@ -5779,6 +5791,18 @@
         ".html": {
           "relative_path": "api/Lime.PrimitiveTopology.html",
           "hash": "3DXd4BaMF0zKuDi5C370R9q2Szdt1zi/FdkuZy8r1g4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.PropertyAttributes-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.PropertyAttributes-1.html",
+          "hash": "cT89cL7GXAuNMYQyADMzUqVKtVkzw7Y2L8/FQF8QI+M="
         }
       },
       "is_incremental": false,
@@ -6350,6 +6374,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.SerializableAssetAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.SerializableAssetAttribute.html",
+          "hash": "OoHREjvbVhiCienIurhnsoEMOkEb+G9OAKSo/rhc6Dg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.SerializableCompoundFont.yml",
       "output": {
         ".html": {
@@ -6366,7 +6402,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SerializableFont.html",
-          "hash": "hSDHWs+PrUtexeZjzx9FfLtzq2Kiwvcz5YPB9Rsc+1g="
+          "hash": "6lOjCHjivi8Vitz0KtFvwAdUV2OLuGgjaklJRYxwrkI="
         }
       },
       "is_incremental": false,
@@ -6378,7 +6414,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SerializableSample.html",
-          "hash": "0b82oIL+tnBq4PQntwO/50CrOoRhV5hi4/wUMeWBLXM="
+          "hash": "3TBIUbIAHFveCAUg32w0dM0AVxfdrBS6PwvYvoFhn34="
         }
       },
       "is_incremental": false,
@@ -6390,7 +6426,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SerializableTexture.html",
-          "hash": "KrOg/11nQpXHYy3z56e2YCTwcW+UAL5O4gxJEZr+7vc="
+          "hash": "QaVvH18mXQL4vJQXaQh43ExpbnHzf2Fp8S8XxtUEyhY="
         }
       },
       "is_incremental": false,
@@ -6570,7 +6606,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ShadowParams.html",
-          "hash": "0c8fHSXN1qMVEHJapKQr5ccIpN+vocxtSxIPyYALtXQ="
+          "hash": "lF5Y5rhboKVNYqGQt7+4Wyyxhqi9RxgHlOt/eUgBjnk="
         }
       },
       "is_incremental": false,
@@ -6762,7 +6798,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SignedDistanceFieldComponent.html",
-          "hash": "HmI0zcngsFum4+m6MakRGHQtUw89dHxigGIG4SssYEQ="
+          "hash": "luIVK1OjeeWSdB7bdqz2+mD+g0TWcBDWn2Edm4Gxnzo="
         }
       },
       "is_incremental": false,
@@ -6774,7 +6810,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SimpleText.html",
-          "hash": "VBUl2kzrCHqBKVZO/P2y/5sAriGIATVFVlUBBenmGac="
+          "hash": "DahISGtUzVEeaWyy7nE4YQ2//vezHV4LtTMU0bCpegs="
         }
       },
       "is_incremental": false,
@@ -6918,7 +6954,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplineGear.html",
-          "hash": "TInfLt79LzUriqQXsO5CNOAt7dO+nwHo8RQ+TLHPcqA="
+          "hash": "aJAbgr9gZOlCGdre7gN8+kLPsNCJ6/nsiik6bEhisxY="
         }
       },
       "is_incremental": false,
@@ -6930,7 +6966,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplineGear3D.html",
-          "hash": "ghvWnT8ceZ5iEXRBTnNckiq7tMlsvEfvw3TcNY5oVjI="
+          "hash": "9BtA0HUa2hY/k0mnxoDHX2CmkGoeJYJ8pRQt5WzjpTA="
         }
       },
       "is_incremental": false,
@@ -7254,7 +7290,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TableLayout.html",
-          "hash": "5/1yitASQT/MmORn7RiRUxh76uTw4a1hDThbxUu3y4c="
+          "hash": "pfzhdqsDMCZvC/3iOJTccjiWgTlOAbcLmnGIdVU+Ejw="
         }
       },
       "is_incremental": false,
@@ -7315,18 +7351,6 @@
         ".html": {
           "relative_path": "api/Lime.TangerineCustomIconAttribute.html",
           "hash": "Xh8cKAOFPQO8wI73eRTLmoIUWI13K9BAccuQLMJpUzk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineDefaultCharsetAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineDefaultCharsetAttribute.html",
-          "hash": "/1wbuO/HV5r0mdXGsWp/qzf/H4QkaYYPCOuO5oAIqaw="
         }
       },
       "is_incremental": false,
@@ -7538,18 +7562,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineRatioInfoAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineRatioInfoAttribute.html",
-          "hash": "EatX4WBmLqjAw8F5aUod9tIK72wmDTJaFdsnPQZPRoA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineReadOnlyAttribute.yml",
       "output": {
         ".html": {
@@ -7598,47 +7610,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineSizeInfoAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineSizeInfoAttribute.html",
-          "hash": "vkbVm8mxksxEVpmr/cHMfWLs9FM1ABEr2pJCVsCFfSw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineStaticPropertyAttribute.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.TangerineStaticPropertyAttribute.html",
           "hash": "n5r5I+MNyzOXgW4YpmgxLh9dxKuwka6koPZIxs4WTdU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineTextureInfoAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineTextureInfoAttribute.html",
-          "hash": "6WU8ILlbw6GDlH8Uc21Uvk50RAZJuLERUGk3d5XBf8o="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineTileImageTextureAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineTileImageTextureAttribute.html",
-          "hash": "hz5vP5KRSRmhePjNdL0UkAqFJCqWXqDfUpRRGm2EIT8="
         }
       },
       "is_incremental": false,
@@ -7675,30 +7651,6 @@
         ".html": {
           "relative_path": "api/Lime.TangerineTooltipAttribute.html",
           "hash": "YMgLe9huKS2bfLV94M3Hj6O9X6Cr67HzJ5LKaN8rxVI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineValidRangeAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineValidRangeAttribute.html",
-          "hash": "t1OvdEapZndsZ0lAcLsYU9rkjaI1YdCmwhfn7R9XncU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.TangerineValidationAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.TangerineValidationAttribute.html",
-          "hash": "e2pPgfT+QPtX6W6bbfA3OZNWkF/sORBVcWXqRj45Kfs="
         }
       },
       "is_incremental": false,
@@ -7866,7 +7818,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TextStyle.html",
-          "hash": "KC2Ye4lNK0a38xtWHF92w4IdBw/p1Ul/u5xd78W8w6Q="
+          "hash": "t9gGiwBQrFRCakPob+6ptgo/nqH22I4s1Kf6J7Q4bLc="
         }
       },
       "is_incremental": false,
@@ -8394,7 +8346,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TiledImage.html",
-          "hash": "8ahNS6sjlCg/a5oCTk5QVOXsoeURF6ZWiC5AftKYJow="
+          "hash": "L4kLsnuSRp2go6KG8Lsl0Nd5UprSnHTNuzGx9I1xKmI="
         }
       },
       "is_incremental": false,
@@ -8550,7 +8502,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TwistComponent.html",
-          "hash": "gyunTg5S+USLsPCB2ltL95mfYRxoAhNhLfln/qcdtn4="
+          "hash": "5DIxKyCtEdRpVGdl7eEWGuP0rr9bLZpikAUfdhUaPCw="
         }
       },
       "is_incremental": false,
@@ -8574,7 +8526,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TwistMaterial.html",
-          "hash": "+k0Gp87djt9HZX/EFzJQyaamuzjBUmkaHW+B3ryPtCI="
+          "hash": "vi14/LXYN0Z4BFQjZM891SL2eoz7fKqcpse9G1GfdSU="
         }
       },
       "is_incremental": false,
@@ -8774,11 +8726,311 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.ValidationResult.yml",
+      "source_relative_path": "api/Lime.Validation.ContentsPathAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Lime.ValidationResult.html",
-          "hash": "GduL3+YBLblR97v3nP+XqTVpfz3rE7wnkPWjhPeG5Mo="
+          "relative_path": "api/Lime.Validation.ContentsPathAttribute.html",
+          "hash": "VzGGklgzkPf5KQ4kiyY28O5bYJrkV/8a51sYE/lRBtI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.DefaultCharsetAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.DefaultCharsetAttribute.html",
+          "hash": "ZaJwIuEQ694OYN4rhE1avR8vR0oX3taEGg9fH3m3HRA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.EnsureKeyframeListOrderAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.EnsureKeyframeListOrderAttribute.html",
+          "hash": "OIMISrUH5GcQfyH8a2rQCz0skYdPKz5OD9SIYDHeWQ0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.EnsureMarkerListOrderAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.EnsureMarkerListOrderAttribute.html",
+          "hash": "MkE29qQfQI7eBzVKnmKlZtgG/oXpwHGGpRAsyYhbPlk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.html",
+          "hash": "cC+JEoDh42gmr/S8bMS6cpJ3FsTt7GJ0woejJDK2ni4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.FilePathExistsAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.FilePathExistsAttribute.html",
+          "hash": "YgzLdfYQVFUxxMM6+hSl123s2xwsyOCPrkcUbMDikeY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IFixingValidator-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IFixingValidator-1.html",
+          "hash": "0mRFh4qWb+tZ0lMKHj8ePxfjpmKFCr1hHEGej89yb5k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IFixingValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IFixingValidator.html",
+          "hash": "ExlNP7vfhHMtr+1JexWoS2JRxTa9UAPO2my+if04vuE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IPassThroughEnumerable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IPassThroughEnumerable.html",
+          "hash": "QQNDrPI2AhoTM1kTZME35OwpWV9zTsnfbH1TyG/0qYY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IRequireOwner-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IRequireOwner-1.html",
+          "hash": "22DU9V/g8McdhK2y7sMLhPXkM6xu3oUuvcMv5DNfYJ8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IRequireOwner.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IRequireOwner.html",
+          "hash": "fYrIEyg+b8ZRXDqRav9B+uRABWFH/4wBUoG+4m3+rOo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IValidator-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IValidator-1.html",
+          "hash": "KD68n2Sph7Jg5GpysgsQine5jqpJY5Oa3WCaW3aGlW8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.IValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.IValidator.html",
+          "hash": "6A/6JSqUtGhstjuN8ap5GZiY7PGU/LOsmj7HFhiGLkA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.KeyframePropertyValuesAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.KeyframePropertyValuesAttribute.html",
+          "hash": "BYjJUdHXkSkXdt9w0Mxsce4Yey27h8V8R82Q5v2yJAs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.MatchRegexAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.MatchRegexAttribute.html",
+          "hash": "WVxG+zWBrHScPSpV8WfcoDsUx3IJwEWDa/iQ9F5PTZA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.NodeChildrenCompositionAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.NodeChildrenCompositionAttribute.html",
+          "hash": "3qRnyk0QACwMcIoqaxmpuhZSKTqUs1Xge8+jdXBbY6Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.NodeComponentOwnerCompositionAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.NodeComponentOwnerCompositionAttribute.html",
+          "hash": "J1q562zSmKh1nDk0dCeaooaEir9NSH2OdrYTNsUYSh8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.NodeParentCompositionAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.NodeParentCompositionAttribute.html",
+          "hash": "D7+6x/3eeqoPK2NfKl8pdBl93i6WnKuq4ETQViSzkEw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.RangeAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.RangeAttribute.html",
+          "hash": "968sh0BpSfQnJuNS0APKaSEttJjr3poUGhbU0X+8578="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.RatioInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.RatioInfoAttribute.html",
+          "hash": "Qe7/r1Wl9+d3UvxPGrAd0/+1+4/rUby1CfhZ9NgXUxw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.Result.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.Result.html",
+          "hash": "+H9b780prw8yycagx82Vopd9nh0YLSGKXmEfQgOynEQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.SerializableAssetExistsAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.SerializableAssetExistsAttribute.html",
+          "hash": "GesP7levujfqrEwC3KOBQGoy4lc3rfIQvvnIIBJBxRw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.SizeInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.SizeInfoAttribute.html",
+          "hash": "eSHeeYmscI+jiUteQwaXWVo3bhUBAHuFBz5rynGpI8o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.TextureInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.TextureInfoAttribute.html",
+          "hash": "lAdeuZz+H+SMVEGH98CZp7xfTNTlRHX9AFTtyiJGFfI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.TileImageTextureAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.TileImageTextureAttribute.html",
+          "hash": "WAStYVhvgWhiwMwoipA0M+9caeyP5QcwFcVNBFh+zLA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Validation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Validation.html",
+          "hash": "sR1IYMCWjWo7grTPYtFSWSMWPtOFsrXOfzIwWuvTdPI="
         }
       },
       "is_incremental": false,
@@ -9222,7 +9474,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Widget.html",
-          "hash": "zfwUrKp4x8Aloc58hxVgAJHuAiW1+YIokrtnfjhIxN8="
+          "hash": "SkX43iXD1CJa1Ra/NJG1VcYAqxiIfgx8nzHb0CCT1Dg="
         }
       },
       "is_incremental": false,
@@ -9486,7 +9738,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "NTpKQTbTo33lvUfLEPbFyNIGnLZ3Ao7/kU5yacrdTlk="
+          "hash": "KDbIlLf0Yp/totAxsJRRroQtan1XDiNODm+87n7il7k="
         }
       },
       "is_incremental": false,
@@ -9534,7 +9786,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "1Elji082GZAR3v0sRQiPQEV9QIAt/kPPWyRK8HuEbcA="
+          "hash": "4tJPfRk5rhAgq/xN9P6OKlwPljMqccIIC9sY2RRQ/1s="
         }
       },
       "is_incremental": false,
@@ -9669,7 +9921,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/assets/validation.ru.html",
-          "hash": "mYyYyjpjSaAOI+y6F2EqfbryOVAJSa+MZLyz2bv+b0s="
+          "hash": "oeubXnJhDkpSRyAuLcCbkOtoQvFEB3l1LNrJSKLVU5I="
         }
       },
       "is_incremental": false,
@@ -12103,7 +12355,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 793,
+          "total_file_count": 814,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

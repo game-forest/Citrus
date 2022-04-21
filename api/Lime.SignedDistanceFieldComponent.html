@@ -179,7 +179,7 @@ public class SignedDistanceFieldComponent : NodeComponent, IDisposable, IAnimabl
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineGroup(&quot;01. TopologyFace&quot;)]
-[TangerineValidRange(-30F, 30F)]
+[Validation.Range(-30F, 30F)]
 public float Dilate { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -396,7 +396,7 @@ public SignedDistanceFieldComponent.ShadowCollection Shadows { get; }</code></pr
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineGroup(&quot;01. TopologyFace&quot;)]
-[TangerineValidRange(0F, 40F)]
+[Validation.Range(0F, 40F)]
 public float Softness { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -424,7 +424,7 @@ public float Softness { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineGroup(&quot;02. Outline&quot;)]
-[TangerineValidRange(0F, 30F)]
+[Validation.Range(0F, 30F)]
 public float Thickness { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>

@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TangerineDefaultCharsetAttribute
+    <title>Class Validation.SizeInfoAttribute
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TangerineDefaultCharsetAttribute
+    <meta name="title" content="Class Validation.SizeInfoAttribute
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,10 +78,10 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.TangerineDefaultCharsetAttribute">
+            <article class="content wrap" id="_content" data-uid="Lime.Validation.SizeInfoAttribute">
   
   
-  <h1 id="Lime_TangerineDefaultCharsetAttribute" data-uid="Lime.TangerineDefaultCharsetAttribute" class="text-break">Class TangerineDefaultCharsetAttribute
+  <h1 id="Lime_Validation_SizeInfoAttribute" data-uid="Lime.Validation.SizeInfoAttribute" class="text-break">Class Validation.SizeInfoAttribute
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
@@ -89,11 +89,24 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">System.Attribute</span></div>
-    <div class="level2"><a class="xref" href="Lime.TangerineValidationAttribute.html">TangerineValidationAttribute</a></div>
-    <div class="level3"><span class="xref">TangerineDefaultCharsetAttribute</span></div>
+    <div class="level2"><a class="xref" href="Lime.Validation.TextureInfoAttribute.html">Validation.TextureInfoAttribute</a></div>
+    <div class="level3"><span class="xref">Validation.SizeInfoAttribute</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lime.Validation.IRequireOwner-1.html">Validation.IRequireOwner</a>&lt;<a class="xref" href="Lime.Node.html">Node</a>&gt;</div>
+    <div><a class="xref" href="Lime.Validation.IRequireOwner.html">Validation.IRequireOwner</a></div>
+    <div><a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator</a>&lt;<a class="xref" href="Lime.Vector2.html">Vector2</a>&gt;</div>
+    <div><a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Owner">Validation.TextureInfoAttribute.Owner</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Validate_Lime_Vector2_">Validation.TextureInfoAttribute.Validate(Vector2)</a>
+    </div>
     <div>
       <span class="xref">System.Attribute.Equals(System.Object)</span>
     </div>
@@ -223,22 +236,21 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_TangerineDefaultCharsetAttribute_syntax">Syntax</h5>
+  <h5 id="Lime_Validation_SizeInfoAttribute_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-public class TangerineDefaultCharsetAttribute : TangerineValidationAttribute</code></pre>
+    <pre><code class="lang-csharp hljs">public class SizeInfoAttribute : Validation.TextureInfoAttribute, Validation.IRequireOwner&lt;Node&gt;, Validation.IRequireOwner, Validation.IValidator&lt;Vector2&gt;, Validation.IValidator</code></pre>
   </div>
-  <h3 id="methods">Methods
+  <h3 id="constructors">Constructors
   </h3>
   
   
-  <a id="Lime_TangerineDefaultCharsetAttribute_IsValid_" data-uid="Lime.TangerineDefaultCharsetAttribute.IsValid*"></a>
-  <h4 id="Lime_TangerineDefaultCharsetAttribute_IsValid_System_Object_System_Object_System_String__" data-uid="Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.Object,System.String@)">IsValid(Object, Object, out String)</h4>
+  <a id="Lime_Validation_SizeInfoAttribute__ctor_" data-uid="Lime.Validation.SizeInfoAttribute.#ctor*"></a>
+  <h4 id="Lime_Validation_SizeInfoAttribute__ctor_System_Type___" data-uid="Lime.Validation.SizeInfoAttribute.#ctor(System.Type[])">SizeInfoAttribute(Type[])</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override ValidationResult IsValid(object owner, object value, out string message)</code></pre>
+    <pre><code class="lang-csharp hljs">public SizeInfoAttribute(params Type[] validatableTypes)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -251,18 +263,42 @@ public class TangerineDefaultCharsetAttribute : TangerineValidationAttribute</co
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">owner</span></td>
+        <td><span class="xref">System.Type</span>[]</td>
+        <td><span class="parametername">validatableTypes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="Lime_Validation_SizeInfoAttribute_Validate_" data-uid="Lime.Validation.SizeInfoAttribute.Validate*"></a>
+  <h4 id="Lime_Validation_SizeInfoAttribute_Validate_Lime_ITexture_Lime_Vector2_" data-uid="Lime.Validation.SizeInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)">Validate(ITexture, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override IEnumerable&lt;(Validation.Result, string)&gt; Validate(ITexture texture, Vector2 size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">value</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">message</span></td>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">size</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -277,60 +313,26 @@ public class TangerineDefaultCharsetAttribute : TangerineValidationAttribute</co
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ValidationResult.html">ValidationResult</a></td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<a class="xref" href="Lime.Validation.Result.html">Validation.Result</a>, <span class="xref">System.String</span>&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_System_Object_System_Object_System_String__">TangerineValidationAttribute.IsValid(Object, Object, out String)</a></div>
-  
-  
-  <a id="Lime_TangerineDefaultCharsetAttribute_IsValid_" data-uid="Lime.TangerineDefaultCharsetAttribute.IsValid*"></a>
-  <h4 id="Lime_TangerineDefaultCharsetAttribute_IsValid_System_String_System_String__" data-uid="Lime.TangerineDefaultCharsetAttribute.IsValid(System.String,System.String@)">IsValid(String, out String)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ValidationResult IsValid(string value, out string message)</code></pre>
+  <div><a class="xref" href="Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Validate_Lime_ITexture_Lime_Vector2_">Validation.TextureInfoAttribute.Validate(ITexture, Vector2)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lime.Validation.IRequireOwner-1.html">Validation.IRequireOwner&lt;T&gt;</a>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">value</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">message</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ValidationResult.html">ValidationResult</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  <div>
+      <a class="xref" href="Lime.Validation.IRequireOwner.html">Validation.IRequireOwner</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a>
+  </div>
 </article>
           </div>
           

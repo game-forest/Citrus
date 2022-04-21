@@ -225,7 +225,8 @@ public AnimationClipList Clips { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[YuzuMember]
+    <pre><code class="lang-csharp hljs">[Validation.DefaultCharset]
+[YuzuMember]
 [TangerineGroup(&quot;Track&quot;)]
 public string Id { get; set; }</code></pre>
   </div>
@@ -330,7 +331,7 @@ public TangerineFlags TangerineFlags { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineGroup(&quot;Track&quot;)]
-[TangerineValidRange(0F, 100F)]
+[Validation.Range(0F, 100F)]
 [TangerineKeyframeColor(1)]
 public float Weight { get; set; }</code></pre>
   </div>

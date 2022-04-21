@@ -30152,6 +30152,25 @@ references:
   isSpec: "True"
   fullName: Lime.IRenderer.WorldViewProjection
   nameWithType: IRenderer.WorldViewProjection
+- uid: Lime.ISerializableAsset
+  name: ISerializableAsset
+  href: api/Lime.ISerializableAsset.html
+  commentId: T:Lime.ISerializableAsset
+  fullName: Lime.ISerializableAsset
+  nameWithType: ISerializableAsset
+- uid: Lime.ISerializableAsset.SerializationPath
+  name: SerializationPath
+  href: api/Lime.ISerializableAsset.html#Lime_ISerializableAsset_SerializationPath
+  commentId: P:Lime.ISerializableAsset.SerializationPath
+  fullName: Lime.ISerializableAsset.SerializationPath
+  nameWithType: ISerializableAsset.SerializationPath
+- uid: Lime.ISerializableAsset.SerializationPath*
+  name: SerializationPath
+  href: api/Lime.ISerializableAsset.html#Lime_ISerializableAsset_SerializationPath_
+  commentId: Overload:Lime.ISerializableAsset.SerializationPath
+  isSpec: "True"
+  fullName: Lime.ISerializableAsset.SerializationPath
+  nameWithType: ISerializableAsset.SerializationPath
 - uid: Lime.ISoftKeyboard
   name: ISoftKeyboard
   href: api/Lime.ISoftKeyboard.html
@@ -51964,6 +51983,57 @@ references:
   commentId: F:Lime.PrimitiveTopology.TriangleStrip
   fullName: Lime.PrimitiveTopology.TriangleStrip
   nameWithType: PrimitiveTopology.TriangleStrip
+- uid: Lime.PropertyAttributes`1
+  name: PropertyAttributes<T>
+  href: api/Lime.PropertyAttributes-1.html
+  commentId: T:Lime.PropertyAttributes`1
+  name.vb: PropertyAttributes(Of T)
+  fullName: Lime.PropertyAttributes<T>
+  fullName.vb: Lime.PropertyAttributes(Of T)
+  nameWithType: PropertyAttributes<T>
+  nameWithType.vb: PropertyAttributes(Of T)
+- uid: Lime.PropertyAttributes`1.Get(System.Reflection.PropertyInfo,System.Boolean)
+  name: Get(PropertyInfo, Boolean)
+  href: api/Lime.PropertyAttributes-1.html#Lime_PropertyAttributes_1_Get_System_Reflection_PropertyInfo_System_Boolean_
+  commentId: M:Lime.PropertyAttributes`1.Get(System.Reflection.PropertyInfo,System.Boolean)
+  fullName: Lime.PropertyAttributes<T>.Get(System.Reflection.PropertyInfo, System.Boolean)
+  fullName.vb: Lime.PropertyAttributes(Of T).Get(System.Reflection.PropertyInfo, System.Boolean)
+  nameWithType: PropertyAttributes<T>.Get(PropertyInfo, Boolean)
+  nameWithType.vb: PropertyAttributes(Of T).Get(PropertyInfo, Boolean)
+- uid: Lime.PropertyAttributes`1.Get(System.Type,System.String,System.Boolean)
+  name: Get(Type, String, Boolean)
+  href: api/Lime.PropertyAttributes-1.html#Lime_PropertyAttributes_1_Get_System_Type_System_String_System_Boolean_
+  commentId: M:Lime.PropertyAttributes`1.Get(System.Type,System.String,System.Boolean)
+  fullName: Lime.PropertyAttributes<T>.Get(System.Type, System.String, System.Boolean)
+  fullName.vb: Lime.PropertyAttributes(Of T).Get(System.Type, System.String, System.Boolean)
+  nameWithType: PropertyAttributes<T>.Get(Type, String, Boolean)
+  nameWithType.vb: PropertyAttributes(Of T).Get(Type, String, Boolean)
+- uid: Lime.PropertyAttributes`1.Get*
+  name: Get
+  href: api/Lime.PropertyAttributes-1.html#Lime_PropertyAttributes_1_Get_
+  commentId: Overload:Lime.PropertyAttributes`1.Get
+  isSpec: "True"
+  fullName: Lime.PropertyAttributes<T>.Get
+  fullName.vb: Lime.PropertyAttributes(Of T).Get
+  nameWithType: PropertyAttributes<T>.Get
+  nameWithType.vb: PropertyAttributes(Of T).Get
+- uid: Lime.PropertyAttributes`1.GetAll(System.Type,System.String,System.Boolean)
+  name: GetAll(Type, String, Boolean)
+  href: api/Lime.PropertyAttributes-1.html#Lime_PropertyAttributes_1_GetAll_System_Type_System_String_System_Boolean_
+  commentId: M:Lime.PropertyAttributes`1.GetAll(System.Type,System.String,System.Boolean)
+  fullName: Lime.PropertyAttributes<T>.GetAll(System.Type, System.String, System.Boolean)
+  fullName.vb: Lime.PropertyAttributes(Of T).GetAll(System.Type, System.String, System.Boolean)
+  nameWithType: PropertyAttributes<T>.GetAll(Type, String, Boolean)
+  nameWithType.vb: PropertyAttributes(Of T).GetAll(Type, String, Boolean)
+- uid: Lime.PropertyAttributes`1.GetAll*
+  name: GetAll
+  href: api/Lime.PropertyAttributes-1.html#Lime_PropertyAttributes_1_GetAll_
+  commentId: Overload:Lime.PropertyAttributes`1.GetAll
+  isSpec: "True"
+  fullName: Lime.PropertyAttributes<T>.GetAll
+  fullName.vb: Lime.PropertyAttributes(Of T).GetAll
+  nameWithType: PropertyAttributes<T>.GetAll
+  nameWithType.vb: PropertyAttributes(Of T).GetAll
 - uid: Lime.Quadrangle
   name: Quadrangle
   href: api/Lime.Quadrangle.html
@@ -57560,6 +57630,41 @@ references:
   isSpec: "True"
   fullName: Lime.SelectionPresenter.PartialHitTest
   nameWithType: SelectionPresenter.PartialHitTest
+- uid: Lime.SerializableAssetAttribute
+  name: SerializableAssetAttribute
+  href: api/Lime.SerializableAssetAttribute.html
+  commentId: T:Lime.SerializableAssetAttribute
+  fullName: Lime.SerializableAssetAttribute
+  nameWithType: SerializableAssetAttribute
+- uid: Lime.SerializableAssetAttribute.#ctor(System.String[])
+  name: SerializableAssetAttribute(String[])
+  href: api/Lime.SerializableAssetAttribute.html#Lime_SerializableAssetAttribute__ctor_System_String___
+  commentId: M:Lime.SerializableAssetAttribute.#ctor(System.String[])
+  name.vb: SerializableAssetAttribute(String())
+  fullName: Lime.SerializableAssetAttribute.SerializableAssetAttribute(System.String[])
+  fullName.vb: Lime.SerializableAssetAttribute.SerializableAssetAttribute(System.String())
+  nameWithType: SerializableAssetAttribute.SerializableAssetAttribute(String[])
+  nameWithType.vb: SerializableAssetAttribute.SerializableAssetAttribute(String())
+- uid: Lime.SerializableAssetAttribute.#ctor*
+  name: SerializableAssetAttribute
+  href: api/Lime.SerializableAssetAttribute.html#Lime_SerializableAssetAttribute__ctor_
+  commentId: Overload:Lime.SerializableAssetAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.SerializableAssetAttribute.SerializableAssetAttribute
+  nameWithType: SerializableAssetAttribute.SerializableAssetAttribute
+- uid: Lime.SerializableAssetAttribute.Extensions
+  name: Extensions
+  href: api/Lime.SerializableAssetAttribute.html#Lime_SerializableAssetAttribute_Extensions
+  commentId: P:Lime.SerializableAssetAttribute.Extensions
+  fullName: Lime.SerializableAssetAttribute.Extensions
+  nameWithType: SerializableAssetAttribute.Extensions
+- uid: Lime.SerializableAssetAttribute.Extensions*
+  name: Extensions
+  href: api/Lime.SerializableAssetAttribute.html#Lime_SerializableAssetAttribute_Extensions_
+  commentId: Overload:Lime.SerializableAssetAttribute.Extensions
+  isSpec: "True"
+  fullName: Lime.SerializableAssetAttribute.Extensions
+  nameWithType: SerializableAssetAttribute.Extensions
 - uid: Lime.SerializableCompoundFont
   name: SerializableCompoundFont
   href: api/Lime.SerializableCompoundFont.html
@@ -57760,6 +57865,19 @@ references:
   isSpec: "True"
   fullName: Lime.SerializableFont.RoundCoordinates
   nameWithType: SerializableFont.RoundCoordinates
+- uid: Lime.SerializableFont.SerializationPath
+  name: SerializationPath
+  href: api/Lime.SerializableFont.html#Lime_SerializableFont_SerializationPath
+  commentId: P:Lime.SerializableFont.SerializationPath
+  fullName: Lime.SerializableFont.SerializationPath
+  nameWithType: SerializableFont.SerializationPath
+- uid: Lime.SerializableFont.SerializationPath*
+  name: SerializationPath
+  href: api/Lime.SerializableFont.html#Lime_SerializableFont_SerializationPath_
+  commentId: Overload:Lime.SerializableFont.SerializationPath
+  isSpec: "True"
+  fullName: Lime.SerializableFont.SerializationPath
+  nameWithType: SerializableFont.SerializationPath
 - uid: Lime.SerializableFont.Spacing
   name: Spacing
   href: api/Lime.SerializableFont.html#Lime_SerializableFont_Spacing
@@ -63968,37 +64086,6 @@ references:
   isSpec: "True"
   fullName: Lime.TangerineCustomIconAttribute.Priority
   nameWithType: TangerineCustomIconAttribute.Priority
-- uid: Lime.TangerineDefaultCharsetAttribute
-  name: TangerineDefaultCharsetAttribute
-  href: api/Lime.TangerineDefaultCharsetAttribute.html
-  commentId: T:Lime.TangerineDefaultCharsetAttribute
-  fullName: Lime.TangerineDefaultCharsetAttribute
-  nameWithType: TangerineDefaultCharsetAttribute
-- uid: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.Object,System.String@)
-  name: IsValid(Object, Object, out String)
-  href: api/Lime.TangerineDefaultCharsetAttribute.html#Lime_TangerineDefaultCharsetAttribute_IsValid_System_Object_System_Object_System_String__
-  commentId: M:Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.Object,System.String@)
-  name.vb: IsValid(Object, Object, ByRef String)
-  fullName: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object, System.Object, out System.String)
-  fullName.vb: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object, System.Object, ByRef System.String)
-  nameWithType: TangerineDefaultCharsetAttribute.IsValid(Object, Object, out String)
-  nameWithType.vb: TangerineDefaultCharsetAttribute.IsValid(Object, Object, ByRef String)
-- uid: Lime.TangerineDefaultCharsetAttribute.IsValid(System.String,System.String@)
-  name: IsValid(String, out String)
-  href: api/Lime.TangerineDefaultCharsetAttribute.html#Lime_TangerineDefaultCharsetAttribute_IsValid_System_String_System_String__
-  commentId: M:Lime.TangerineDefaultCharsetAttribute.IsValid(System.String,System.String@)
-  name.vb: IsValid(String, ByRef String)
-  fullName: Lime.TangerineDefaultCharsetAttribute.IsValid(System.String, out System.String)
-  fullName.vb: Lime.TangerineDefaultCharsetAttribute.IsValid(System.String, ByRef System.String)
-  nameWithType: TangerineDefaultCharsetAttribute.IsValid(String, out String)
-  nameWithType.vb: TangerineDefaultCharsetAttribute.IsValid(String, ByRef String)
-- uid: Lime.TangerineDefaultCharsetAttribute.IsValid*
-  name: IsValid
-  href: api/Lime.TangerineDefaultCharsetAttribute.html#Lime_TangerineDefaultCharsetAttribute_IsValid_
-  commentId: Overload:Lime.TangerineDefaultCharsetAttribute.IsValid
-  isSpec: "True"
-  fullName: Lime.TangerineDefaultCharsetAttribute.IsValid
-  nameWithType: TangerineDefaultCharsetAttribute.IsValid
 - uid: Lime.TangerineDisplayNameAttribute
   name: TangerineDisplayNameAttribute
   href: api/Lime.TangerineDisplayNameAttribute.html
@@ -64575,44 +64662,6 @@ references:
   isSpec: "True"
   fullName: Lime.TangerinePropertyDefaultValueAttribute.GetValue
   nameWithType: TangerinePropertyDefaultValueAttribute.GetValue
-- uid: Lime.TangerineRatioInfoAttribute
-  name: TangerineRatioInfoAttribute
-  href: api/Lime.TangerineRatioInfoAttribute.html
-  commentId: T:Lime.TangerineRatioInfoAttribute
-  fullName: Lime.TangerineRatioInfoAttribute
-  nameWithType: TangerineRatioInfoAttribute
-- uid: Lime.TangerineRatioInfoAttribute.#ctor(System.Type[])
-  name: TangerineRatioInfoAttribute(Type[])
-  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute__ctor_System_Type___
-  commentId: M:Lime.TangerineRatioInfoAttribute.#ctor(System.Type[])
-  name.vb: TangerineRatioInfoAttribute(Type())
-  fullName: Lime.TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(System.Type[])
-  fullName.vb: Lime.TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(System.Type())
-  nameWithType: TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(Type[])
-  nameWithType.vb: TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(Type())
-- uid: Lime.TangerineRatioInfoAttribute.#ctor*
-  name: TangerineRatioInfoAttribute
-  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute__ctor_
-  commentId: Overload:Lime.TangerineRatioInfoAttribute.#ctor
-  isSpec: "True"
-  fullName: Lime.TangerineRatioInfoAttribute.TangerineRatioInfoAttribute
-  nameWithType: TangerineRatioInfoAttribute.TangerineRatioInfoAttribute
-- uid: Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
-  name: Validate(ITexture, Object, out String)
-  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__
-  commentId: M:Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
-  name.vb: Validate(ITexture, Object, ByRef String)
-  fullName: Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture, System.Object, out System.String)
-  fullName.vb: Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture, System.Object, ByRef System.String)
-  nameWithType: TangerineRatioInfoAttribute.Validate(ITexture, Object, out String)
-  nameWithType.vb: TangerineRatioInfoAttribute.Validate(ITexture, Object, ByRef String)
-- uid: Lime.TangerineRatioInfoAttribute.Validate*
-  name: Validate
-  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute_Validate_
-  commentId: Overload:Lime.TangerineRatioInfoAttribute.Validate
-  isSpec: "True"
-  fullName: Lime.TangerineRatioInfoAttribute.Validate
-  nameWithType: TangerineRatioInfoAttribute.Validate
 - uid: Lime.TangerineReadOnlyAttribute
   name: TangerineReadOnlyAttribute
   href: api/Lime.TangerineReadOnlyAttribute.html
@@ -64678,126 +64727,12 @@ references:
   commentId: F:Lime.TangerineRegisterNodeAttribute.Order
   fullName: Lime.TangerineRegisterNodeAttribute.Order
   nameWithType: TangerineRegisterNodeAttribute.Order
-- uid: Lime.TangerineSizeInfoAttribute
-  name: TangerineSizeInfoAttribute
-  href: api/Lime.TangerineSizeInfoAttribute.html
-  commentId: T:Lime.TangerineSizeInfoAttribute
-  fullName: Lime.TangerineSizeInfoAttribute
-  nameWithType: TangerineSizeInfoAttribute
-- uid: Lime.TangerineSizeInfoAttribute.#ctor(System.Type[])
-  name: TangerineSizeInfoAttribute(Type[])
-  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute__ctor_System_Type___
-  commentId: M:Lime.TangerineSizeInfoAttribute.#ctor(System.Type[])
-  name.vb: TangerineSizeInfoAttribute(Type())
-  fullName: Lime.TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(System.Type[])
-  fullName.vb: Lime.TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(System.Type())
-  nameWithType: TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(Type[])
-  nameWithType.vb: TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(Type())
-- uid: Lime.TangerineSizeInfoAttribute.#ctor*
-  name: TangerineSizeInfoAttribute
-  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute__ctor_
-  commentId: Overload:Lime.TangerineSizeInfoAttribute.#ctor
-  isSpec: "True"
-  fullName: Lime.TangerineSizeInfoAttribute.TangerineSizeInfoAttribute
-  nameWithType: TangerineSizeInfoAttribute.TangerineSizeInfoAttribute
-- uid: Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
-  name: Validate(ITexture, Object, out String)
-  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__
-  commentId: M:Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
-  name.vb: Validate(ITexture, Object, ByRef String)
-  fullName: Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture, System.Object, out System.String)
-  fullName.vb: Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture, System.Object, ByRef System.String)
-  nameWithType: TangerineSizeInfoAttribute.Validate(ITexture, Object, out String)
-  nameWithType.vb: TangerineSizeInfoAttribute.Validate(ITexture, Object, ByRef String)
-- uid: Lime.TangerineSizeInfoAttribute.Validate*
-  name: Validate
-  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute_Validate_
-  commentId: Overload:Lime.TangerineSizeInfoAttribute.Validate
-  isSpec: "True"
-  fullName: Lime.TangerineSizeInfoAttribute.Validate
-  nameWithType: TangerineSizeInfoAttribute.Validate
 - uid: Lime.TangerineStaticPropertyAttribute
   name: TangerineStaticPropertyAttribute
   href: api/Lime.TangerineStaticPropertyAttribute.html
   commentId: T:Lime.TangerineStaticPropertyAttribute
   fullName: Lime.TangerineStaticPropertyAttribute
   nameWithType: TangerineStaticPropertyAttribute
-- uid: Lime.TangerineTextureInfoAttribute
-  name: TangerineTextureInfoAttribute
-  href: api/Lime.TangerineTextureInfoAttribute.html
-  commentId: T:Lime.TangerineTextureInfoAttribute
-  fullName: Lime.TangerineTextureInfoAttribute
-  nameWithType: TangerineTextureInfoAttribute
-- uid: Lime.TangerineTextureInfoAttribute.#ctor(System.Type[])
-  name: TangerineTextureInfoAttribute(Type[])
-  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute__ctor_System_Type___
-  commentId: M:Lime.TangerineTextureInfoAttribute.#ctor(System.Type[])
-  name.vb: TangerineTextureInfoAttribute(Type())
-  fullName: Lime.TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(System.Type[])
-  fullName.vb: Lime.TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(System.Type())
-  nameWithType: TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(Type[])
-  nameWithType.vb: TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(Type())
-- uid: Lime.TangerineTextureInfoAttribute.#ctor*
-  name: TangerineTextureInfoAttribute
-  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute__ctor_
-  commentId: Overload:Lime.TangerineTextureInfoAttribute.#ctor
-  isSpec: "True"
-  fullName: Lime.TangerineTextureInfoAttribute.TangerineTextureInfoAttribute
-  nameWithType: TangerineTextureInfoAttribute.TangerineTextureInfoAttribute
-- uid: Lime.TangerineTextureInfoAttribute.IsValid(System.Object,System.Object,System.String@)
-  name: IsValid(Object, Object, out String)
-  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_IsValid_System_Object_System_Object_System_String__
-  commentId: M:Lime.TangerineTextureInfoAttribute.IsValid(System.Object,System.Object,System.String@)
-  name.vb: IsValid(Object, Object, ByRef String)
-  fullName: Lime.TangerineTextureInfoAttribute.IsValid(System.Object, System.Object, out System.String)
-  fullName.vb: Lime.TangerineTextureInfoAttribute.IsValid(System.Object, System.Object, ByRef System.String)
-  nameWithType: TangerineTextureInfoAttribute.IsValid(Object, Object, out String)
-  nameWithType.vb: TangerineTextureInfoAttribute.IsValid(Object, Object, ByRef String)
-- uid: Lime.TangerineTextureInfoAttribute.IsValid*
-  name: IsValid
-  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_IsValid_
-  commentId: Overload:Lime.TangerineTextureInfoAttribute.IsValid
-  isSpec: "True"
-  fullName: Lime.TangerineTextureInfoAttribute.IsValid
-  nameWithType: TangerineTextureInfoAttribute.IsValid
-- uid: Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
-  name: Validate(ITexture, Object, out String)
-  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__
-  commentId: M:Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
-  name.vb: Validate(ITexture, Object, ByRef String)
-  fullName: Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture, System.Object, out System.String)
-  fullName.vb: Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture, System.Object, ByRef System.String)
-  nameWithType: TangerineTextureInfoAttribute.Validate(ITexture, Object, out String)
-  nameWithType.vb: TangerineTextureInfoAttribute.Validate(ITexture, Object, ByRef String)
-- uid: Lime.TangerineTextureInfoAttribute.Validate*
-  name: Validate
-  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_Validate_
-  commentId: Overload:Lime.TangerineTextureInfoAttribute.Validate
-  isSpec: "True"
-  fullName: Lime.TangerineTextureInfoAttribute.Validate
-  nameWithType: TangerineTextureInfoAttribute.Validate
-- uid: Lime.TangerineTileImageTextureAttribute
-  name: TangerineTileImageTextureAttribute
-  href: api/Lime.TangerineTileImageTextureAttribute.html
-  commentId: T:Lime.TangerineTileImageTextureAttribute
-  fullName: Lime.TangerineTileImageTextureAttribute
-  nameWithType: TangerineTileImageTextureAttribute
-- uid: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object,System.Object,System.String@)
-  name: IsValid(Object, Object, out String)
-  href: api/Lime.TangerineTileImageTextureAttribute.html#Lime_TangerineTileImageTextureAttribute_IsValid_System_Object_System_Object_System_String__
-  commentId: M:Lime.TangerineTileImageTextureAttribute.IsValid(System.Object,System.Object,System.String@)
-  name.vb: IsValid(Object, Object, ByRef String)
-  fullName: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object, System.Object, out System.String)
-  fullName.vb: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object, System.Object, ByRef System.String)
-  nameWithType: TangerineTileImageTextureAttribute.IsValid(Object, Object, out String)
-  nameWithType.vb: TangerineTileImageTextureAttribute.IsValid(Object, Object, ByRef String)
-- uid: Lime.TangerineTileImageTextureAttribute.IsValid*
-  name: IsValid
-  href: api/Lime.TangerineTileImageTextureAttribute.html#Lime_TangerineTileImageTextureAttribute_IsValid_
-  commentId: Overload:Lime.TangerineTileImageTextureAttribute.IsValid
-  isSpec: "True"
-  fullName: Lime.TangerineTileImageTextureAttribute.IsValid
-  nameWithType: TangerineTileImageTextureAttribute.IsValid
 - uid: Lime.TangerineTooltipAttribute
   name: TangerineTooltipAttribute
   href: api/Lime.TangerineTooltipAttribute.html
@@ -64880,101 +64815,6 @@ references:
   isSpec: "True"
   fullName: Lime.TangerineToStringUsingMethodAttribute.GetText
   nameWithType: TangerineToStringUsingMethodAttribute.GetText
-- uid: Lime.TangerineValidationAttribute
-  name: TangerineValidationAttribute
-  href: api/Lime.TangerineValidationAttribute.html
-  commentId: T:Lime.TangerineValidationAttribute
-  fullName: Lime.TangerineValidationAttribute
-  nameWithType: TangerineValidationAttribute
-- uid: Lime.TangerineValidationAttribute.IsValid(System.Object,System.Object,System.String@)
-  name: IsValid(Object, Object, out String)
-  href: api/Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_System_Object_System_Object_System_String__
-  commentId: M:Lime.TangerineValidationAttribute.IsValid(System.Object,System.Object,System.String@)
-  name.vb: IsValid(Object, Object, ByRef String)
-  fullName: Lime.TangerineValidationAttribute.IsValid(System.Object, System.Object, out System.String)
-  fullName.vb: Lime.TangerineValidationAttribute.IsValid(System.Object, System.Object, ByRef System.String)
-  nameWithType: TangerineValidationAttribute.IsValid(Object, Object, out String)
-  nameWithType.vb: TangerineValidationAttribute.IsValid(Object, Object, ByRef String)
-- uid: Lime.TangerineValidationAttribute.IsValid*
-  name: IsValid
-  href: api/Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_
-  commentId: Overload:Lime.TangerineValidationAttribute.IsValid
-  isSpec: "True"
-  fullName: Lime.TangerineValidationAttribute.IsValid
-  nameWithType: TangerineValidationAttribute.IsValid
-- uid: Lime.TangerineValidRangeAttribute
-  name: TangerineValidRangeAttribute
-  href: api/Lime.TangerineValidRangeAttribute.html
-  commentId: T:Lime.TangerineValidRangeAttribute
-  fullName: Lime.TangerineValidRangeAttribute
-  nameWithType: TangerineValidRangeAttribute
-- uid: Lime.TangerineValidRangeAttribute.#ctor(System.Int32,System.Int32)
-  name: TangerineValidRangeAttribute(Int32, Int32)
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute__ctor_System_Int32_System_Int32_
-  commentId: M:Lime.TangerineValidRangeAttribute.#ctor(System.Int32,System.Int32)
-  fullName: Lime.TangerineValidRangeAttribute.TangerineValidRangeAttribute(System.Int32, System.Int32)
-  nameWithType: TangerineValidRangeAttribute.TangerineValidRangeAttribute(Int32, Int32)
-- uid: Lime.TangerineValidRangeAttribute.#ctor(System.Single,System.Single)
-  name: TangerineValidRangeAttribute(Single, Single)
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute__ctor_System_Single_System_Single_
-  commentId: M:Lime.TangerineValidRangeAttribute.#ctor(System.Single,System.Single)
-  fullName: Lime.TangerineValidRangeAttribute.TangerineValidRangeAttribute(System.Single, System.Single)
-  nameWithType: TangerineValidRangeAttribute.TangerineValidRangeAttribute(Single, Single)
-- uid: Lime.TangerineValidRangeAttribute.#ctor*
-  name: TangerineValidRangeAttribute
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute__ctor_
-  commentId: Overload:Lime.TangerineValidRangeAttribute.#ctor
-  isSpec: "True"
-  fullName: Lime.TangerineValidRangeAttribute.TangerineValidRangeAttribute
-  nameWithType: TangerineValidRangeAttribute.TangerineValidRangeAttribute
-- uid: Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.Object,System.String@)
-  name: IsValid(Object, Object, out String)
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_IsValid_System_Object_System_Object_System_String__
-  commentId: M:Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.Object,System.String@)
-  name.vb: IsValid(Object, Object, ByRef String)
-  fullName: Lime.TangerineValidRangeAttribute.IsValid(System.Object, System.Object, out System.String)
-  fullName.vb: Lime.TangerineValidRangeAttribute.IsValid(System.Object, System.Object, ByRef System.String)
-  nameWithType: TangerineValidRangeAttribute.IsValid(Object, Object, out String)
-  nameWithType.vb: TangerineValidRangeAttribute.IsValid(Object, Object, ByRef String)
-- uid: Lime.TangerineValidRangeAttribute.IsValid*
-  name: IsValid
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_IsValid_
-  commentId: Overload:Lime.TangerineValidRangeAttribute.IsValid
-  isSpec: "True"
-  fullName: Lime.TangerineValidRangeAttribute.IsValid
-  nameWithType: TangerineValidRangeAttribute.IsValid
-- uid: Lime.TangerineValidRangeAttribute.Maximum
-  name: Maximum
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_Maximum
-  commentId: P:Lime.TangerineValidRangeAttribute.Maximum
-  fullName: Lime.TangerineValidRangeAttribute.Maximum
-  nameWithType: TangerineValidRangeAttribute.Maximum
-- uid: Lime.TangerineValidRangeAttribute.Maximum*
-  name: Maximum
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_Maximum_
-  commentId: Overload:Lime.TangerineValidRangeAttribute.Maximum
-  isSpec: "True"
-  fullName: Lime.TangerineValidRangeAttribute.Maximum
-  nameWithType: TangerineValidRangeAttribute.Maximum
-- uid: Lime.TangerineValidRangeAttribute.Minimum
-  name: Minimum
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_Minimum
-  commentId: P:Lime.TangerineValidRangeAttribute.Minimum
-  fullName: Lime.TangerineValidRangeAttribute.Minimum
-  nameWithType: TangerineValidRangeAttribute.Minimum
-- uid: Lime.TangerineValidRangeAttribute.Minimum*
-  name: Minimum
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_Minimum_
-  commentId: Overload:Lime.TangerineValidRangeAttribute.Minimum
-  isSpec: "True"
-  fullName: Lime.TangerineValidRangeAttribute.Minimum
-  nameWithType: TangerineValidRangeAttribute.Minimum
-- uid: Lime.TangerineValidRangeAttribute.WarningLevel
-  name: WarningLevel
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_WarningLevel
-  commentId: F:Lime.TangerineValidRangeAttribute.WarningLevel
-  fullName: Lime.TangerineValidRangeAttribute.WarningLevel
-  nameWithType: TangerineValidRangeAttribute.WarningLevel
 - uid: Lime.TangerineVisualHintGroupAttribute
   name: TangerineVisualHintGroupAttribute
   href: api/Lime.TangerineVisualHintGroupAttribute.html
@@ -71125,36 +70965,773 @@ references:
   commentId: T:Lime.UpdatingDelegate
   fullName: Lime.UpdatingDelegate
   nameWithType: UpdatingDelegate
-- uid: Lime.ValidationResult
-  name: ValidationResult
-  href: api/Lime.ValidationResult.html
-  commentId: T:Lime.ValidationResult
-  fullName: Lime.ValidationResult
-  nameWithType: ValidationResult
-- uid: Lime.ValidationResult.Error
+- uid: Lime.Validation
+  name: Validation
+  href: api/Lime.Validation.html
+  commentId: T:Lime.Validation
+  fullName: Lime.Validation
+  nameWithType: Validation
+- uid: Lime.Validation.ContentsPathAttribute
+  name: Validation.ContentsPathAttribute
+  href: api/Lime.Validation.ContentsPathAttribute.html
+  commentId: T:Lime.Validation.ContentsPathAttribute
+  fullName: Lime.Validation.ContentsPathAttribute
+  nameWithType: Validation.ContentsPathAttribute
+- uid: Lime.Validation.ContentsPathAttribute.Validate(System.String)
+  name: Validate(String)
+  href: api/Lime.Validation.ContentsPathAttribute.html#Lime_Validation_ContentsPathAttribute_Validate_System_String_
+  commentId: M:Lime.Validation.ContentsPathAttribute.Validate(System.String)
+  fullName: Lime.Validation.ContentsPathAttribute.Validate(System.String)
+  nameWithType: Validation.ContentsPathAttribute.Validate(String)
+- uid: Lime.Validation.ContentsPathAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.ContentsPathAttribute.html#Lime_Validation_ContentsPathAttribute_Validate_
+  commentId: Overload:Lime.Validation.ContentsPathAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.ContentsPathAttribute.Validate
+  nameWithType: Validation.ContentsPathAttribute.Validate
+- uid: Lime.Validation.DefaultCharsetAttribute
+  name: Validation.DefaultCharsetAttribute
+  href: api/Lime.Validation.DefaultCharsetAttribute.html
+  commentId: T:Lime.Validation.DefaultCharsetAttribute
+  fullName: Lime.Validation.DefaultCharsetAttribute
+  nameWithType: Validation.DefaultCharsetAttribute
+- uid: Lime.Validation.DefaultCharsetAttribute.#ctor
+  name: DefaultCharsetAttribute()
+  href: api/Lime.Validation.DefaultCharsetAttribute.html#Lime_Validation_DefaultCharsetAttribute__ctor
+  commentId: M:Lime.Validation.DefaultCharsetAttribute.#ctor
+  fullName: Lime.Validation.DefaultCharsetAttribute.DefaultCharsetAttribute()
+  nameWithType: Validation.DefaultCharsetAttribute.DefaultCharsetAttribute()
+- uid: Lime.Validation.DefaultCharsetAttribute.#ctor*
+  name: DefaultCharsetAttribute
+  href: api/Lime.Validation.DefaultCharsetAttribute.html#Lime_Validation_DefaultCharsetAttribute__ctor_
+  commentId: Overload:Lime.Validation.DefaultCharsetAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.Validation.DefaultCharsetAttribute.DefaultCharsetAttribute
+  nameWithType: Validation.DefaultCharsetAttribute.DefaultCharsetAttribute
+- uid: Lime.Validation.DefaultCharsetAttribute.IsValid(System.String,System.String@)
+  name: IsValid(String, out String)
+  href: api/Lime.Validation.DefaultCharsetAttribute.html#Lime_Validation_DefaultCharsetAttribute_IsValid_System_String_System_String__
+  commentId: M:Lime.Validation.DefaultCharsetAttribute.IsValid(System.String,System.String@)
+  name.vb: IsValid(String, ByRef String)
+  fullName: Lime.Validation.DefaultCharsetAttribute.IsValid(System.String, out System.String)
+  fullName.vb: Lime.Validation.DefaultCharsetAttribute.IsValid(System.String, ByRef System.String)
+  nameWithType: Validation.DefaultCharsetAttribute.IsValid(String, out String)
+  nameWithType.vb: Validation.DefaultCharsetAttribute.IsValid(String, ByRef String)
+- uid: Lime.Validation.DefaultCharsetAttribute.IsValid*
+  name: IsValid
+  href: api/Lime.Validation.DefaultCharsetAttribute.html#Lime_Validation_DefaultCharsetAttribute_IsValid_
+  commentId: Overload:Lime.Validation.DefaultCharsetAttribute.IsValid
+  isSpec: "True"
+  fullName: Lime.Validation.DefaultCharsetAttribute.IsValid
+  nameWithType: Validation.DefaultCharsetAttribute.IsValid
+- uid: Lime.Validation.EnsureKeyframeListOrderAttribute
+  name: Validation.EnsureKeyframeListOrderAttribute
+  href: api/Lime.Validation.EnsureKeyframeListOrderAttribute.html
+  commentId: T:Lime.Validation.EnsureKeyframeListOrderAttribute
+  fullName: Lime.Validation.EnsureKeyframeListOrderAttribute
+  nameWithType: Validation.EnsureKeyframeListOrderAttribute
+- uid: Lime.Validation.EnsureKeyframeListOrderAttribute.Lime#Validation#IValidator#IsValueTypeCompatible(System.Object,System.Type)
+  name: Validation.IValidator.IsValueTypeCompatible(Object, Type)
+  href: api/Lime.Validation.EnsureKeyframeListOrderAttribute.html#Lime_Validation_EnsureKeyframeListOrderAttribute_Lime_Validation_IValidator_IsValueTypeCompatible_System_Object_System_Type_
+  commentId: M:Lime.Validation.EnsureKeyframeListOrderAttribute.Lime#Validation#IValidator#IsValueTypeCompatible(System.Object,System.Type)
+  name.vb: Lime.Validation.IValidator.IsValueTypeCompatible(Object, Type)
+  fullName: Lime.Validation.EnsureKeyframeListOrderAttribute.Lime.Validation.IValidator.IsValueTypeCompatible(System.Object, System.Type)
+  nameWithType: Validation.EnsureKeyframeListOrderAttribute.Validation.IValidator.IsValueTypeCompatible(Object, Type)
+  nameWithType.vb: Validation.EnsureKeyframeListOrderAttribute.Lime.Validation.IValidator.IsValueTypeCompatible(Object, Type)
+- uid: Lime.Validation.EnsureKeyframeListOrderAttribute.Lime#Validation#IValidator#IsValueTypeCompatible*
+  name: Validation.IValidator.IsValueTypeCompatible
+  href: api/Lime.Validation.EnsureKeyframeListOrderAttribute.html#Lime_Validation_EnsureKeyframeListOrderAttribute_Lime_Validation_IValidator_IsValueTypeCompatible_
+  commentId: Overload:Lime.Validation.EnsureKeyframeListOrderAttribute.Lime#Validation#IValidator#IsValueTypeCompatible
+  isSpec: "True"
+  name.vb: Lime.Validation.IValidator.IsValueTypeCompatible
+  fullName: Lime.Validation.EnsureKeyframeListOrderAttribute.Lime.Validation.IValidator.IsValueTypeCompatible
+  nameWithType: Validation.EnsureKeyframeListOrderAttribute.Validation.IValidator.IsValueTypeCompatible
+  nameWithType.vb: Validation.EnsureKeyframeListOrderAttribute.Lime.Validation.IValidator.IsValueTypeCompatible
+- uid: Lime.Validation.EnsureKeyframeListOrderAttribute.Validate(Lime.IKeyframeList)
+  name: Validate(IKeyframeList)
+  href: api/Lime.Validation.EnsureKeyframeListOrderAttribute.html#Lime_Validation_EnsureKeyframeListOrderAttribute_Validate_Lime_IKeyframeList_
+  commentId: M:Lime.Validation.EnsureKeyframeListOrderAttribute.Validate(Lime.IKeyframeList)
+  fullName: Lime.Validation.EnsureKeyframeListOrderAttribute.Validate(Lime.IKeyframeList)
+  nameWithType: Validation.EnsureKeyframeListOrderAttribute.Validate(IKeyframeList)
+- uid: Lime.Validation.EnsureKeyframeListOrderAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.EnsureKeyframeListOrderAttribute.html#Lime_Validation_EnsureKeyframeListOrderAttribute_Validate_
+  commentId: Overload:Lime.Validation.EnsureKeyframeListOrderAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.EnsureKeyframeListOrderAttribute.Validate
+  nameWithType: Validation.EnsureKeyframeListOrderAttribute.Validate
+- uid: Lime.Validation.EnsureMarkerListOrderAttribute
+  name: Validation.EnsureMarkerListOrderAttribute
+  href: api/Lime.Validation.EnsureMarkerListOrderAttribute.html
+  commentId: T:Lime.Validation.EnsureMarkerListOrderAttribute
+  fullName: Lime.Validation.EnsureMarkerListOrderAttribute
+  nameWithType: Validation.EnsureMarkerListOrderAttribute
+- uid: Lime.Validation.EnsureMarkerListOrderAttribute.Validate(Lime.MarkerList)
+  name: Validate(MarkerList)
+  href: api/Lime.Validation.EnsureMarkerListOrderAttribute.html#Lime_Validation_EnsureMarkerListOrderAttribute_Validate_Lime_MarkerList_
+  commentId: M:Lime.Validation.EnsureMarkerListOrderAttribute.Validate(Lime.MarkerList)
+  fullName: Lime.Validation.EnsureMarkerListOrderAttribute.Validate(Lime.MarkerList)
+  nameWithType: Validation.EnsureMarkerListOrderAttribute.Validate(MarkerList)
+- uid: Lime.Validation.EnsureMarkerListOrderAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.EnsureMarkerListOrderAttribute.html#Lime_Validation_EnsureMarkerListOrderAttribute_Validate_
+  commentId: Overload:Lime.Validation.EnsureMarkerListOrderAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.EnsureMarkerListOrderAttribute.Validate
+  nameWithType: Validation.EnsureMarkerListOrderAttribute.Validate
+- uid: Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
+  name: Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
+  href: api/Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.html
+  commentId: T:Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
+  fullName: Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
+  nameWithType: Validation.EnsureOnlyOneAnimatorPerPropertyAttribute
+- uid: Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate(Lime.AnimatorList)
+  name: Validate(AnimatorList)
+  href: api/Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.html#Lime_Validation_EnsureOnlyOneAnimatorPerPropertyAttribute_Validate_Lime_AnimatorList_
+  commentId: M:Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate(Lime.AnimatorList)
+  fullName: Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate(Lime.AnimatorList)
+  nameWithType: Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate(AnimatorList)
+- uid: Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.html#Lime_Validation_EnsureOnlyOneAnimatorPerPropertyAttribute_Validate_
+  commentId: Overload:Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate
+  nameWithType: Validation.EnsureOnlyOneAnimatorPerPropertyAttribute.Validate
+- uid: Lime.Validation.FilePathExistsAttribute
+  name: Validation.FilePathExistsAttribute
+  href: api/Lime.Validation.FilePathExistsAttribute.html
+  commentId: T:Lime.Validation.FilePathExistsAttribute
+  fullName: Lime.Validation.FilePathExistsAttribute
+  nameWithType: Validation.FilePathExistsAttribute
+- uid: Lime.Validation.FilePathExistsAttribute.Validate(System.String)
+  name: Validate(String)
+  href: api/Lime.Validation.FilePathExistsAttribute.html#Lime_Validation_FilePathExistsAttribute_Validate_System_String_
+  commentId: M:Lime.Validation.FilePathExistsAttribute.Validate(System.String)
+  fullName: Lime.Validation.FilePathExistsAttribute.Validate(System.String)
+  nameWithType: Validation.FilePathExistsAttribute.Validate(String)
+- uid: Lime.Validation.FilePathExistsAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.FilePathExistsAttribute.html#Lime_Validation_FilePathExistsAttribute_Validate_
+  commentId: Overload:Lime.Validation.FilePathExistsAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.FilePathExistsAttribute.Validate
+  nameWithType: Validation.FilePathExistsAttribute.Validate
+- uid: Lime.Validation.IFixingValidator
+  name: Validation.IFixingValidator
+  href: api/Lime.Validation.IFixingValidator.html
+  commentId: T:Lime.Validation.IFixingValidator
+  fullName: Lime.Validation.IFixingValidator
+  nameWithType: Validation.IFixingValidator
+- uid: Lime.Validation.IFixingValidator.TryFix(System.Object,System.Object@)
+  name: TryFix(Object, out Object)
+  href: api/Lime.Validation.IFixingValidator.html#Lime_Validation_IFixingValidator_TryFix_System_Object_System_Object__
+  commentId: M:Lime.Validation.IFixingValidator.TryFix(System.Object,System.Object@)
+  name.vb: TryFix(Object, ByRef Object)
+  fullName: Lime.Validation.IFixingValidator.TryFix(System.Object, out System.Object)
+  fullName.vb: Lime.Validation.IFixingValidator.TryFix(System.Object, ByRef System.Object)
+  nameWithType: Validation.IFixingValidator.TryFix(Object, out Object)
+  nameWithType.vb: Validation.IFixingValidator.TryFix(Object, ByRef Object)
+- uid: Lime.Validation.IFixingValidator.TryFix*
+  name: TryFix
+  href: api/Lime.Validation.IFixingValidator.html#Lime_Validation_IFixingValidator_TryFix_
+  commentId: Overload:Lime.Validation.IFixingValidator.TryFix
+  isSpec: "True"
+  fullName: Lime.Validation.IFixingValidator.TryFix
+  nameWithType: Validation.IFixingValidator.TryFix
+- uid: Lime.Validation.IFixingValidator`1
+  name: Validation.IFixingValidator<T>
+  href: api/Lime.Validation.IFixingValidator-1.html
+  commentId: T:Lime.Validation.IFixingValidator`1
+  name.vb: Validation.IFixingValidator(Of T)
+  fullName: Lime.Validation.IFixingValidator<T>
+  fullName.vb: Lime.Validation.IFixingValidator(Of T)
+  nameWithType: Validation.IFixingValidator<T>
+  nameWithType.vb: Validation.IFixingValidator(Of T)
+- uid: Lime.Validation.IFixingValidator`1.Lime#Validation#IFixingValidator#TryFix(System.Object,System.Object@)
+  name: Validation.IFixingValidator.TryFix(Object, out Object)
+  href: api/Lime.Validation.IFixingValidator-1.html#Lime_Validation_IFixingValidator_1_Lime_Validation_IFixingValidator_TryFix_System_Object_System_Object__
+  commentId: M:Lime.Validation.IFixingValidator`1.Lime#Validation#IFixingValidator#TryFix(System.Object,System.Object@)
+  name.vb: Lime.Validation.IFixingValidator.TryFix(Object, ByRef Object)
+  fullName: Lime.Validation.IFixingValidator<T>.Lime.Validation.IFixingValidator.TryFix(System.Object, out System.Object)
+  fullName.vb: Lime.Validation.IFixingValidator(Of T).Lime.Validation.IFixingValidator.TryFix(System.Object, ByRef System.Object)
+  nameWithType: Validation.IFixingValidator<T>.Validation.IFixingValidator.TryFix(Object, out Object)
+  nameWithType.vb: Validation.IFixingValidator(Of T).Lime.Validation.IFixingValidator.TryFix(Object, ByRef Object)
+- uid: Lime.Validation.IFixingValidator`1.Lime#Validation#IFixingValidator#TryFix*
+  name: Validation.IFixingValidator.TryFix
+  href: api/Lime.Validation.IFixingValidator-1.html#Lime_Validation_IFixingValidator_1_Lime_Validation_IFixingValidator_TryFix_
+  commentId: Overload:Lime.Validation.IFixingValidator`1.Lime#Validation#IFixingValidator#TryFix
+  isSpec: "True"
+  name.vb: Lime.Validation.IFixingValidator.TryFix
+  fullName: Lime.Validation.IFixingValidator<T>.Lime.Validation.IFixingValidator.TryFix
+  fullName.vb: Lime.Validation.IFixingValidator(Of T).Lime.Validation.IFixingValidator.TryFix
+  nameWithType: Validation.IFixingValidator<T>.Validation.IFixingValidator.TryFix
+  nameWithType.vb: Validation.IFixingValidator(Of T).Lime.Validation.IFixingValidator.TryFix
+- uid: Lime.Validation.IFixingValidator`1.TryFix(`0,`0@)
+  name: TryFix(T, out T)
+  href: api/Lime.Validation.IFixingValidator-1.html#Lime_Validation_IFixingValidator_1_TryFix__0__0__
+  commentId: M:Lime.Validation.IFixingValidator`1.TryFix(`0,`0@)
+  name.vb: TryFix(T, ByRef T)
+  fullName: Lime.Validation.IFixingValidator<T>.TryFix(T, out T)
+  fullName.vb: Lime.Validation.IFixingValidator(Of T).TryFix(T, ByRef T)
+  nameWithType: Validation.IFixingValidator<T>.TryFix(T, out T)
+  nameWithType.vb: Validation.IFixingValidator(Of T).TryFix(T, ByRef T)
+- uid: Lime.Validation.IFixingValidator`1.TryFix*
+  name: TryFix
+  href: api/Lime.Validation.IFixingValidator-1.html#Lime_Validation_IFixingValidator_1_TryFix_
+  commentId: Overload:Lime.Validation.IFixingValidator`1.TryFix
+  isSpec: "True"
+  fullName: Lime.Validation.IFixingValidator<T>.TryFix
+  fullName.vb: Lime.Validation.IFixingValidator(Of T).TryFix
+  nameWithType: Validation.IFixingValidator<T>.TryFix
+  nameWithType.vb: Validation.IFixingValidator(Of T).TryFix
+- uid: Lime.Validation.IPassThroughEnumerable
+  name: Validation.IPassThroughEnumerable
+  href: api/Lime.Validation.IPassThroughEnumerable.html
+  commentId: T:Lime.Validation.IPassThroughEnumerable
+  fullName: Lime.Validation.IPassThroughEnumerable
+  nameWithType: Validation.IPassThroughEnumerable
+- uid: Lime.Validation.IRequireOwner
+  name: Validation.IRequireOwner
+  href: api/Lime.Validation.IRequireOwner.html
+  commentId: T:Lime.Validation.IRequireOwner
+  fullName: Lime.Validation.IRequireOwner
+  nameWithType: Validation.IRequireOwner
+- uid: Lime.Validation.IRequireOwner.SetOwner(System.Object)
+  name: SetOwner(Object)
+  href: api/Lime.Validation.IRequireOwner.html#Lime_Validation_IRequireOwner_SetOwner_System_Object_
+  commentId: M:Lime.Validation.IRequireOwner.SetOwner(System.Object)
+  fullName: Lime.Validation.IRequireOwner.SetOwner(System.Object)
+  nameWithType: Validation.IRequireOwner.SetOwner(Object)
+- uid: Lime.Validation.IRequireOwner.SetOwner*
+  name: SetOwner
+  href: api/Lime.Validation.IRequireOwner.html#Lime_Validation_IRequireOwner_SetOwner_
+  commentId: Overload:Lime.Validation.IRequireOwner.SetOwner
+  isSpec: "True"
+  fullName: Lime.Validation.IRequireOwner.SetOwner
+  nameWithType: Validation.IRequireOwner.SetOwner
+- uid: Lime.Validation.IRequireOwner`1
+  name: Validation.IRequireOwner<T>
+  href: api/Lime.Validation.IRequireOwner-1.html
+  commentId: T:Lime.Validation.IRequireOwner`1
+  name.vb: Validation.IRequireOwner(Of T)
+  fullName: Lime.Validation.IRequireOwner<T>
+  fullName.vb: Lime.Validation.IRequireOwner(Of T)
+  nameWithType: Validation.IRequireOwner<T>
+  nameWithType.vb: Validation.IRequireOwner(Of T)
+- uid: Lime.Validation.IRequireOwner`1.Lime#Validation#IRequireOwner#SetOwner(System.Object)
+  name: Validation.IRequireOwner.SetOwner(Object)
+  href: api/Lime.Validation.IRequireOwner-1.html#Lime_Validation_IRequireOwner_1_Lime_Validation_IRequireOwner_SetOwner_System_Object_
+  commentId: M:Lime.Validation.IRequireOwner`1.Lime#Validation#IRequireOwner#SetOwner(System.Object)
+  name.vb: Lime.Validation.IRequireOwner.SetOwner(Object)
+  fullName: Lime.Validation.IRequireOwner<T>.Lime.Validation.IRequireOwner.SetOwner(System.Object)
+  fullName.vb: Lime.Validation.IRequireOwner(Of T).Lime.Validation.IRequireOwner.SetOwner(System.Object)
+  nameWithType: Validation.IRequireOwner<T>.Validation.IRequireOwner.SetOwner(Object)
+  nameWithType.vb: Validation.IRequireOwner(Of T).Lime.Validation.IRequireOwner.SetOwner(Object)
+- uid: Lime.Validation.IRequireOwner`1.Lime#Validation#IRequireOwner#SetOwner*
+  name: Validation.IRequireOwner.SetOwner
+  href: api/Lime.Validation.IRequireOwner-1.html#Lime_Validation_IRequireOwner_1_Lime_Validation_IRequireOwner_SetOwner_
+  commentId: Overload:Lime.Validation.IRequireOwner`1.Lime#Validation#IRequireOwner#SetOwner
+  isSpec: "True"
+  name.vb: Lime.Validation.IRequireOwner.SetOwner
+  fullName: Lime.Validation.IRequireOwner<T>.Lime.Validation.IRequireOwner.SetOwner
+  fullName.vb: Lime.Validation.IRequireOwner(Of T).Lime.Validation.IRequireOwner.SetOwner
+  nameWithType: Validation.IRequireOwner<T>.Validation.IRequireOwner.SetOwner
+  nameWithType.vb: Validation.IRequireOwner(Of T).Lime.Validation.IRequireOwner.SetOwner
+- uid: Lime.Validation.IRequireOwner`1.Owner
+  name: Owner
+  href: api/Lime.Validation.IRequireOwner-1.html#Lime_Validation_IRequireOwner_1_Owner
+  commentId: P:Lime.Validation.IRequireOwner`1.Owner
+  fullName: Lime.Validation.IRequireOwner<T>.Owner
+  fullName.vb: Lime.Validation.IRequireOwner(Of T).Owner
+  nameWithType: Validation.IRequireOwner<T>.Owner
+  nameWithType.vb: Validation.IRequireOwner(Of T).Owner
+- uid: Lime.Validation.IRequireOwner`1.Owner*
+  name: Owner
+  href: api/Lime.Validation.IRequireOwner-1.html#Lime_Validation_IRequireOwner_1_Owner_
+  commentId: Overload:Lime.Validation.IRequireOwner`1.Owner
+  isSpec: "True"
+  fullName: Lime.Validation.IRequireOwner<T>.Owner
+  fullName.vb: Lime.Validation.IRequireOwner(Of T).Owner
+  nameWithType: Validation.IRequireOwner<T>.Owner
+  nameWithType.vb: Validation.IRequireOwner(Of T).Owner
+- uid: Lime.Validation.IValidator
+  name: Validation.IValidator
+  href: api/Lime.Validation.IValidator.html
+  commentId: T:Lime.Validation.IValidator
+  fullName: Lime.Validation.IValidator
+  nameWithType: Validation.IValidator
+- uid: Lime.Validation.IValidator.IsValueTypeCompatible(System.Object,System.Type)
+  name: IsValueTypeCompatible(Object, Type)
+  href: api/Lime.Validation.IValidator.html#Lime_Validation_IValidator_IsValueTypeCompatible_System_Object_System_Type_
+  commentId: M:Lime.Validation.IValidator.IsValueTypeCompatible(System.Object,System.Type)
+  fullName: Lime.Validation.IValidator.IsValueTypeCompatible(System.Object, System.Type)
+  nameWithType: Validation.IValidator.IsValueTypeCompatible(Object, Type)
+- uid: Lime.Validation.IValidator.IsValueTypeCompatible*
+  name: IsValueTypeCompatible
+  href: api/Lime.Validation.IValidator.html#Lime_Validation_IValidator_IsValueTypeCompatible_
+  commentId: Overload:Lime.Validation.IValidator.IsValueTypeCompatible
+  isSpec: "True"
+  fullName: Lime.Validation.IValidator.IsValueTypeCompatible
+  nameWithType: Validation.IValidator.IsValueTypeCompatible
+- uid: Lime.Validation.IValidator.Validate(System.Object)
+  name: Validate(Object)
+  href: api/Lime.Validation.IValidator.html#Lime_Validation_IValidator_Validate_System_Object_
+  commentId: M:Lime.Validation.IValidator.Validate(System.Object)
+  fullName: Lime.Validation.IValidator.Validate(System.Object)
+  nameWithType: Validation.IValidator.Validate(Object)
+- uid: Lime.Validation.IValidator.Validate*
+  name: Validate
+  href: api/Lime.Validation.IValidator.html#Lime_Validation_IValidator_Validate_
+  commentId: Overload:Lime.Validation.IValidator.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.IValidator.Validate
+  nameWithType: Validation.IValidator.Validate
+- uid: Lime.Validation.IValidator`1
+  name: Validation.IValidator<T>
+  href: api/Lime.Validation.IValidator-1.html
+  commentId: T:Lime.Validation.IValidator`1
+  name.vb: Validation.IValidator(Of T)
+  fullName: Lime.Validation.IValidator<T>
+  fullName.vb: Lime.Validation.IValidator(Of T)
+  nameWithType: Validation.IValidator<T>
+  nameWithType.vb: Validation.IValidator(Of T)
+- uid: Lime.Validation.IValidator`1.Lime#Validation#IValidator#IsValueTypeCompatible(System.Object,System.Type)
+  name: Validation.IValidator.IsValueTypeCompatible(Object, Type)
+  href: api/Lime.Validation.IValidator-1.html#Lime_Validation_IValidator_1_Lime_Validation_IValidator_IsValueTypeCompatible_System_Object_System_Type_
+  commentId: M:Lime.Validation.IValidator`1.Lime#Validation#IValidator#IsValueTypeCompatible(System.Object,System.Type)
+  name.vb: Lime.Validation.IValidator.IsValueTypeCompatible(Object, Type)
+  fullName: Lime.Validation.IValidator<T>.Lime.Validation.IValidator.IsValueTypeCompatible(System.Object, System.Type)
+  fullName.vb: Lime.Validation.IValidator(Of T).Lime.Validation.IValidator.IsValueTypeCompatible(System.Object, System.Type)
+  nameWithType: Validation.IValidator<T>.Validation.IValidator.IsValueTypeCompatible(Object, Type)
+  nameWithType.vb: Validation.IValidator(Of T).Lime.Validation.IValidator.IsValueTypeCompatible(Object, Type)
+- uid: Lime.Validation.IValidator`1.Lime#Validation#IValidator#IsValueTypeCompatible*
+  name: Validation.IValidator.IsValueTypeCompatible
+  href: api/Lime.Validation.IValidator-1.html#Lime_Validation_IValidator_1_Lime_Validation_IValidator_IsValueTypeCompatible_
+  commentId: Overload:Lime.Validation.IValidator`1.Lime#Validation#IValidator#IsValueTypeCompatible
+  isSpec: "True"
+  name.vb: Lime.Validation.IValidator.IsValueTypeCompatible
+  fullName: Lime.Validation.IValidator<T>.Lime.Validation.IValidator.IsValueTypeCompatible
+  fullName.vb: Lime.Validation.IValidator(Of T).Lime.Validation.IValidator.IsValueTypeCompatible
+  nameWithType: Validation.IValidator<T>.Validation.IValidator.IsValueTypeCompatible
+  nameWithType.vb: Validation.IValidator(Of T).Lime.Validation.IValidator.IsValueTypeCompatible
+- uid: Lime.Validation.IValidator`1.Lime#Validation#IValidator#Validate(System.Object)
+  name: Validation.IValidator.Validate(Object)
+  href: api/Lime.Validation.IValidator-1.html#Lime_Validation_IValidator_1_Lime_Validation_IValidator_Validate_System_Object_
+  commentId: M:Lime.Validation.IValidator`1.Lime#Validation#IValidator#Validate(System.Object)
+  name.vb: Lime.Validation.IValidator.Validate(Object)
+  fullName: Lime.Validation.IValidator<T>.Lime.Validation.IValidator.Validate(System.Object)
+  fullName.vb: Lime.Validation.IValidator(Of T).Lime.Validation.IValidator.Validate(System.Object)
+  nameWithType: Validation.IValidator<T>.Validation.IValidator.Validate(Object)
+  nameWithType.vb: Validation.IValidator(Of T).Lime.Validation.IValidator.Validate(Object)
+- uid: Lime.Validation.IValidator`1.Lime#Validation#IValidator#Validate*
+  name: Validation.IValidator.Validate
+  href: api/Lime.Validation.IValidator-1.html#Lime_Validation_IValidator_1_Lime_Validation_IValidator_Validate_
+  commentId: Overload:Lime.Validation.IValidator`1.Lime#Validation#IValidator#Validate
+  isSpec: "True"
+  name.vb: Lime.Validation.IValidator.Validate
+  fullName: Lime.Validation.IValidator<T>.Lime.Validation.IValidator.Validate
+  fullName.vb: Lime.Validation.IValidator(Of T).Lime.Validation.IValidator.Validate
+  nameWithType: Validation.IValidator<T>.Validation.IValidator.Validate
+  nameWithType.vb: Validation.IValidator(Of T).Lime.Validation.IValidator.Validate
+- uid: Lime.Validation.IValidator`1.Validate(`0)
+  name: Validate(T)
+  href: api/Lime.Validation.IValidator-1.html#Lime_Validation_IValidator_1_Validate__0_
+  commentId: M:Lime.Validation.IValidator`1.Validate(`0)
+  fullName: Lime.Validation.IValidator<T>.Validate(T)
+  fullName.vb: Lime.Validation.IValidator(Of T).Validate(T)
+  nameWithType: Validation.IValidator<T>.Validate(T)
+  nameWithType.vb: Validation.IValidator(Of T).Validate(T)
+- uid: Lime.Validation.IValidator`1.Validate*
+  name: Validate
+  href: api/Lime.Validation.IValidator-1.html#Lime_Validation_IValidator_1_Validate_
+  commentId: Overload:Lime.Validation.IValidator`1.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.IValidator<T>.Validate
+  fullName.vb: Lime.Validation.IValidator(Of T).Validate
+  nameWithType: Validation.IValidator<T>.Validate
+  nameWithType.vb: Validation.IValidator(Of T).Validate
+- uid: Lime.Validation.KeyframePropertyValuesAttribute
+  name: Validation.KeyframePropertyValuesAttribute
+  href: api/Lime.Validation.KeyframePropertyValuesAttribute.html
+  commentId: T:Lime.Validation.KeyframePropertyValuesAttribute
+  fullName: Lime.Validation.KeyframePropertyValuesAttribute
+  nameWithType: Validation.KeyframePropertyValuesAttribute
+- uid: Lime.Validation.KeyframePropertyValuesAttribute.Validate(Lime.IAnimator)
+  name: Validate(IAnimator)
+  href: api/Lime.Validation.KeyframePropertyValuesAttribute.html#Lime_Validation_KeyframePropertyValuesAttribute_Validate_Lime_IAnimator_
+  commentId: M:Lime.Validation.KeyframePropertyValuesAttribute.Validate(Lime.IAnimator)
+  fullName: Lime.Validation.KeyframePropertyValuesAttribute.Validate(Lime.IAnimator)
+  nameWithType: Validation.KeyframePropertyValuesAttribute.Validate(IAnimator)
+- uid: Lime.Validation.KeyframePropertyValuesAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.KeyframePropertyValuesAttribute.html#Lime_Validation_KeyframePropertyValuesAttribute_Validate_
+  commentId: Overload:Lime.Validation.KeyframePropertyValuesAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.KeyframePropertyValuesAttribute.Validate
+  nameWithType: Validation.KeyframePropertyValuesAttribute.Validate
+- uid: Lime.Validation.MatchRegexAttribute
+  name: Validation.MatchRegexAttribute
+  href: api/Lime.Validation.MatchRegexAttribute.html
+  commentId: T:Lime.Validation.MatchRegexAttribute
+  fullName: Lime.Validation.MatchRegexAttribute
+  nameWithType: Validation.MatchRegexAttribute
+- uid: Lime.Validation.MatchRegexAttribute.#ctor(System.String)
+  name: MatchRegexAttribute(String)
+  href: api/Lime.Validation.MatchRegexAttribute.html#Lime_Validation_MatchRegexAttribute__ctor_System_String_
+  commentId: M:Lime.Validation.MatchRegexAttribute.#ctor(System.String)
+  fullName: Lime.Validation.MatchRegexAttribute.MatchRegexAttribute(System.String)
+  nameWithType: Validation.MatchRegexAttribute.MatchRegexAttribute(String)
+- uid: Lime.Validation.MatchRegexAttribute.#ctor*
+  name: MatchRegexAttribute
+  href: api/Lime.Validation.MatchRegexAttribute.html#Lime_Validation_MatchRegexAttribute__ctor_
+  commentId: Overload:Lime.Validation.MatchRegexAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.Validation.MatchRegexAttribute.MatchRegexAttribute
+  nameWithType: Validation.MatchRegexAttribute.MatchRegexAttribute
+- uid: Lime.Validation.MatchRegexAttribute.Validate(System.String)
+  name: Validate(String)
+  href: api/Lime.Validation.MatchRegexAttribute.html#Lime_Validation_MatchRegexAttribute_Validate_System_String_
+  commentId: M:Lime.Validation.MatchRegexAttribute.Validate(System.String)
+  fullName: Lime.Validation.MatchRegexAttribute.Validate(System.String)
+  nameWithType: Validation.MatchRegexAttribute.Validate(String)
+- uid: Lime.Validation.MatchRegexAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.MatchRegexAttribute.html#Lime_Validation_MatchRegexAttribute_Validate_
+  commentId: Overload:Lime.Validation.MatchRegexAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.MatchRegexAttribute.Validate
+  nameWithType: Validation.MatchRegexAttribute.Validate
+- uid: Lime.Validation.NodeChildrenCompositionAttribute
+  name: Validation.NodeChildrenCompositionAttribute
+  href: api/Lime.Validation.NodeChildrenCompositionAttribute.html
+  commentId: T:Lime.Validation.NodeChildrenCompositionAttribute
+  fullName: Lime.Validation.NodeChildrenCompositionAttribute
+  nameWithType: Validation.NodeChildrenCompositionAttribute
+- uid: Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren(System.Type,Lime.TangerineAllowedChildrenTypes@)
+  name: CanHaveChildren(Type, out TangerineAllowedChildrenTypes)
+  href: api/Lime.Validation.NodeChildrenCompositionAttribute.html#Lime_Validation_NodeChildrenCompositionAttribute_CanHaveChildren_System_Type_Lime_TangerineAllowedChildrenTypes__
+  commentId: M:Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren(System.Type,Lime.TangerineAllowedChildrenTypes@)
+  name.vb: CanHaveChildren(Type, ByRef TangerineAllowedChildrenTypes)
+  fullName: Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren(System.Type, out Lime.TangerineAllowedChildrenTypes)
+  fullName.vb: Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren(System.Type, ByRef Lime.TangerineAllowedChildrenTypes)
+  nameWithType: Validation.NodeChildrenCompositionAttribute.CanHaveChildren(Type, out TangerineAllowedChildrenTypes)
+  nameWithType.vb: Validation.NodeChildrenCompositionAttribute.CanHaveChildren(Type, ByRef TangerineAllowedChildrenTypes)
+- uid: Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren*
+  name: CanHaveChildren
+  href: api/Lime.Validation.NodeChildrenCompositionAttribute.html#Lime_Validation_NodeChildrenCompositionAttribute_CanHaveChildren_
+  commentId: Overload:Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren
+  isSpec: "True"
+  fullName: Lime.Validation.NodeChildrenCompositionAttribute.CanHaveChildren
+  nameWithType: Validation.NodeChildrenCompositionAttribute.CanHaveChildren
+- uid: Lime.Validation.NodeChildrenCompositionAttribute.Validate(Lime.Node)
+  name: Validate(Node)
+  href: api/Lime.Validation.NodeChildrenCompositionAttribute.html#Lime_Validation_NodeChildrenCompositionAttribute_Validate_Lime_Node_
+  commentId: M:Lime.Validation.NodeChildrenCompositionAttribute.Validate(Lime.Node)
+  fullName: Lime.Validation.NodeChildrenCompositionAttribute.Validate(Lime.Node)
+  nameWithType: Validation.NodeChildrenCompositionAttribute.Validate(Node)
+- uid: Lime.Validation.NodeChildrenCompositionAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.NodeChildrenCompositionAttribute.html#Lime_Validation_NodeChildrenCompositionAttribute_Validate_
+  commentId: Overload:Lime.Validation.NodeChildrenCompositionAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.NodeChildrenCompositionAttribute.Validate
+  nameWithType: Validation.NodeChildrenCompositionAttribute.Validate
+- uid: Lime.Validation.NodeComponentOwnerCompositionAttribute
+  name: Validation.NodeComponentOwnerCompositionAttribute
+  href: api/Lime.Validation.NodeComponentOwnerCompositionAttribute.html
+  commentId: T:Lime.Validation.NodeComponentOwnerCompositionAttribute
+  fullName: Lime.Validation.NodeComponentOwnerCompositionAttribute
+  nameWithType: Validation.NodeComponentOwnerCompositionAttribute
+- uid: Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate(Lime.NodeComponent)
+  name: Validate(NodeComponent)
+  href: api/Lime.Validation.NodeComponentOwnerCompositionAttribute.html#Lime_Validation_NodeComponentOwnerCompositionAttribute_Validate_Lime_NodeComponent_
+  commentId: M:Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate(Lime.NodeComponent)
+  fullName: Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate(Lime.NodeComponent)
+  nameWithType: Validation.NodeComponentOwnerCompositionAttribute.Validate(NodeComponent)
+- uid: Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.NodeComponentOwnerCompositionAttribute.html#Lime_Validation_NodeComponentOwnerCompositionAttribute_Validate_
+  commentId: Overload:Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.NodeComponentOwnerCompositionAttribute.Validate
+  nameWithType: Validation.NodeComponentOwnerCompositionAttribute.Validate
+- uid: Lime.Validation.NodeParentCompositionAttribute
+  name: Validation.NodeParentCompositionAttribute
+  href: api/Lime.Validation.NodeParentCompositionAttribute.html
+  commentId: T:Lime.Validation.NodeParentCompositionAttribute
+  fullName: Lime.Validation.NodeParentCompositionAttribute
+  nameWithType: Validation.NodeParentCompositionAttribute
+- uid: Lime.Validation.NodeParentCompositionAttribute.Validate(Lime.Node)
+  name: Validate(Node)
+  href: api/Lime.Validation.NodeParentCompositionAttribute.html#Lime_Validation_NodeParentCompositionAttribute_Validate_Lime_Node_
+  commentId: M:Lime.Validation.NodeParentCompositionAttribute.Validate(Lime.Node)
+  fullName: Lime.Validation.NodeParentCompositionAttribute.Validate(Lime.Node)
+  nameWithType: Validation.NodeParentCompositionAttribute.Validate(Node)
+- uid: Lime.Validation.NodeParentCompositionAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.NodeParentCompositionAttribute.html#Lime_Validation_NodeParentCompositionAttribute_Validate_
+  commentId: Overload:Lime.Validation.NodeParentCompositionAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.NodeParentCompositionAttribute.Validate
+  nameWithType: Validation.NodeParentCompositionAttribute.Validate
+- uid: Lime.Validation.RangeAttribute
+  name: Validation.RangeAttribute
+  href: api/Lime.Validation.RangeAttribute.html
+  commentId: T:Lime.Validation.RangeAttribute
+  fullName: Lime.Validation.RangeAttribute
+  nameWithType: Validation.RangeAttribute
+- uid: Lime.Validation.RangeAttribute.#ctor(System.Int32,System.Int32)
+  name: RangeAttribute(Int32, Int32)
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute__ctor_System_Int32_System_Int32_
+  commentId: M:Lime.Validation.RangeAttribute.#ctor(System.Int32,System.Int32)
+  fullName: Lime.Validation.RangeAttribute.RangeAttribute(System.Int32, System.Int32)
+  nameWithType: Validation.RangeAttribute.RangeAttribute(Int32, Int32)
+- uid: Lime.Validation.RangeAttribute.#ctor(System.Single,System.Single)
+  name: RangeAttribute(Single, Single)
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute__ctor_System_Single_System_Single_
+  commentId: M:Lime.Validation.RangeAttribute.#ctor(System.Single,System.Single)
+  fullName: Lime.Validation.RangeAttribute.RangeAttribute(System.Single, System.Single)
+  nameWithType: Validation.RangeAttribute.RangeAttribute(Single, Single)
+- uid: Lime.Validation.RangeAttribute.#ctor*
+  name: RangeAttribute
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute__ctor_
+  commentId: Overload:Lime.Validation.RangeAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.Validation.RangeAttribute.RangeAttribute
+  nameWithType: Validation.RangeAttribute.RangeAttribute
+- uid: Lime.Validation.RangeAttribute.Maximum
+  name: Maximum
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_Maximum
+  commentId: P:Lime.Validation.RangeAttribute.Maximum
+  fullName: Lime.Validation.RangeAttribute.Maximum
+  nameWithType: Validation.RangeAttribute.Maximum
+- uid: Lime.Validation.RangeAttribute.Maximum*
+  name: Maximum
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_Maximum_
+  commentId: Overload:Lime.Validation.RangeAttribute.Maximum
+  isSpec: "True"
+  fullName: Lime.Validation.RangeAttribute.Maximum
+  nameWithType: Validation.RangeAttribute.Maximum
+- uid: Lime.Validation.RangeAttribute.Minimum
+  name: Minimum
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_Minimum
+  commentId: P:Lime.Validation.RangeAttribute.Minimum
+  fullName: Lime.Validation.RangeAttribute.Minimum
+  nameWithType: Validation.RangeAttribute.Minimum
+- uid: Lime.Validation.RangeAttribute.Minimum*
+  name: Minimum
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_Minimum_
+  commentId: Overload:Lime.Validation.RangeAttribute.Minimum
+  isSpec: "True"
+  fullName: Lime.Validation.RangeAttribute.Minimum
+  nameWithType: Validation.RangeAttribute.Minimum
+- uid: Lime.Validation.RangeAttribute.Validate(System.Object)
+  name: Validate(Object)
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_Validate_System_Object_
+  commentId: M:Lime.Validation.RangeAttribute.Validate(System.Object)
+  fullName: Lime.Validation.RangeAttribute.Validate(System.Object)
+  nameWithType: Validation.RangeAttribute.Validate(Object)
+- uid: Lime.Validation.RangeAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_Validate_
+  commentId: Overload:Lime.Validation.RangeAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.RangeAttribute.Validate
+  nameWithType: Validation.RangeAttribute.Validate
+- uid: Lime.Validation.RangeAttribute.WarningLevel
+  name: WarningLevel
+  href: api/Lime.Validation.RangeAttribute.html#Lime_Validation_RangeAttribute_WarningLevel
+  commentId: F:Lime.Validation.RangeAttribute.WarningLevel
+  fullName: Lime.Validation.RangeAttribute.WarningLevel
+  nameWithType: Validation.RangeAttribute.WarningLevel
+- uid: Lime.Validation.RatioInfoAttribute
+  name: Validation.RatioInfoAttribute
+  href: api/Lime.Validation.RatioInfoAttribute.html
+  commentId: T:Lime.Validation.RatioInfoAttribute
+  fullName: Lime.Validation.RatioInfoAttribute
+  nameWithType: Validation.RatioInfoAttribute
+- uid: Lime.Validation.RatioInfoAttribute.#ctor(System.Type[])
+  name: RatioInfoAttribute(Type[])
+  href: api/Lime.Validation.RatioInfoAttribute.html#Lime_Validation_RatioInfoAttribute__ctor_System_Type___
+  commentId: M:Lime.Validation.RatioInfoAttribute.#ctor(System.Type[])
+  name.vb: RatioInfoAttribute(Type())
+  fullName: Lime.Validation.RatioInfoAttribute.RatioInfoAttribute(System.Type[])
+  fullName.vb: Lime.Validation.RatioInfoAttribute.RatioInfoAttribute(System.Type())
+  nameWithType: Validation.RatioInfoAttribute.RatioInfoAttribute(Type[])
+  nameWithType.vb: Validation.RatioInfoAttribute.RatioInfoAttribute(Type())
+- uid: Lime.Validation.RatioInfoAttribute.#ctor*
+  name: RatioInfoAttribute
+  href: api/Lime.Validation.RatioInfoAttribute.html#Lime_Validation_RatioInfoAttribute__ctor_
+  commentId: Overload:Lime.Validation.RatioInfoAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.Validation.RatioInfoAttribute.RatioInfoAttribute
+  nameWithType: Validation.RatioInfoAttribute.RatioInfoAttribute
+- uid: Lime.Validation.RatioInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)
+  name: Validate(ITexture, Vector2)
+  href: api/Lime.Validation.RatioInfoAttribute.html#Lime_Validation_RatioInfoAttribute_Validate_Lime_ITexture_Lime_Vector2_
+  commentId: M:Lime.Validation.RatioInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)
+  fullName: Lime.Validation.RatioInfoAttribute.Validate(Lime.ITexture, Lime.Vector2)
+  nameWithType: Validation.RatioInfoAttribute.Validate(ITexture, Vector2)
+- uid: Lime.Validation.RatioInfoAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.RatioInfoAttribute.html#Lime_Validation_RatioInfoAttribute_Validate_
+  commentId: Overload:Lime.Validation.RatioInfoAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.RatioInfoAttribute.Validate
+  nameWithType: Validation.RatioInfoAttribute.Validate
+- uid: Lime.Validation.Result
+  name: Validation.Result
+  href: api/Lime.Validation.Result.html
+  commentId: T:Lime.Validation.Result
+  fullName: Lime.Validation.Result
+  nameWithType: Validation.Result
+- uid: Lime.Validation.Result.Error
   name: Error
-  href: api/Lime.ValidationResult.html#Lime_ValidationResult_Error
-  commentId: F:Lime.ValidationResult.Error
-  fullName: Lime.ValidationResult.Error
-  nameWithType: ValidationResult.Error
-- uid: Lime.ValidationResult.Info
+  href: api/Lime.Validation.Result.html#Lime_Validation_Result_Error
+  commentId: F:Lime.Validation.Result.Error
+  fullName: Lime.Validation.Result.Error
+  nameWithType: Validation.Result.Error
+- uid: Lime.Validation.Result.Info
   name: Info
-  href: api/Lime.ValidationResult.html#Lime_ValidationResult_Info
-  commentId: F:Lime.ValidationResult.Info
-  fullName: Lime.ValidationResult.Info
-  nameWithType: ValidationResult.Info
-- uid: Lime.ValidationResult.Ok
-  name: Ok
-  href: api/Lime.ValidationResult.html#Lime_ValidationResult_Ok
-  commentId: F:Lime.ValidationResult.Ok
-  fullName: Lime.ValidationResult.Ok
-  nameWithType: ValidationResult.Ok
-- uid: Lime.ValidationResult.Warning
+  href: api/Lime.Validation.Result.html#Lime_Validation_Result_Info
+  commentId: F:Lime.Validation.Result.Info
+  fullName: Lime.Validation.Result.Info
+  nameWithType: Validation.Result.Info
+- uid: Lime.Validation.Result.Warning
   name: Warning
-  href: api/Lime.ValidationResult.html#Lime_ValidationResult_Warning
-  commentId: F:Lime.ValidationResult.Warning
-  fullName: Lime.ValidationResult.Warning
-  nameWithType: ValidationResult.Warning
+  href: api/Lime.Validation.Result.html#Lime_Validation_Result_Warning
+  commentId: F:Lime.Validation.Result.Warning
+  fullName: Lime.Validation.Result.Warning
+  nameWithType: Validation.Result.Warning
+- uid: Lime.Validation.SerializableAssetExistsAttribute
+  name: Validation.SerializableAssetExistsAttribute
+  href: api/Lime.Validation.SerializableAssetExistsAttribute.html
+  commentId: T:Lime.Validation.SerializableAssetExistsAttribute
+  fullName: Lime.Validation.SerializableAssetExistsAttribute
+  nameWithType: Validation.SerializableAssetExistsAttribute
+- uid: Lime.Validation.SerializableAssetExistsAttribute.Validate(Lime.ISerializableAsset)
+  name: Validate(ISerializableAsset)
+  href: api/Lime.Validation.SerializableAssetExistsAttribute.html#Lime_Validation_SerializableAssetExistsAttribute_Validate_Lime_ISerializableAsset_
+  commentId: M:Lime.Validation.SerializableAssetExistsAttribute.Validate(Lime.ISerializableAsset)
+  fullName: Lime.Validation.SerializableAssetExistsAttribute.Validate(Lime.ISerializableAsset)
+  nameWithType: Validation.SerializableAssetExistsAttribute.Validate(ISerializableAsset)
+- uid: Lime.Validation.SerializableAssetExistsAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.SerializableAssetExistsAttribute.html#Lime_Validation_SerializableAssetExistsAttribute_Validate_
+  commentId: Overload:Lime.Validation.SerializableAssetExistsAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.SerializableAssetExistsAttribute.Validate
+  nameWithType: Validation.SerializableAssetExistsAttribute.Validate
+- uid: Lime.Validation.SizeInfoAttribute
+  name: Validation.SizeInfoAttribute
+  href: api/Lime.Validation.SizeInfoAttribute.html
+  commentId: T:Lime.Validation.SizeInfoAttribute
+  fullName: Lime.Validation.SizeInfoAttribute
+  nameWithType: Validation.SizeInfoAttribute
+- uid: Lime.Validation.SizeInfoAttribute.#ctor(System.Type[])
+  name: SizeInfoAttribute(Type[])
+  href: api/Lime.Validation.SizeInfoAttribute.html#Lime_Validation_SizeInfoAttribute__ctor_System_Type___
+  commentId: M:Lime.Validation.SizeInfoAttribute.#ctor(System.Type[])
+  name.vb: SizeInfoAttribute(Type())
+  fullName: Lime.Validation.SizeInfoAttribute.SizeInfoAttribute(System.Type[])
+  fullName.vb: Lime.Validation.SizeInfoAttribute.SizeInfoAttribute(System.Type())
+  nameWithType: Validation.SizeInfoAttribute.SizeInfoAttribute(Type[])
+  nameWithType.vb: Validation.SizeInfoAttribute.SizeInfoAttribute(Type())
+- uid: Lime.Validation.SizeInfoAttribute.#ctor*
+  name: SizeInfoAttribute
+  href: api/Lime.Validation.SizeInfoAttribute.html#Lime_Validation_SizeInfoAttribute__ctor_
+  commentId: Overload:Lime.Validation.SizeInfoAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.Validation.SizeInfoAttribute.SizeInfoAttribute
+  nameWithType: Validation.SizeInfoAttribute.SizeInfoAttribute
+- uid: Lime.Validation.SizeInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)
+  name: Validate(ITexture, Vector2)
+  href: api/Lime.Validation.SizeInfoAttribute.html#Lime_Validation_SizeInfoAttribute_Validate_Lime_ITexture_Lime_Vector2_
+  commentId: M:Lime.Validation.SizeInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)
+  fullName: Lime.Validation.SizeInfoAttribute.Validate(Lime.ITexture, Lime.Vector2)
+  nameWithType: Validation.SizeInfoAttribute.Validate(ITexture, Vector2)
+- uid: Lime.Validation.SizeInfoAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.SizeInfoAttribute.html#Lime_Validation_SizeInfoAttribute_Validate_
+  commentId: Overload:Lime.Validation.SizeInfoAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.SizeInfoAttribute.Validate
+  nameWithType: Validation.SizeInfoAttribute.Validate
+- uid: Lime.Validation.TextureInfoAttribute
+  name: Validation.TextureInfoAttribute
+  href: api/Lime.Validation.TextureInfoAttribute.html
+  commentId: T:Lime.Validation.TextureInfoAttribute
+  fullName: Lime.Validation.TextureInfoAttribute
+  nameWithType: Validation.TextureInfoAttribute
+- uid: Lime.Validation.TextureInfoAttribute.#ctor(System.Type[])
+  name: TextureInfoAttribute(Type[])
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute__ctor_System_Type___
+  commentId: M:Lime.Validation.TextureInfoAttribute.#ctor(System.Type[])
+  name.vb: TextureInfoAttribute(Type())
+  fullName: Lime.Validation.TextureInfoAttribute.TextureInfoAttribute(System.Type[])
+  fullName.vb: Lime.Validation.TextureInfoAttribute.TextureInfoAttribute(System.Type())
+  nameWithType: Validation.TextureInfoAttribute.TextureInfoAttribute(Type[])
+  nameWithType.vb: Validation.TextureInfoAttribute.TextureInfoAttribute(Type())
+- uid: Lime.Validation.TextureInfoAttribute.#ctor*
+  name: TextureInfoAttribute
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute__ctor_
+  commentId: Overload:Lime.Validation.TextureInfoAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.Validation.TextureInfoAttribute.TextureInfoAttribute
+  nameWithType: Validation.TextureInfoAttribute.TextureInfoAttribute
+- uid: Lime.Validation.TextureInfoAttribute.Owner
+  name: Owner
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Owner
+  commentId: P:Lime.Validation.TextureInfoAttribute.Owner
+  fullName: Lime.Validation.TextureInfoAttribute.Owner
+  nameWithType: Validation.TextureInfoAttribute.Owner
+- uid: Lime.Validation.TextureInfoAttribute.Owner*
+  name: Owner
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Owner_
+  commentId: Overload:Lime.Validation.TextureInfoAttribute.Owner
+  isSpec: "True"
+  fullName: Lime.Validation.TextureInfoAttribute.Owner
+  nameWithType: Validation.TextureInfoAttribute.Owner
+- uid: Lime.Validation.TextureInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)
+  name: Validate(ITexture, Vector2)
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Validate_Lime_ITexture_Lime_Vector2_
+  commentId: M:Lime.Validation.TextureInfoAttribute.Validate(Lime.ITexture,Lime.Vector2)
+  fullName: Lime.Validation.TextureInfoAttribute.Validate(Lime.ITexture, Lime.Vector2)
+  nameWithType: Validation.TextureInfoAttribute.Validate(ITexture, Vector2)
+- uid: Lime.Validation.TextureInfoAttribute.Validate(Lime.Vector2)
+  name: Validate(Vector2)
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Validate_Lime_Vector2_
+  commentId: M:Lime.Validation.TextureInfoAttribute.Validate(Lime.Vector2)
+  fullName: Lime.Validation.TextureInfoAttribute.Validate(Lime.Vector2)
+  nameWithType: Validation.TextureInfoAttribute.Validate(Vector2)
+- uid: Lime.Validation.TextureInfoAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.TextureInfoAttribute.html#Lime_Validation_TextureInfoAttribute_Validate_
+  commentId: Overload:Lime.Validation.TextureInfoAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.TextureInfoAttribute.Validate
+  nameWithType: Validation.TextureInfoAttribute.Validate
+- uid: Lime.Validation.TileImageTextureAttribute
+  name: Validation.TileImageTextureAttribute
+  href: api/Lime.Validation.TileImageTextureAttribute.html
+  commentId: T:Lime.Validation.TileImageTextureAttribute
+  fullName: Lime.Validation.TileImageTextureAttribute
+  nameWithType: Validation.TileImageTextureAttribute
+- uid: Lime.Validation.TileImageTextureAttribute.Validate(Lime.ITexture)
+  name: Validate(ITexture)
+  href: api/Lime.Validation.TileImageTextureAttribute.html#Lime_Validation_TileImageTextureAttribute_Validate_Lime_ITexture_
+  commentId: M:Lime.Validation.TileImageTextureAttribute.Validate(Lime.ITexture)
+  fullName: Lime.Validation.TileImageTextureAttribute.Validate(Lime.ITexture)
+  nameWithType: Validation.TileImageTextureAttribute.Validate(ITexture)
+- uid: Lime.Validation.TileImageTextureAttribute.Validate*
+  name: Validate
+  href: api/Lime.Validation.TileImageTextureAttribute.html#Lime_Validation_TileImageTextureAttribute_Validate_
+  commentId: Overload:Lime.Validation.TileImageTextureAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.Validation.TileImageTextureAttribute.Validate
+  nameWithType: Validation.TileImageTextureAttribute.Validate
 - uid: Lime.VAlignment
   name: VAlignment
   href: api/Lime.VAlignment.html
