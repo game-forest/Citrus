@@ -36173,6 +36173,19 @@ references:
   isSpec: "True"
   fullName: Lime.Mathf.CalcDistanceToSegment
   nameWithType: Mathf.CalcDistanceToSegment
+- uid: Lime.Mathf.CalcLowerPowerOfTwo(System.Int32)
+  name: CalcLowerPowerOfTwo(Int32)
+  href: api/Lime.Mathf.html#Lime_Mathf_CalcLowerPowerOfTwo_System_Int32_
+  commentId: M:Lime.Mathf.CalcLowerPowerOfTwo(System.Int32)
+  fullName: Lime.Mathf.CalcLowerPowerOfTwo(System.Int32)
+  nameWithType: Mathf.CalcLowerPowerOfTwo(Int32)
+- uid: Lime.Mathf.CalcLowerPowerOfTwo*
+  name: CalcLowerPowerOfTwo
+  href: api/Lime.Mathf.html#Lime_Mathf_CalcLowerPowerOfTwo_
+  commentId: Overload:Lime.Mathf.CalcLowerPowerOfTwo
+  isSpec: "True"
+  fullName: Lime.Mathf.CalcLowerPowerOfTwo
+  nameWithType: Mathf.CalcLowerPowerOfTwo
 - uid: Lime.Mathf.CalcUpperPowerOfTwo(System.Int32)
   name: CalcUpperPowerOfTwo(Int32)
   href: api/Lime.Mathf.html#Lime_Mathf_CalcUpperPowerOfTwo_System_Int32_
