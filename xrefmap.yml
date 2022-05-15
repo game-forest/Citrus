@@ -29336,6 +29336,12 @@ references:
   isSpec: "True"
   fullName: Lime.IPersistenceReadData.ReplacedStream
   nameWithType: IPersistenceReadData.ReplacedStream
+- uid: Lime.IPersistOnReplaceContent
+  name: IPersistOnReplaceContent
+  href: api/Lime.IPersistOnReplaceContent.html
+  commentId: T:Lime.IPersistOnReplaceContent
+  fullName: Lime.IPersistOnReplaceContent
+  nameWithType: IPersistOnReplaceContent
 - uid: Lime.IPresenter
   name: IPresenter
   href: api/Lime.IPresenter.html
