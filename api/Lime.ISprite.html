@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class MovieTexture
+    <title>Interface ISprite
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class MovieTexture
+    <meta name="title" content="Interface ISprite
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,156 +78,105 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.MovieTexture">
+            <article class="content wrap" id="_content" data-uid="Lime.ISprite">
   
   
-  <h1 id="Lime_MovieTexture" data-uid="Lime.MovieTexture" class="text-break">Class MovieTexture
+  <h1 id="Lime_ISprite" data-uid="Lime.ISprite" class="text-break">Interface ISprite
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="Lime.CommonTexture.html">CommonTexture</a></div>
-    <div class="level2"><a class="xref" href="Lime.Texture2D.html">Texture2D</a></div>
-    <div class="level3"><span class="xref">MovieTexture</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="Lime.ITexture.html">ITexture</a></div>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_IsStubTextureTransparent">Texture2D.IsStubTextureTransparent</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_OpacityMask">Texture2D.OpacityMask</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_ImageSize">Texture2D.ImageSize</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_SurfaceSize">Texture2D.SurfaceSize</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_AtlasTexture">Texture2D.AtlasTexture</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_AtlasUVRect">Texture2D.AtlasUVRect</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_TransformUVCoordinatesToAtlasSpace_Lime_Vector2__">Texture2D.TransformUVCoordinatesToAtlasSpace(Vector2)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_IsStubTexture">Texture2D.IsStubTexture</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_TextureParams">Texture2D.TextureParams</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_LoadImage_System_String_Lime_Texture2D_TextureMissingDelegate_">Texture2D.LoadImage(String, Texture2D.TextureMissingDelegate)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_LoadImage_System_Byte___">Texture2D.LoadImage(Byte[])</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_LoadImage_System_IO_Stream_">Texture2D.LoadImage(Stream)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_LoadImage_Lime_Bitmap_">Texture2D.LoadImage(Bitmap)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_LoadImage_Lime_Color4___System_Int32_System_Int32_">Texture2D.LoadImage(Color4[], Int32, Int32)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_LoadSubImage_Lime_Color4___System_Int32_System_Int32_System_Int32_System_Int32_">Texture2D.LoadSubImage(Color4[], Int32, Int32, Int32, Int32)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_GetPlatformTexture">Texture2D.GetPlatformTexture()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_MaybeDiscardUnderPressure">Texture2D.MaybeDiscardUnderPressure()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_SetAsRenderTarget">Texture2D.SetAsRenderTarget()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_RestoreRenderTarget">Texture2D.RestoreRenderTarget()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_IsTransparentPixel_System_Int32_System_Int32_">Texture2D.IsTransparentPixel(Int32, Int32)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_GetPixels">Texture2D.GetPixels()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_KTXMagic">Texture2D.KTXMagic</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.CommonTexture.html#Lime_CommonTexture_TotalMemoryUsed">CommonTexture.TotalMemoryUsed</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.CommonTexture.html#Lime_CommonTexture_TotalMemoryUsedMb">CommonTexture.TotalMemoryUsedMb</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.CommonTexture.html#Lime_CommonTexture_IsDisposed">CommonTexture.IsDisposed</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.CommonTexture.html#Lime_CommonTexture_MemoryUsed">CommonTexture.MemoryUsed</a>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_MovieTexture_syntax">Syntax</h5>
+  <h5 id="Lime_ISprite_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class MovieTexture : Texture2D, ITexture, IDisposable</code></pre>
-  </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="Lime_MovieTexture__ctor_" data-uid="Lime.MovieTexture.#ctor*"></a>
-  <h4 id="Lime_MovieTexture__ctor" data-uid="Lime.MovieTexture.#ctor">MovieTexture()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MovieTexture()</code></pre>
+    <pre><code class="lang-csharp hljs">public interface ISprite</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
   
   
-  <a id="Lime_MovieTexture_Looped_" data-uid="Lime.MovieTexture.Looped*"></a>
-  <h4 id="Lime_MovieTexture_Looped" data-uid="Lime.MovieTexture.Looped">Looped</h4>
+  <a id="Lime_ISprite_AtlasSize_" data-uid="Lime.ISprite.AtlasSize*"></a>
+  <h4 id="Lime_ISprite_AtlasSize" data-uid="Lime.ISprite.AtlasSize">AtlasSize</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Looped { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">Vector2 AtlasSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ISprite_AtlasTexture_" data-uid="Lime.ISprite.AtlasTexture*"></a>
+  <h4 id="Lime_ISprite_AtlasTexture" data-uid="Lime.ISprite.AtlasTexture">AtlasTexture</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ITexture AtlasTexture { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ISprite_IndexCount_" data-uid="Lime.ISprite.IndexCount*"></a>
+  <h4 id="Lime_ISprite_IndexCount" data-uid="Lime.ISprite.IndexCount">IndexCount</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int IndexCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ISprite_IsRectangular_" data-uid="Lime.ISprite.IsRectangular*"></a>
+  <h4 id="Lime_ISprite_IsRectangular" data-uid="Lime.ISprite.IsRectangular">IsRectangular</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsRectangular { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -246,13 +195,13 @@
   </table>
   
   
-  <a id="Lime_MovieTexture_Path_" data-uid="Lime.MovieTexture.Path*"></a>
-  <h4 id="Lime_MovieTexture_Path" data-uid="Lime.MovieTexture.Path">Path</h4>
+  <a id="Lime_ISprite_Size_" data-uid="Lime.ISprite.Size*"></a>
+  <h4 id="Lime_ISprite_Size" data-uid="Lime.ISprite.Size">Size</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Path { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">Vector2 Size { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -264,20 +213,20 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   
   
-  <a id="Lime_MovieTexture_Paused_" data-uid="Lime.MovieTexture.Paused*"></a>
-  <h4 id="Lime_MovieTexture_Paused" data-uid="Lime.MovieTexture.Paused">Paused</h4>
+  <a id="Lime_ISprite_VertexCount_" data-uid="Lime.ISprite.VertexCount*"></a>
+  <h4 id="Lime_ISprite_VertexCount" data-uid="Lime.ISprite.VertexCount">VertexCount</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Paused { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">int VertexCount { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -289,32 +238,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_MovieTexture_Stopped_" data-uid="Lime.MovieTexture.Stopped*"></a>
-  <h4 id="Lime_MovieTexture_Stopped" data-uid="Lime.MovieTexture.Stopped">Stopped</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Stopped { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="xref">System.Int32</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -323,25 +247,13 @@
   </h3>
   
   
-  <a id="Lime_MovieTexture_Dispose_" data-uid="Lime.MovieTexture.Dispose*"></a>
-  <h4 id="Lime_MovieTexture_Dispose" data-uid="Lime.MovieTexture.Dispose">Dispose()</h4>
+  <a id="Lime_ISprite_GetIndex_" data-uid="Lime.ISprite.GetIndex*"></a>
+  <h4 id="Lime_ISprite_GetIndex_System_Int32_" data-uid="Lime.ISprite.GetIndex(System.Int32)">GetIndex(Int32)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Dispose()</code></pre>
-  </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Texture2D.html#Lime_Texture2D_Dispose">Texture2D.Dispose()</a></div>
-  
-  
-  <a id="Lime_MovieTexture_Pause_" data-uid="Lime.MovieTexture.Pause*"></a>
-  <h4 id="Lime_MovieTexture_Pause_System_Boolean_" data-uid="Lime.MovieTexture.Pause(System.Boolean)">Pause(Boolean)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Pause(bool value)</code></pre>
+    <pre><code class="lang-csharp hljs">ushort GetIndex(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -349,80 +261,172 @@
       <tr>
         <th>Type</th>
         <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ISprite_GetUV_" data-uid="Lime.ISprite.GetUV*"></a>
+  <h4 id="Lime_ISprite_GetUV_System_Int32_" data-uid="Lime.ISprite.GetUV(System.Int32)">GetUV(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Vector2 GetUV(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ISprite_GetVertex_" data-uid="Lime.ISprite.GetVertex*"></a>
+  <h4 id="Lime_ISprite_GetVertex_System_Int32_" data-uid="Lime.ISprite.GetVertex(System.Int32)">GetVertex(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Vector2 GetVertex(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ISprite_ValidateRectangular_" data-uid="Lime.ISprite.ValidateRectangular*"></a>
+  <h4 id="Lime_ISprite_ValidateRectangular_Lime_Node_System_String_" data-uid="Lime.ISprite.ValidateRectangular(Lime.Node,System.String)">ValidateRectangular(Node, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool ValidateRectangular(Node node, string useContext = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Node.html">Node</a></td>
+        <td><span class="parametername">node</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">useContext</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">value</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  
-  
-  <a id="Lime_MovieTexture_Play_" data-uid="Lime.MovieTexture.Play*"></a>
-  <h4 id="Lime_MovieTexture_Play" data-uid="Lime.MovieTexture.Play">Play()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Play()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_MovieTexture_Restart_" data-uid="Lime.MovieTexture.Restart*"></a>
-  <h4 id="Lime_MovieTexture_Restart" data-uid="Lime.MovieTexture.Restart">Restart()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Restart()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_MovieTexture_Stop_" data-uid="Lime.MovieTexture.Stop*"></a>
-  <h4 id="Lime_MovieTexture_Stop" data-uid="Lime.MovieTexture.Stop">Stop()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_MovieTexture_Update_" data-uid="Lime.MovieTexture.Update*"></a>
-  <h4 id="Lime_MovieTexture_Update_System_Single_" data-uid="Lime.MovieTexture.Update(System.Single)">Update(Single)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Update(float delta)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
+  <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="Lime.ITexture.html">ITexture</a>
+      <a class="xref" href="Lime.SpriteExtensions.html#Lime_SpriteExtensions_IsTransparentPixel_Lime_ISprite_System_Int32_System_Int32_">SpriteExtensions.IsTransparentPixel(ISprite, Int32, Int32)</a>
   </div>
   <div>
-      <span class="xref">System.IDisposable</span>
+      <a class="xref" href="Lime.SpriteExtensions.html#Lime_SpriteExtensions_TransformUVCoordinatesToAtlasSpace_Lime_ISprite_Lime_Vector2_">SpriteExtensions.TransformUVCoordinatesToAtlasSpace(ISprite, Vector2)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.SpriteExtensions.html#Lime_SpriteExtensions_TryTransformUVCoordinatesToAtlasSpace_Lime_ISprite_Lime_Vector2_Lime_Vector2__">SpriteExtensions.TryTransformUVCoordinatesToAtlasSpace(ISprite, Vector2, out Vector2)</a>
   </div>
 </article>
           </div>

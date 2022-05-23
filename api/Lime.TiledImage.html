@@ -785,12 +785,12 @@ public class TiledImage : Widget, IDisposable, IAnimationHost, IRenderChainBuild
   
   
   <a id="Lime_TiledImage__ctor_" data-uid="Lime.TiledImage.#ctor*"></a>
-  <h4 id="Lime_TiledImage__ctor_Lime_ITexture_" data-uid="Lime.TiledImage.#ctor(Lime.ITexture)">TiledImage(ITexture)</h4>
+  <h4 id="Lime_TiledImage__ctor_Lime_ISprite_" data-uid="Lime.TiledImage.#ctor(Lime.ISprite)">TiledImage(ISprite)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TiledImage(ITexture texture)</code></pre>
+    <pre><code class="lang-csharp hljs">public TiledImage(ISprite sprite)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -803,8 +803,8 @@ public class TiledImage : Widget, IDisposable, IAnimationHost, IRenderChainBuild
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture</span></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
+        <td><span class="parametername">sprite</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -817,7 +817,7 @@ public class TiledImage : Widget, IDisposable, IAnimationHost, IRenderChainBuild
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TiledImage(string texturePath)</code></pre>
+    <pre><code class="lang-csharp hljs">public TiledImage(string spritePath)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -831,7 +831,7 @@ public class TiledImage : Widget, IDisposable, IAnimationHost, IRenderChainBuild
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">texturePath</span></td>
+        <td><span class="parametername">spritePath</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -865,15 +865,15 @@ public class TiledImage : Widget, IDisposable, IAnimationHost, IRenderChainBuild
   </table>
   
   
-  <a id="Lime_TiledImage_Texture_" data-uid="Lime.TiledImage.Texture*"></a>
-  <h4 id="Lime_TiledImage_Texture" data-uid="Lime.TiledImage.Texture">Texture</h4>
+  <a id="Lime_TiledImage_Sprite_" data-uid="Lime.TiledImage.Sprite*"></a>
+  <h4 id="Lime_TiledImage_Sprite" data-uid="Lime.TiledImage.Sprite">Sprite</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [YuzuSerializeIf(&quot;IsNotRenderTexture&quot;)]
-public sealed override ITexture Texture { get; set; }</code></pre>
+public sealed override ISprite Sprite { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -885,13 +885,13 @@ public sealed override ITexture Texture { get; set; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Widget.html#Lime_Widget_Texture">Widget.Texture</a></div>
+  <div><a class="xref" href="Lime.Widget.html#Lime_Widget_Sprite">Widget.Sprite</a></div>
   
   
   <a id="Lime_TiledImage_TileOffset_" data-uid="Lime.TiledImage.TileOffset*"></a>

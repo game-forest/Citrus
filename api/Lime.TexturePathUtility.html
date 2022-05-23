@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface Sprite.IMaterialProvider
+    <title>Class TexturePathUtility
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface Sprite.IMaterialProvider
+    <meta name="title" content="Class TexturePathUtility
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,30 +78,59 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.Sprite.IMaterialProvider">
+            <article class="content wrap" id="_content" data-uid="Lime.TexturePathUtility">
   
   
-  <h1 id="Lime_Sprite_IMaterialProvider" data-uid="Lime.Sprite.IMaterialProvider" class="text-break">Interface Sprite.IMaterialProvider
+  <h1 id="Lime_TexturePathUtility" data-uid="Lime.TexturePathUtility" class="text-break">Class TexturePathUtility
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">TexturePathUtility</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_Sprite_IMaterialProvider_syntax">Syntax</h5>
+  <h5 id="Lime_TexturePathUtility_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IMaterialProvider</code></pre>
+    <pre><code class="lang-csharp hljs">public static class TexturePathUtility</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   
   
-  <a id="Lime_Sprite_IMaterialProvider_GetMaterial_" data-uid="Lime.Sprite.IMaterialProvider.GetMaterial*"></a>
-  <h4 id="Lime_Sprite_IMaterialProvider_GetMaterial_System_Int32_" data-uid="Lime.Sprite.IMaterialProvider.GetMaterial(System.Int32)">GetMaterial(Int32)</h4>
+  <a id="Lime_TexturePathUtility_GetRenderTarget_" data-uid="Lime.TexturePathUtility.GetRenderTarget*"></a>
+  <h4 id="Lime_TexturePathUtility_GetRenderTarget_System_String_" data-uid="Lime.TexturePathUtility.GetRenderTarget(System.String)">GetRenderTarget(String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IMaterial GetMaterial(int tag)</code></pre>
+    <pre><code class="lang-csharp hljs">public static RenderTarget GetRenderTarget(string id)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -114,8 +143,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">tag</span></td>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">id</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -130,49 +159,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Sprite_IMaterialProvider_ProcessSprite_" data-uid="Lime.Sprite.IMaterialProvider.ProcessSprite*"></a>
-  <h4 id="Lime_Sprite_IMaterialProvider_ProcessSprite_Lime_Sprite_" data-uid="Lime.Sprite.IMaterialProvider.ProcessSprite(Lime.Sprite)">ProcessSprite(Sprite)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Sprite ProcessSprite(Sprite s)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Sprite.html">Sprite</a></td>
-        <td><span class="parametername">s</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Sprite.html">Sprite</a></td>
+        <td><a class="xref" href="Lime.RenderTarget.html">RenderTarget</a></td>
         <td></td>
       </tr>
     </tbody>

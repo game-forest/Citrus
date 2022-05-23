@@ -357,7 +357,7 @@ Directly serialized ones determine document root type. So Node is root type of a
 <ul>
 <li><a class="xref" href="Lime.Node.html">Node</a> (tangerine scene, *.tan),</li>
 <li><a class="xref" href="Lime.Model3DAttachmentParser.ModelAttachmentFormat.html">Model3DAttachmentParser.ModelAttachmentFormat</a> (*.txt),</li>
-<li><a class="xref" href="Lime.TextureAtlasElement.Params.html">TextureAtlasElement.Params</a> (*.atlasPart, but will be renamed to Sprite *.sprite),</li>
+<li><see cref="!:TextureAtlasElement.Params"></see> (*.atlasPart, but will be renamed to Sprite *.sprite),</li>
 <li><a class="xref" href="Lime.Font.html">Font</a> (*.tft).</li>
 <li><code>Lime.TftConfig</code> (*.tftconf) (defined in Lime/Extensions/DynamicFont)</li>
 <li><a class="xref" href="Lime.PackedAssetBundle.Manifest.html">PackedAssetBundle.Manifest</a> (.Manifest)</li>
@@ -446,6 +446,10 @@ Duration is calculated so motion lasts until min speed reached.</p>
       <h4><a class="xref" href="Lime.GestureManager.html">GestureManager</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.GestureProcessor.html">GestureProcessor</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.Glyph.html">Glyph</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.GlyphList.html">GlyphList</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.GradientComponent.html">GradientComponent</a></h4>
       <section></section>
@@ -632,8 +636,6 @@ layer metadata for an application (e.g. layer: &quot;game&quot;, version: 17).</
       <section></section>
       <h4><a class="xref" href="Lime.Movie.html">Movie</a></h4>
       <section></section>
-      <h4><a class="xref" href="Lime.MovieTexture.html">MovieTexture</a></h4>
-      <section></section>
       <h4><a class="xref" href="Lime.MultiCaretPosition.html">MultiCaretPosition</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.NineGrid.html">NineGrid</a></h4>
@@ -817,6 +819,8 @@ disables rendering of a subtree (including owner) of child objects in the main r
       <section></section>
       <h4><a class="xref" href="Lime.SerializableSample.html">SerializableSample</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.SerializableSprite.html">SerializableSprite</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.SerializableTexture.html">SerializableTexture</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.ServiceProviderExtensions.html">ServiceProviderExtensions</a></h4>
@@ -880,15 +884,11 @@ disables rendering of a subtree (including owner) of child objects in the main r
       <section></section>
       <h4><a class="xref" href="Lime.Sprite.html">Sprite</a></h4>
       <section></section>
-      <h4><a class="xref" href="Lime.Sprite.CompoundMaterialProvider.html">Sprite.CompoundMaterialProvider</a></h4>
+      <h4><a class="xref" href="Lime.SpriteData.html">SpriteData</a></h4>
       <section></section>
-      <h4><a class="xref" href="Lime.Sprite.DefaultMaterialProvider.html">Sprite.DefaultMaterialProvider</a></h4>
+      <h4><a class="xref" href="Lime.SpriteExtensions.html">SpriteExtensions</a></h4>
       <section></section>
-      <h4><a class="xref" href="Lime.Sprite.LcdFontMaterial.html">Sprite.LcdFontMaterial</a></h4>
-      <section></section>
-      <h4><a class="xref" href="Lime.Sprite.LcdFontMaterialProvider.html">Sprite.LcdFontMaterialProvider</a></h4>
-      <section></section>
-      <h4><a class="xref" href="Lime.SpriteList.html">SpriteList</a></h4>
+      <h4><a class="xref" href="Lime.SpritePool.html">SpritePool</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.StackLayout.html">StackLayout</a></h4>
       <section></section>
@@ -997,9 +997,9 @@ will be assigned to command.Text. <see cref="!:Tangerine.Core.MenuExtensions.Ins
       <h4><a class="xref" href="Lime.Texture2D.html">Texture2D</a></h4>
       <section><p>Represents 2D texture</p>
 </section>
-      <h4><a class="xref" href="Lime.TextureAtlasElement.html">TextureAtlasElement</a></h4>
-      <section></section>
       <h4><a class="xref" href="Lime.TextureParams.html">TextureParams</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.TexturePathUtility.html">TexturePathUtility</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.TexturePool.html">TexturePool</a></h4>
       <section></section>
@@ -1266,6 +1266,8 @@ Other widgets receive released buttons state and frozen axes values.</p>
       <section><p>An axis-aligned bounding box, or AABB for short, is a box
 aligned with coordinate axes and fully enclosing some object.</p>
 </section>
+      <h4><a class="xref" href="Lime.CharPosition.html">CharPosition</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.Color4.html">Color4</a></h4>
       <section><p>Representation of 4-byte color (RGBA).</p>
 </section>
@@ -1349,13 +1351,11 @@ aligned with coordinate axes and fully enclosing some object.</p>
 </section>
       <h4><a class="xref" href="Lime.Splitter.SeparatorsRenderPresenterBase.SplitterLine.html">Splitter.SeparatorsRenderPresenterBase.SplitterLine</a></h4>
       <section></section>
-      <h4><a class="xref" href="Lime.SpriteList.CharDef.html">SpriteList.CharDef</a></h4>
+      <h4><a class="xref" href="Lime.Sprite.Vertex.html">Sprite.Vertex</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.StencilState.html">StencilState</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.TapGestureOptions.html">TapGestureOptions</a></h4>
-      <section></section>
-      <h4><a class="xref" href="Lime.TextureAtlasElement.Params.html">TextureAtlasElement.Params</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.Thickness.html">Thickness</a></h4>
       <section></section>
@@ -1441,6 +1441,8 @@ aligned with coordinate axes and fully enclosing some object.</p>
       <section></section>
       <h4><a class="xref" href="Lime.IFontCharSource.html">IFontCharSource</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.IGlyphMaterialProvider.html">IGlyphMaterialProvider</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.IImageCombinerArg.html">IImageCombinerArg</a></h4>
       <section><p>This interface must implements every node which can be used as a source for ImageCombiner.</p>
 </section>
@@ -1492,11 +1494,15 @@ Do not use with components marked with <a class="xref" href="Lime.AllowMultipleC
       <h4><a class="xref" href="Lime.ISoftKeyboard.html">ISoftKeyboard</a></h4>
       <section><p>Програмная клавиатура (для мобильных устройств)</p>
 </section>
+      <h4><a class="xref" href="Lime.ISprite.html">ISprite</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.ITangerinePreviewAnimationListener.html">ITangerinePreviewAnimationListener</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.IText.html">IText</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.ITexture.html">ITexture</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.ITiledImageMaterial.html">ITiledImageMaterial</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.ITopology.html">ITopology</a></h4>
       <section></section>
@@ -1513,8 +1519,6 @@ Do not use with components marked with <a class="xref" href="Lime.AllowMultipleC
       <h4><a class="xref" href="Lime.IWindow.html">IWindow</a></h4>
       <section><p>Defines the interface for a window.</p>
 </section>
-      <h4><a class="xref" href="Lime.Sprite.IMaterialProvider.html">Sprite.IMaterialProvider</a></h4>
-      <section></section>
       <h4><a class="xref" href="Lime.ThemedButton.IButtonPresenter.html">ThemedButton.IButtonPresenter</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.Validation.IFixingValidator.html">Validation.IFixingValidator</a></h4>

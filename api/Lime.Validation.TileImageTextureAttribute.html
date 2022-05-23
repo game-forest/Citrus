@@ -93,7 +93,7 @@
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator</a>&lt;<a class="xref" href="Lime.ITexture.html">ITexture</a>&gt;</div>
+    <div><a class="xref" href="Lime.Validation.IValidator-1.html">Validation.IValidator</a>&lt;<a class="xref" href="Lime.ISprite.html">ISprite</a>&gt;</div>
     <div><a class="xref" href="Lime.Validation.IValidator.html">Validation.IValidator</a></div>
   </div>
   <div class="inheritedMembers">
@@ -230,19 +230,19 @@
   <h5 id="Lime_Validation_TileImageTextureAttribute_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[AttributeUsage(AttributeTargets.Property)]
-public class TileImageTextureAttribute : Attribute, Validation.IValidator&lt;ITexture&gt;, Validation.IValidator</code></pre>
+public class TileImageTextureAttribute : Attribute, Validation.IValidator&lt;ISprite&gt;, Validation.IValidator</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   
   
   <a id="Lime_Validation_TileImageTextureAttribute_Validate_" data-uid="Lime.Validation.TileImageTextureAttribute.Validate*"></a>
-  <h4 id="Lime_Validation_TileImageTextureAttribute_Validate_Lime_ITexture_" data-uid="Lime.Validation.TileImageTextureAttribute.Validate(Lime.ITexture)">Validate(ITexture)</h4>
+  <h4 id="Lime_Validation_TileImageTextureAttribute_Validate_Lime_ISprite_" data-uid="Lime.Validation.TileImageTextureAttribute.Validate(Lime.ISprite)">Validate(ISprite)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;(Validation.Result Result, string Message)&gt; Validate(ITexture texture)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;(Validation.Result Result, string Message)&gt; Validate(ISprite sprite)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -255,8 +255,8 @@ public class TileImageTextureAttribute : Attribute, Validation.IValidator&lt;ITe
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture</span></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
+        <td><span class="parametername">sprite</span></td>
         <td></td>
       </tr>
     </tbody>

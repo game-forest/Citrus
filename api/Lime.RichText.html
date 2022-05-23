@@ -281,7 +281,7 @@
       <a class="xref" href="Lime.Widget.html#Lime_Widget_HitTestMethod">Widget.HitTestMethod</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_Texture">Widget.Texture</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_Sprite">Widget.Sprite</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_Input">Widget.Input</a>
@@ -1226,12 +1226,12 @@ public bool WordSplitAllowed { get; set; }</code></pre>
   
   
   <a id="Lime_RichText_GetCharPair_" data-uid="Lime.RichText.GetCharPair*"></a>
-  <h4 id="Lime_RichText_GetCharPair_Lime_Vector2_System_Tuple_Lime_SpriteList_CharDef_Lime_SpriteList_CharDef___" data-uid="Lime.RichText.GetCharPair(Lime.Vector2,System.Tuple{Lime.SpriteList.CharDef,Lime.SpriteList.CharDef}@)">GetCharPair(Vector2, out Tuple&lt;SpriteList.CharDef, SpriteList.CharDef&gt;)</h4>
+  <h4 id="Lime_RichText_GetCharPair_Lime_Vector2_System_ValueTuple_Lime_CharPosition_Lime_CharPosition___" data-uid="Lime.RichText.GetCharPair(Lime.Vector2,System.ValueTuple{Lime.CharPosition,Lime.CharPosition}@)">GetCharPair(Vector2, out (CharPosition, CharPosition))</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool GetCharPair(Vector2 point, out Tuple&lt;SpriteList.CharDef, SpriteList.CharDef&gt; pair)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool GetCharPair(Vector2 point, out (CharPosition, CharPosition) pair)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1249,7 +1249,7 @@ public bool WordSplitAllowed { get; set; }</code></pre>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Tuple</span>&lt;<a class="xref" href="Lime.SpriteList.CharDef.html">SpriteList.CharDef</a>, <a class="xref" href="Lime.SpriteList.CharDef.html">SpriteList.CharDef</a>&gt;</td>
+        <td><span class="xref">System.ValueTuple</span>&lt;<a class="xref" href="Lime.CharPosition.html">CharPosition</a>, <a class="xref" href="Lime.CharPosition.html">CharPosition</a>&gt;</td>
         <td><span class="parametername">pair</span></td>
         <td></td>
       </tr>

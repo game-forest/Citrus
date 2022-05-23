@@ -788,12 +788,12 @@ public class Image : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, I
   
   
   <a id="Lime_Image__ctor_" data-uid="Lime.Image.#ctor*"></a>
-  <h4 id="Lime_Image__ctor_Lime_ITexture_" data-uid="Lime.Image.#ctor(Lime.ITexture)">Image(ITexture)</h4>
+  <h4 id="Lime_Image__ctor_Lime_ISprite_" data-uid="Lime.Image.#ctor(Lime.ISprite)">Image(ISprite)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Image(ITexture texture)</code></pre>
+    <pre><code class="lang-csharp hljs">public Image(ISprite sprite)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -806,8 +806,8 @@ public class Image : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, I
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture</span></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
+        <td><span class="parametername">sprite</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -820,7 +820,7 @@ public class Image : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, I
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Image(string texturePath)</code></pre>
+    <pre><code class="lang-csharp hljs">public Image(string spritePath)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -834,7 +834,7 @@ public class Image : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, I
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">texturePath</span></td>
+        <td><span class="parametername">spritePath</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -893,8 +893,8 @@ public class Image : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, I
   </table>
   
   
-  <a id="Lime_Image_Texture_" data-uid="Lime.Image.Texture*"></a>
-  <h4 id="Lime_Image_Texture" data-uid="Lime.Image.Texture">Texture</h4>
+  <a id="Lime_Image_Sprite_" data-uid="Lime.Image.Sprite*"></a>
+  <h4 id="Lime_Image_Sprite" data-uid="Lime.Image.Sprite">Sprite</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -902,7 +902,7 @@ public class Image : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, I
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [YuzuSerializeIf(&quot;IsNotRenderTexture&quot;)]
 [TangerineKeyframeColor(15)]
-public sealed override ITexture Texture { get; set; }</code></pre>
+public sealed override ISprite Sprite { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -914,13 +914,13 @@ public sealed override ITexture Texture { get; set; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Widget.html#Lime_Widget_Texture">Widget.Texture</a></div>
+  <div><a class="xref" href="Lime.Widget.html#Lime_Widget_Sprite">Widget.Sprite</a></div>
   
   
   <a id="Lime_Image_UV0_" data-uid="Lime.Image.UV0*"></a>

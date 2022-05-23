@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Struct SpriteList.CharDef
+    <title>Class SpritePool
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Struct SpriteList.CharDef
+    <meta name="title" content="Class SpritePool
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,50 +78,58 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.SpriteList.CharDef">
+            <article class="content wrap" id="_content" data-uid="Lime.SpritePool">
   
   
-  <h1 id="Lime_SpriteList_CharDef" data-uid="Lime.SpriteList.CharDef" class="text-break">Struct SpriteList.CharDef
+  <h1 id="Lime_SpritePool" data-uid="Lime.SpritePool" class="text-break">Class SpritePool
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">SpritePool</span></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <span class="xref">System.ValueType.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.ValueType.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.ValueType.ToString()</span>
+      <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
     </div>
     <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
       <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
     <div>
       <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_SpriteList_CharDef_syntax">Syntax</h5>
+  <h5 id="Lime_SpritePool_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public struct CharDef</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class SpritePool</code></pre>
   </div>
   <h3 id="fields">Fields
   </h3>
   
   
-  <h4 id="Lime_SpriteList_CharDef_FontChar" data-uid="Lime.SpriteList.CharDef.FontChar">FontChar</h4>
+  <h4 id="Lime_SpritePool_Instance" data-uid="Lime.SpritePool.Instance">Instance</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public FontChar FontChar</code></pre>
+    <pre><code class="lang-csharp hljs">public static readonly SpritePool Instance</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -133,21 +141,24 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.FontChar.html">FontChar</a></td>
+        <td><a class="xref" href="Lime.SpritePool.html">SpritePool</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h3 id="properties">Properties
+  </h3>
   
   
-  <h4 id="Lime_SpriteList_CharDef_Position" data-uid="Lime.SpriteList.CharDef.Position">Position</h4>
+  <a id="Lime_SpritePool_NullSprite_" data-uid="Lime.SpritePool.NullSprite*"></a>
+  <h4 id="Lime_SpritePool_NullSprite" data-uid="Lime.SpritePool.NullSprite">NullSprite</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Vector2 Position</code></pre>
+    <pre><code class="lang-csharp hljs">public ISprite NullSprite { get; }</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -157,7 +168,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -166,13 +177,13 @@
   </h3>
   
   
-  <a id="Lime_SpriteList_CharDef_Size_" data-uid="Lime.SpriteList.CharDef.Size*"></a>
-  <h4 id="Lime_SpriteList_CharDef_Size_System_Single_" data-uid="Lime.SpriteList.CharDef.Size(System.Single)">Size(Single)</h4>
+  <a id="Lime_SpritePool_GetSprite_" data-uid="Lime.SpritePool.GetSprite*"></a>
+  <h4 id="Lime_SpritePool_GetSprite_System_String_" data-uid="Lime.SpritePool.GetSprite(System.String)">GetSprite(String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Vector2 Size(float fontHeight)</code></pre>
+    <pre><code class="lang-csharp hljs">public ISprite GetSprite(string path)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -185,8 +196,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -201,11 +212,21 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="Lime_SpritePool_Reset_" data-uid="Lime.SpritePool.Reset*"></a>
+  <h4 id="Lime_SpritePool_Reset" data-uid="Lime.SpritePool.Reset">Reset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
 </article>
           </div>
           

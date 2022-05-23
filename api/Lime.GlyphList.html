@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class CommonTexture
+    <title>Class GlyphList
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class CommonTexture
+    <meta name="title" content="Class GlyphList
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,20 +78,17 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.CommonTexture">
+            <article class="content wrap" id="_content" data-uid="Lime.GlyphList">
   
   
-  <h1 id="Lime_CommonTexture" data-uid="Lime.CommonTexture" class="text-break">Class CommonTexture
+  <h1 id="Lime_GlyphList" data-uid="Lime.GlyphList" class="text-break">Class GlyphList
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">CommonTexture</span></div>
-      <div class="level2"><a class="xref" href="Lime.RenderTexture.html">RenderTexture</a></div>
-      <div class="level2"><a class="xref" href="Lime.SerializableTexture.html">SerializableTexture</a></div>
-      <div class="level2"><a class="xref" href="Lime.Texture2D.html">Texture2D</a></div>
+    <div class="level1"><span class="xref">GlyphList</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -119,23 +116,159 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_CommonTexture_syntax">Syntax</h5>
+  <h5 id="Lime_GlyphList_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class CommonTexture</code></pre>
+    <pre><code class="lang-csharp hljs">public class GlyphList</code></pre>
   </div>
-  <h3 id="properties">Properties
+  <h3 id="methods">Methods
   </h3>
   
   
-  <a id="Lime_CommonTexture_IsDisposed_" data-uid="Lime.CommonTexture.IsDisposed*"></a>
-  <h4 id="Lime_CommonTexture_IsDisposed" data-uid="Lime.CommonTexture.IsDisposed">IsDisposed</h4>
+  <a id="Lime_GlyphList_Add_" data-uid="Lime.GlyphList.Add*"></a>
+  <h4 id="Lime_GlyphList_Add_Lime_IFont_Lime_Color4_System_Single_Lime_CharPosition___System_Int32_" data-uid="Lime.GlyphList.Add(Lime.IFont,Lime.Color4,System.Single,Lime.CharPosition[],System.Int32)">Add(IFont, Color4, Single, CharPosition[], Int32)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool IsDisposed { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public void Add(IFont font, Color4 color, float fontHeight, CharPosition[] charDefs, int tag)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IFont.html">IFont</a></td>
+        <td><span class="parametername">font</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">fontHeight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.CharPosition.html">CharPosition</a>[]</td>
+        <td><span class="parametername">charDefs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">tag</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_GlyphList_Add_" data-uid="Lime.GlyphList.Add*"></a>
+  <h4 id="Lime_GlyphList_Add_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_System_Int32_" data-uid="Lime.GlyphList.Add(Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,System.Int32)">Add(ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(ITexture texture, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, int tag)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0t1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1t1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">tag</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_GlyphList_Clear_" data-uid="Lime.GlyphList.Clear*"></a>
+  <h4 id="Lime_GlyphList_Clear" data-uid="Lime.GlyphList.Clear">Clear()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  
+  
+  <a id="Lime_GlyphList_GetCharPair_" data-uid="Lime.GlyphList.GetCharPair*"></a>
+  <h4 id="Lime_GlyphList_GetCharPair_Lime_Vector2_System_ValueTuple_Lime_CharPosition_Lime_CharPosition___" data-uid="Lime.GlyphList.GetCharPair(Lime.Vector2,System.ValueTuple{Lime.CharPosition,Lime.CharPosition}@)">GetCharPair(Vector2, out (CharPosition, CharPosition))</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool GetCharPair(Vector2 point, out (CharPosition, CharPosition) pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">point</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ValueTuple</span>&lt;<a class="xref" href="Lime.CharPosition.html">CharPosition</a>, <a class="xref" href="Lime.CharPosition.html">CharPosition</a>&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -152,15 +285,42 @@
   </table>
   
   
-  <a id="Lime_CommonTexture_MemoryUsed_" data-uid="Lime.CommonTexture.MemoryUsed*"></a>
-  <h4 id="Lime_CommonTexture_MemoryUsed" data-uid="Lime.CommonTexture.MemoryUsed">MemoryUsed</h4>
+  <a id="Lime_GlyphList_HitTest_" data-uid="Lime.GlyphList.HitTest*"></a>
+  <h4 id="Lime_GlyphList_HitTest_Lime_Matrix32_Lime_Vector2_System_Int32__" data-uid="Lime.GlyphList.HitTest(Lime.Matrix32,Lime.Vector2,System.Int32@)">HitTest(Matrix32, Vector2, out Int32)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int MemoryUsed { get; protected set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public bool HitTest(Matrix32 worldTransform, Vector2 point, out int tag)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
+        <td><span class="parametername">worldTransform</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">point</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">tag</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -170,84 +330,80 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   
   
-  <a id="Lime_CommonTexture_TotalMemoryUsed_" data-uid="Lime.CommonTexture.TotalMemoryUsed*"></a>
-  <h4 id="Lime_CommonTexture_TotalMemoryUsed" data-uid="Lime.CommonTexture.TotalMemoryUsed">TotalMemoryUsed</h4>
-  <div class="markdown level1 summary"><p>Gets total bytes uploaded to vram by all alive textures. Thread safe.</p>
-</div>
+  <a id="Lime_GlyphList_Render_" data-uid="Lime.GlyphList.Render*"></a>
+  <h4 id="Lime_GlyphList_Render_Lime_Color4_Lime_Blending_Lime_ShaderId_" data-uid="Lime.GlyphList.Render(Lime.Color4,Lime.Blending,Lime.ShaderId)">Render(Color4, Blending, ShaderId)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static int TotalMemoryUsed { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public void Render(Color4 color, Blending blending, ShaderId shader)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Blending.html">Blending</a></td>
+        <td><span class="parametername">blending</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.ShaderId.html">ShaderId</a></td>
+        <td><span class="parametername">shader</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   
   
-  <a id="Lime_CommonTexture_TotalMemoryUsedMb_" data-uid="Lime.CommonTexture.TotalMemoryUsedMb*"></a>
-  <h4 id="Lime_CommonTexture_TotalMemoryUsedMb" data-uid="Lime.CommonTexture.TotalMemoryUsedMb">TotalMemoryUsedMb</h4>
+  <a id="Lime_GlyphList_Render_" data-uid="Lime.GlyphList.Render*"></a>
+  <h4 id="Lime_GlyphList_Render_Lime_Color4_Lime_IGlyphMaterialProvider_" data-uid="Lime.GlyphList.Render(Lime.Color4,Lime.IGlyphMaterialProvider)">Render(Color4, IGlyphMaterialProvider)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static int TotalMemoryUsedMb { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public void Render(Color4 color, IGlyphMaterialProvider materialProvider)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.IGlyphMaterialProvider.html">IGlyphMaterialProvider</a></td>
+        <td><span class="parametername">materialProvider</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
-  <a id="Lime_CommonTexture_Dispose_" data-uid="Lime.CommonTexture.Dispose*"></a>
-  <h4 id="Lime_CommonTexture_Dispose" data-uid="Lime.CommonTexture.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Dispose()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_CommonTexture_MaybeDiscardUnderPressure_" data-uid="Lime.CommonTexture.MaybeDiscardUnderPressure*"></a>
-  <h4 id="Lime_CommonTexture_MaybeDiscardUnderPressure" data-uid="Lime.CommonTexture.MaybeDiscardUnderPressure">MaybeDiscardUnderPressure()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void MaybeDiscardUnderPressure()</code></pre>
-  </div>
 </article>
           </div>
           

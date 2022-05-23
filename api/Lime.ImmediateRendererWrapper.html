@@ -958,12 +958,12 @@
   
   
   <a id="Lime_ImmediateRendererWrapper_DrawSprite_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite*"></a>
-  <h4 id="Lime_ImmediateRendererWrapper_DrawSprite_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite(Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</h4>
+  <h4 id="Lime_ImmediateRendererWrapper_DrawSprite_Lime_ISprite_Lime_Color4_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite(Lime.ISprite,Lime.Color4,Lime.Vector2,Lime.Vector2)">DrawSprite(ISprite, Color4, Vector2, Vector2)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void DrawSprite(ISprite sprite, Color4 color, Vector2 position, Vector2 size)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -976,8 +976,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
+        <td><span class="parametername">sprite</span></td>
         <td></td>
       </tr>
       <tr>
@@ -995,29 +995,19 @@
         <td><span class="parametername">size</span></td>
         <td></td>
       </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1</span></td>
-        <td></td>
-      </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawSprite_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawSprite(ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</a></div>
+  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawSprite_Lime_ISprite_Lime_Color4_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawSprite(ISprite, Color4, Vector2, Vector2)</a></div>
   
   
   <a id="Lime_ImmediateRendererWrapper_DrawSprite_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite*"></a>
-  <h4 id="Lime_ImmediateRendererWrapper_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</h4>
+  <h4 id="Lime_ImmediateRendererWrapper_DrawSprite_Lime_ISprite_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite(Lime.ISprite,Lime.IMaterial,Lime.Color4,Lime.Vector2,Lime.Vector2)">DrawSprite(ISprite, IMaterial, Color4, Vector2, Vector2)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void DrawSprite(ISprite sprite, IMaterial material, Color4 color, Vector2 position, Vector2 size)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1030,141 +1020,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</a></div>
-  
-  
-  <a id="Lime_ImmediateRendererWrapper_DrawSprite_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite*"></a>
-  <h4 id="Lime_ImmediateRendererWrapper_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t2</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</a></div>
-  
-  
-  <a id="Lime_ImmediateRendererWrapper_DrawSprite_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite*"></a>
-  <h4 id="Lime_ImmediateRendererWrapper_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, ITexture, IMaterial, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
+        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
+        <td><span class="parametername">sprite</span></td>
         <td></td>
       </tr>
       <tr>
@@ -1187,30 +1044,10 @@
         <td><span class="parametername">size</span></td>
         <td></td>
       </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t2</span></td>
-        <td></td>
-      </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawSprite(ITexture, ITexture, IMaterial, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</a></div>
+  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawSprite_Lime_ISprite_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawSprite(ISprite, IMaterial, Color4, Vector2, Vector2)</a></div>
   
   
   <a id="Lime_ImmediateRendererWrapper_DrawTextLine_" data-uid="Lime.ImmediateRendererWrapper.DrawTextLine*"></a>
@@ -1275,6 +1112,262 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_Lime_Color4_System_Single_System_Int32_System_Int32_System_Single_">RendererWrapper.DrawTextLine(IFont, Vector2, String, Color4, Single, Int32, Int32, Single)</a></div>
+  
+  
+  <a id="Lime_ImmediateRendererWrapper_DrawTexture_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture*"></a>
+  <h4 id="Lime_ImmediateRendererWrapper_DrawTexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture(Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawTexture(ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawTexture(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawTexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawTexture(ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</a></div>
+  
+  
+  <a id="Lime_ImmediateRendererWrapper_DrawTexture_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture*"></a>
+  <h4 id="Lime_ImmediateRendererWrapper_DrawTexture_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawTexture(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawTexture(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawTexture_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawTexture(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</a></div>
+  
+  
+  <a id="Lime_ImmediateRendererWrapper_DrawTexture_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture*"></a>
+  <h4 id="Lime_ImmediateRendererWrapper_DrawTexture_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawTexture(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawTexture(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0t1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1t1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0t2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1t2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawTexture_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawTexture(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</a></div>
+  
+  
+  <a id="Lime_ImmediateRendererWrapper_DrawTexture_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture*"></a>
+  <h4 id="Lime_ImmediateRendererWrapper_DrawTexture_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.ImmediateRendererWrapper.DrawTexture(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawTexture(ITexture, ITexture, IMaterial, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawTexture(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td><span class="parametername">texture2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td><span class="parametername">material</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0t1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1t1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv0t2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td><span class="parametername">uv1t2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.RendererWrapper.html#Lime_RendererWrapper_DrawTexture_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_">RendererWrapper.DrawTexture(ITexture, ITexture, IMaterial, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</a></div>
   
   
   <a id="Lime_ImmediateRendererWrapper_DrawTriangleFan_" data-uid="Lime.ImmediateRendererWrapper.DrawTriangleFan*"></a>
