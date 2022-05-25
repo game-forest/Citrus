@@ -35973,6 +35973,19 @@ references:
   isSpec: "True"
   fullName: Lime.Marker.Owner
   nameWithType: Marker.Owner
+- uid: Lime.Marker.Tags
+  name: Tags
+  href: api/Lime.Marker.html#Lime_Marker_Tags
+  commentId: P:Lime.Marker.Tags
+  fullName: Lime.Marker.Tags
+  nameWithType: Marker.Tags
+- uid: Lime.Marker.Tags*
+  name: Tags
+  href: api/Lime.Marker.html#Lime_Marker_Tags_
+  commentId: Overload:Lime.Marker.Tags
+  isSpec: "True"
+  fullName: Lime.Marker.Tags
+  nameWithType: Marker.Tags
 - uid: Lime.Marker.Time
   name: Time
   href: api/Lime.Marker.html#Lime_Marker_Time
@@ -69853,6 +69866,19 @@ references:
   isSpec: "True"
   fullName: Lime.ThemedTabCloseButton.ThemedTabCloseButton
   nameWithType: ThemedTabCloseButton.ThemedTabCloseButton
+- uid: Lime.ThemedTabCloseButton.FocusColor
+  name: FocusColor
+  href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_FocusColor
+  commentId: P:Lime.ThemedTabCloseButton.FocusColor
+  fullName: Lime.ThemedTabCloseButton.FocusColor
+  nameWithType: ThemedTabCloseButton.FocusColor
+- uid: Lime.ThemedTabCloseButton.FocusColor*
+  name: FocusColor
+  href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_FocusColor_
+  commentId: Overload:Lime.ThemedTabCloseButton.FocusColor
+  isSpec: "True"
+  fullName: Lime.ThemedTabCloseButton.FocusColor
+  nameWithType: ThemedTabCloseButton.FocusColor
 - uid: Lime.ThemedTabCloseButton.IsNotDecorated
   name: IsNotDecorated()
   href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_IsNotDecorated
@@ -69866,6 +69892,19 @@ references:
   isSpec: "True"
   fullName: Lime.ThemedTabCloseButton.IsNotDecorated
   nameWithType: ThemedTabCloseButton.IsNotDecorated
+- uid: Lime.ThemedTabCloseButton.NormalColor
+  name: NormalColor
+  href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_NormalColor
+  commentId: P:Lime.ThemedTabCloseButton.NormalColor
+  fullName: Lime.ThemedTabCloseButton.NormalColor
+  nameWithType: ThemedTabCloseButton.NormalColor
+- uid: Lime.ThemedTabCloseButton.NormalColor*
+  name: NormalColor
+  href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_NormalColor_
+  commentId: Overload:Lime.ThemedTabCloseButton.NormalColor
+  isSpec: "True"
+  fullName: Lime.ThemedTabCloseButton.NormalColor
+  nameWithType: ThemedTabCloseButton.NormalColor
 - uid: Lime.ThemedTabCloseButton.OnUpdate(System.Single)
   name: OnUpdate(Single)
   href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_OnUpdate_System_Single_
@@ -69879,6 +69918,19 @@ references:
   isSpec: "True"
   fullName: Lime.ThemedTabCloseButton.OnUpdate
   nameWithType: ThemedTabCloseButton.OnUpdate
+- uid: Lime.ThemedTabCloseButton.PressedColor
+  name: PressedColor
+  href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_PressedColor
+  commentId: P:Lime.ThemedTabCloseButton.PressedColor
+  fullName: Lime.ThemedTabCloseButton.PressedColor
+  nameWithType: ThemedTabCloseButton.PressedColor
+- uid: Lime.ThemedTabCloseButton.PressedColor*
+  name: PressedColor
+  href: api/Lime.ThemedTabCloseButton.html#Lime_ThemedTabCloseButton_PressedColor_
+  commentId: Overload:Lime.ThemedTabCloseButton.PressedColor
+  isSpec: "True"
+  fullName: Lime.ThemedTabCloseButton.PressedColor
+  nameWithType: ThemedTabCloseButton.PressedColor
 - uid: Lime.ThemedTextView
   name: ThemedTextView
   href: api/Lime.ThemedTextView.html
@@ -74623,6 +74675,19 @@ references:
   isSpec: "True"
   fullName: Lime.VectorShapeButtonPresenter.VectorShapeButtonPresenter
   nameWithType: VectorShapeButtonPresenter.VectorShapeButtonPresenter
+- uid: Lime.VectorShapeButtonPresenter.FocusColor
+  name: FocusColor
+  href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_FocusColor
+  commentId: P:Lime.VectorShapeButtonPresenter.FocusColor
+  fullName: Lime.VectorShapeButtonPresenter.FocusColor
+  nameWithType: VectorShapeButtonPresenter.FocusColor
+- uid: Lime.VectorShapeButtonPresenter.FocusColor*
+  name: FocusColor
+  href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_FocusColor_
+  commentId: Overload:Lime.VectorShapeButtonPresenter.FocusColor
+  isSpec: "True"
+  fullName: Lime.VectorShapeButtonPresenter.FocusColor
+  nameWithType: VectorShapeButtonPresenter.FocusColor
 - uid: Lime.VectorShapeButtonPresenter.GetRenderObject(Lime.Node)
   name: GetRenderObject(Node)
   href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_GetRenderObject_Lime_Node_
@@ -74636,6 +74701,19 @@ references:
   isSpec: "True"
   fullName: Lime.VectorShapeButtonPresenter.GetRenderObject
   nameWithType: VectorShapeButtonPresenter.GetRenderObject
+- uid: Lime.VectorShapeButtonPresenter.NormalColor
+  name: NormalColor
+  href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_NormalColor
+  commentId: P:Lime.VectorShapeButtonPresenter.NormalColor
+  fullName: Lime.VectorShapeButtonPresenter.NormalColor
+  nameWithType: VectorShapeButtonPresenter.NormalColor
+- uid: Lime.VectorShapeButtonPresenter.NormalColor*
+  name: NormalColor
+  href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_NormalColor_
+  commentId: Overload:Lime.VectorShapeButtonPresenter.NormalColor
+  isSpec: "True"
+  fullName: Lime.VectorShapeButtonPresenter.NormalColor
+  nameWithType: VectorShapeButtonPresenter.NormalColor
 - uid: Lime.VectorShapeButtonPresenter.PartialHitTest(Lime.Node,Lime.HitTestArgs@)
   name: PartialHitTest(Node, ref HitTestArgs)
   href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_PartialHitTest_Lime_Node_Lime_HitTestArgs__
@@ -74652,6 +74730,19 @@ references:
   isSpec: "True"
   fullName: Lime.VectorShapeButtonPresenter.PartialHitTest
   nameWithType: VectorShapeButtonPresenter.PartialHitTest
+- uid: Lime.VectorShapeButtonPresenter.PressedColor
+  name: PressedColor
+  href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_PressedColor
+  commentId: P:Lime.VectorShapeButtonPresenter.PressedColor
+  fullName: Lime.VectorShapeButtonPresenter.PressedColor
+  nameWithType: VectorShapeButtonPresenter.PressedColor
+- uid: Lime.VectorShapeButtonPresenter.PressedColor*
+  name: PressedColor
+  href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_PressedColor_
+  commentId: Overload:Lime.VectorShapeButtonPresenter.PressedColor
+  isSpec: "True"
+  fullName: Lime.VectorShapeButtonPresenter.PressedColor
+  nameWithType: VectorShapeButtonPresenter.PressedColor
 - uid: Lime.VectorShapeButtonPresenter.SetState(System.String)
   name: SetState(String)
   href: api/Lime.VectorShapeButtonPresenter.html#Lime_VectorShapeButtonPresenter_SetState_System_String_
