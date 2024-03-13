@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Cooking rules | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Cooking rules | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cooking-rules">Cooking rules</h1>
+
+<p>To be used in a game application, the source asset files must go through a number of transformations. The set of these transformations we call &quot;asset cooking&quot; and the system for configuring the transformations &quot;cooking rules&quot;.</p>
+<p>Asset cooking options are set and propagated using cooking rules files. Cooking rules files are placed in the asset directory and could be named in two ways:</p>
+<ol>
+<li><code>#CookingRules.txt</code></li>
+<li><code>&lt;asset_filename_with_extension&gt;.txt</code> e.g. <code>illuminator.png.txt</code></li>
+</ol>
+<p>In first case cooking rules are applied to all files and directories in current directory recursively until overridden with another cooking rules.</p>
+<p>In second case cooking rules are only applied to specified asset file.
+Cooking rules only override concrete rule lines specified.</p>
+<p>A target (see <a href="../citrus_project/targets.html">Targets</a>) can be specified for each rule according to the grammar.
+For example <code>Ignore(iOS) Yes</code> sets <code>Ignore</code> rule to <code>Yes</code> for iOS only.
+Rules with no target specified are implicitly bound to root target <code>Any</code>.</p>
+<p>There's a list of default targets, which are Win, Mac, iOS and Android. Other targets can be configured in <code>.citproj</code> project file.</p>
+<p>Cooking rules in this form are deduced only within the file where the cooking rules are defined. Each rule is deduced in the context of the current target, according to the priority of inheritance of the targets and in the order in which the rules are written. It follows that rules described for a particular target do not cause overloading of rule values in cooking rules which are deeper in the directory tree. If you declare an <code>Ignore(iOS) Yes</code> rule in the current directory, you can still overload it with an <code>Ignore Yes</code> rule located in the directory below, even if the current target is <code>iOS</code>.</p>
+<p>To propagate the overloading of target-specific rules down the directory tree, use <code>!</code> before the rule. Thus <code>!Ignore(iOS) Yes</code> can no longer be overloaded anywhere down the directory hierarchy by any rule, as long as its target has a lower priority.</p>
+<h2 id="format">Format</h2>
+<p>grammar:</p>
+<pre><code>rule_list: one of
+    rule '\n' rule_list
+    rule
+
+rule: [ '!' ] rule_name ['(' target_name ')'] ' ' rule_value '\n'
+
+target_name: one of
+    'Any'
+    'Win'
+    'Mac'
+    'iOS'
+    'Android'
+    &lt;user_defined_target&gt;
+
+rule_name: one of
+    'Image.ImportMode'
+    'Sprite.Mesh'
+    'Sprite.AtlasName'
+    'MipMaps'
+    'HighQualityCompression'
+    'PVRFormat'
+    'DDSFormat'
+    'GenerateOpacityMask'
+    'Bundles'
+    'Ignore'
+    'Only'
+    'Alias'
+    'ADPCMLimit'
+    'TextureScaleFactor'
+    'AtlasOptimization'
+    'ModelCompression'
+    'WrapMode'
+    'MinFilter'
+    'MagFilter'
+    'AtlasItemPadding'
+    'AtlasDebug'
+    'MaxAtlasSize'
+    'Polygonization.MaxVertexCount'
+    'Polygonization.MinVertexCount'
+    'Polygonization.Detail'
+    'Polygonization.AlphaThreshold'
+    'Polygonization.SizeThreshold'
+    'PolyPack.Rotation'
+</code></pre>
+<p>e.g.:</p>
+<pre><code>Rule1(Target1) Value
+Rule2(Target1) Value
+Rule2(Target1) Value
+Rule3 Value
+...
+!Rule1(Target2) Value
+Rule10 Value
+...
+</code></pre>
+<h2 id="rules">Rules</h2>
+<h3 id="common-rules">Common rules</h3>
+<p>Applicable to any kind of asset.</p>
+<ul>
+<li><p><code>Bundles</code> List of bundle names separated by space. The Asset will get into all the listed bundles. Default value is <code>Data</code>.</p>
+</li>
+<li><p><code>Ignore</code> <code>Yes</code> or <code>No</code> Asset will be ignored if <code>Yes</code>. Often used with target specified. Default is <code>No</code>.</p>
+</li>
+<li><p><code>Only</code> <code>Yes</code> or <code>No</code>. Asset will not be ignored only for specified target. Makes no sense without the target. Default is <code>No</code>.</p>
+</li>
+<li><p><code>Alias</code> <code>&lt;string&gt;</code> Asset will be renamed to the alias value in bundle. By default there's no alias.</p>
+</li>
+</ul>
+<h3 id="sound-rules">Sound rules</h3>
+<ul>
+<li><code>ADPCMLimit</code> value is <int> in Kb. <code>.ogg</code> files less than value in size will be converted to ADPCM/IMA4 format for faster loading.</int></li>
+</ul>
+<h3 id="image-rules">Image rules</h3>
+<ul>
+<li><p><code>Image.ImportMode</code> value is <code>Sprite</code> or <code>Texture</code>. Default is <code>Sprite</code>. Sprites get packed into atlas. And with <code>Texture</code> image will be converted to output format directly.</p>
+</li>
+<li><p><code>TextureScaleFactor</code> value is <float>. Default is <code>1.0f</code>. Image size will rescaled to this value.</float></p>
+</li>
+</ul>
+<h3 id="sprite-rules">Sprite rules</h3>
+<ul>
+<li><p><code>Sprite.Mesh</code> value is <code>Rect</code> or <code>Poly</code>. Default is <code>Rect</code>. See <a href="sprite_polygonization.html">Sprite Polygonization</a> for details.</p>
+</li>
+<li><p><code>Sprite.AtlasName</code> value is either <code>&lt;string&gt;</code> for custom atlas name or <code>${DirectoryName}</code> to use current directory name as an atlas name. Default value is empty string.</p>
+</li>
+<li><p><code>AtlasOptimization</code> value is one of <code>Memory</code>, <code>DrawCalls</code>, <code>PolyPack</code>. Default is <code>Memory</code>. See <a href="atlas_packing.html">Atlas Packing</a> for details.</p>
+</li>
+</ul>
+<h3 id="texture-rules">Texture rules</h3>
+<ul>
+<li><p><code>MipMaps</code></p>
+</li>
+<li><p><code>HighQualityCompression</code></p>
+</li>
+<li><p><code>PVRFormat</code> one of:</p>
+<ul>
+<li><code>PVRTC4</code> Falls back to PVRTC2 if image has no alpha</li>
+<li><code>PVRTC4_Forced</code></li>
+<li><code>PVRTC2</code></li>
+<li><code>RGBA4</code></li>
+<li><code>RGB565</code></li>
+<li><code>ARGB8</code></li>
+<li><code>RGBA8</code></li>
+</ul>
+<p>Used for iOS and Android.</p>
+</li>
+<li><p><code>DDSFormat</code> value is one of <code>DXTi</code>, <code>ARGB8</code>, <code>RGBA8</code>. Only used on Windows and MacOS.</p>
+<ul>
+<li>in case of <code>DXTi</code> for images with alpha channel <code>bc3</code> format will be used, otherwise <code>bc1</code>.</li>
+<li><code>ARGB8</code>, <code>RGBA8</code> are equivalent and mean uncompressed image data in dds container.</li>
+</ul>
+</li>
+<li><p><code>WrapMode</code> value is one of <code>Clamp</code>, <code>Repeat</code>, <code>MirroredRepeat</code>. Texture wrap mode. Default is <code>Clamp</code>.</p>
+</li>
+<li><p><code>MinFilter</code> value is <code>Linear</code> or <code>Nearest</code>. Texture min filter. Default is <code>Linear</code>.</p>
+</li>
+<li><p><code>MagFilter</code> value is <code>Linear</code> or <code>Nearest</code>. Texture mag filter, default is <code>Linear</code>.</p>
+</li>
+<li><p><code>GenerateOpacityMask</code> values is <code>Yes</code> or <code>No</code>. Default is <code>No</code>. Should an opacity mask be generated. Opacity masks are used for pixel precise hit test. Dimensions of opacity mask are texture dimensions divided by 2. Alpha threshold for generating mask is 12.</p>
+</li>
+</ul>
+<h3 id="model-rules">Model rules</h3>
+<ul>
+<li><code>ModelCompression</code> value is <code>Deflate</code> or <code>LZMA</code>. Default is <code>Deflate</code>.</li>
+</ul>
+<h3 id="atlas-rules">Atlas rules</h3>
+<ul>
+<li><code>AtlasItemPadding</code> <int> default is <code>1</code></int></li>
+<li><code>AtlasDebug</code> <code>Yes</code> or <code>No</code> default is <code>No</code></li>
+<li><code>MaxAtlasSize</code> <int> default is 2048</int></li>
+</ul>
+<p>See <a href="atlas_packing.html">Atlas Packing</a> for details.</p>
+<h3 id="polygonization-rules">Polygonization rules</h3>
+<ul>
+<li><code>Polygonization.MaxVertexCount</code> <int> default is <code>100</code></int></li>
+<li><code>Polygonization.MinVertexCount</code> <int> default is <code>3</code></int></li>
+<li><code>Polygonization.Detail</code> <int> default is <code>2000</code></int></li>
+<li><code>Polygonization.AlphaThreshold</code> <int> default is <code>1</code></int></li>
+<li><code>Polygonization.SizeThreshold</code> <int> default is <code>128</code></int></li>
+</ul>
+<p>See <a href="sprite_polygonization.html">Sprite Polygonization</a> for details.</p>
+<h3 id="polypack-rules">PolyPack rules</h3>
+<ul>
+<li><code>PolyPack.Rotation</code> value is one of <code>None</code>, <code>Right</code>, <code>Any</code></li>
+</ul>
+<p>See <a href="sprite_polygonization.html">Sprite Polygonization</a> for details.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

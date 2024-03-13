@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title> | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<p><strong>Синтетические бенчмарки Сitrus</strong></p>
+<p>В движке есть встроенные инструменты для замеров производительности вне игровых проектов, так называемые синтетические бенчмарки.</p>
+<p>В инструментарий входят:</p>
+<ul>
+<li><p>Сцены для синтетических тестов с различными игровыми объектами (Image,  TiledImage, SimpleText и так далее)</p>
+</li>
+<li><p>Логгеры для различных метрик в Lime - GPU, CPU (Render, Update, Vsync)</p>
+</li>
+<li><p>Cкрипты на языке Python для построения графиков</p>
+</li>
+<li><p>Скрипты RemoteScripting для сбора метрик</p>
+</li>
+</ul>
+<p><strong>Сбор метрик</strong></p>
+<p>Запуск сбора метрик осуществляется через скрипты RemoteScripting в редакторе Tangerine. Скрипты находятся в проекте <code>Examples\Tests</code> Соответственно для мобильных платформ на устройствах должны быть соответствующие билды проекта <code>Tests</code>.</p>
+<p>Запуск скриптов для сбора метрик происходит также, как и обычный запуск скриптов (см. RemoteScripting)</p>
+<p><strong>ВАЖНО!</strong> Для корректной работы скриптов необходимо открыть Inspector и заполнить поля, выбрав любой виджет на сцене.</p>
+<p>После того, как устройство было подключено к хосту, необходимо запустить скрипты в определенном порядке:</p>
+<ol>
+<li><p><em>Calculate device performance profile</em> - выбор целевого количества кадров в секунду. Создается файл профиля, в котором указано, сколько копий каждой сцены необходимо, чтобы достичь выбранного результата. Профиль сохраняется по пути <code>\Examples\Tests\StorageForRemoteScripting\</code> в формате <code>json</code></p>
+</li>
+<li><p><em>Run performance test</em> - запуск бенчмарков. В качестве параметра необходимо указать сгенерированный ранее профиль. Из параметров - интервал замера производительности, интервал паузы между сценами и количество повтора интервалов. <em>Результаты бенчмарка будут сохранены на подключенном устройстве.</em></p>
+</li>
+<li><p><em>Download performance test results</em> - скачивает результаты прогона бенчмарков в директорию <code>\Examples\Tests\StorageForRemoteScripting</code></p>
+</li>
+<li><p><em>Remove performance test results</em> - удаляет результаты прогона бенчмарков с устройства.</p>
+</li>
+</ol>
+<p>Собранные метрики в бинарном формате хранятся по пути<code>\Examples\Tests\StorageForRemoteScripting</code>  и имеют структуру вида <code>%дата_прогона%\%бенчмарк%\%сцена%</code></p>
+<p><strong>Построение графиков</strong></p>
+<p>Скрипты для построения графиков находятся по пути <code>\Examples\Tests\Charts</code></p>
+<p>Для запуска скриптов необходим Python3 (3.6). Все необходимые зависимости можно установить через <code>pip -r requirements.txt</code></p>
+<p>Результаты для каждой сцены поделены на <code>SingleAtlas</code> и <code>DifferentAtlases</code> - оптимизированная и неоптимизированная версия текстурного атласа.</p>
+<p>Существует 2 вида графиков:</p>
+<ul>
+<li><p>гистограмма (<code>draw_histogram.py</code>)</p>
+</li>
+<li><p>столбчатая диаграмма (<code>draw_bars_for_all.py</code>)</p>
+</li>
+</ul>
+<p><em>Гистограмма</em></p>
+<p>Конфигурация:</p>
+<pre><code class="lang-python">    scene_a = '2022-09-02_13-17-47\\ImagesBenchmark\\SingleAtlas'
+    scene_b = '2022-10-04_15-18-47\\ImagesBenchmark\\SingleAtlas'
+
+    device_name = &quot;kek&quot;
+    profile_name = &quot;Profile for kek 55 fps.json&quot;
+</code></pre>
+<p><em>Столбчатая диаграмма:</em></p>
+<p>Конфигурация:</p>
+<pre><code class="lang-python">device_name = &quot;msi&quot;
+profile_name = &quot;Profile for msi 55 fps.json&quot;
+
+launch_times = (
+    '2022-09-02_13-17-47',
+    '2022-09-03_13-17-47',
+    '2022-09-04_13-17-47',
+)
+
+scene_names = (
+    &quot;DistortionMeshBenchmark/SingleAtlas&quot;,
+    &quot;DistortionMeshBenchmark/DifferentAtlases&quot;,
+    &quot;ImagesBenchmark/SingleAtlas&quot;,
+    &quot;ImagesBenchmark/DifferentAtlases&quot;,
+    &quot;NineGridBenchmark/SingleAtlas&quot;,
+    &quot;NineGridBenchmark/DifferentAtlases&quot;,
+    &quot;ParticleEmitterBenchmark/SingleAtlas&quot;,
+    &quot;ParticleEmitterBenchmark/DifferentAtlases&quot;,
+    &quot;SdfTextBenchmark/SingleAtlas&quot;,
+    &quot;SimpleTextBenchmark/SingleAtlas&quot;,
+)
+</code></pre>
+<p>У столбчатой диаграммы есть 2 режима отображения:</p>
+<ul>
+<li><p>сравнения средних показателей по конкретной сцене (<code>compare_mean_for_scene</code>)</p>
+</li>
+<li><p>сравнение средних показателей по конкретной метрике (<code>compare_mean_for_metric</code>)</p>
+</li>
+</ul>
+<p>Для использование конкретного метода нужно раскомментировать нужную строчку в скрипте:</p>
+<pre><code class="lang-python">compare_mean_for_metric(target_metric, filtered_scenes, reference_time_for_comparison)
+compare_mean_for_all_scenes(scenes, reference_time_for_comparison)
+</code></pre>
+<p><strong>Сохранение диаграммы</strong></p>
+<p>Для сохранения диаграммы достаточно нажать выделенную кнопку и выбрать, куда сохранить.</p>
+<p><img src="images/bench_diagram.png" alt="bench_diagram.png"></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

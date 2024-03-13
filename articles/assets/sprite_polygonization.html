@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Sprite polygonization | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Sprite polygonization | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="sprite-polygonization">Sprite polygonization</h1>
+
+<p>The reason we would like to describe images with something other than a rectangle is to get rid of transparent pixels in the image (which can occupy quite large areas), as well as to pack the images more tightly into the atlas. By sacrificing the number of vertices.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Some code does not work with non rectangular sprites. For example NineGrid, DistortionMesh, ImageSprite in TextStyle, FontGlyph, Animesh, Image as an ImageCombiner argument, TiledImage.</p>
+<p>If you are writing code which only works with rectangular sprites use <code>ISprite.ValidateRectangular</code></p>
+<p><code>ISprite.ValidateRectangular</code> will produce error console output in Tangerine and will throw in application unless <code>Application.IsProduction</code> flag is set in which case it's silently ignored.</p>
+</div>
+<h2 id="spritemesh">Sprite.Mesh</h2>
+<p>A sprite mesh is the way an image is described by the vertices that make up the triangles that contain the pixels of an image. The type of a mesh for a sprite can be set using the <code>Sprite.Mesh</code> cooking rule. Possible values are <code>Rect</code> and <code>Poly</code>.</p>
+<p>If <code>Rect</code> is selected then the original rectangle of the image is used as a mesh. 4 vertices, 6 indices, 2 triangles. The <code>ISprite.IsRectangular</code> of the resulting sprite will be set to <code>true</code>.</p>
+<p>If you select <code>Poly</code>, a polygonization process will take place over the image to build a set of triangles describing the opaque pixels of the image. The <code>ISprite.IsRectangular</code> of the resulting sprite will be set to <code>false</code>.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>A polygonal representation can be convex, concave, disjoint, contain holes, but cannot have self-intersections.</p>
+</div>
+<h2 id="polygonization-cooking-rules">Polygonization cooking rules</h2>
+<p>Since there is no single correct polygonization, polygonization can be adjusted by the following cooking rules.</p>
+<ul>
+<li><p><code>Polygonization.MaxVertexCount</code> maximum allowed number of vertices in polygonal representation. Default value is <code>100</code>.</p>
+</li>
+<li><p><code>Polygonization.MinVertexCount</code> minimal allowed number of vertices in polygonal representation. Default value is <code>3</code>.</p>
+</li>
+</ul>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Even if you specify an interval for example from 3 to 6 vertices, it may happen that the algorithm cannot reduce the number of vertices less than 8. That is, the algorithm does not always reach 4, 5, 6, 7, 8 vertices, etc.</p>
+</div>
+<ul>
+<li><p><code>Polygonization.AlphaThreshold</code> threshold value for pixel's alpha. Pixels with an alpha value strictly lower than the threshold are considered transparent. Default value is <code>1</code>.</p>
+</li>
+<li><p><code>Polygonization.SizeThreshold</code> threshold value for the image size. If both width and height of the image are less than or equal to the threshold, then such an image is not polygonized and the original image rectangle is used as the polygonal approximation. However, the resulting sprite will have an <code>bool IsRectangular</code> value of <code>false</code>. The default size threshold value is <code>128</code>.</p>
+</li>
+<li><p><code>Polygonization.Detail</code> allows you to set how much the polygonal approximation of the image accurately describes the area of opaque pixels in the image. Makes sense somewhere between 300 and 20000. In practice, something in the 500 to 2000 range is more likely to be recommended. Semantically, it means the required number of saved pixels per vertex of the sprite, after which you should stop reducing the number of vertices in the polygonal approximation. You can think of it as &quot;how many saved pixels per vertex is enough. For example, a value of 10000 would mean that we are satisfied if one vertex saves a square with a side of 100 pixels. Default value is <code>2000</code>.</p>
+</li>
+</ul>
+<p>It is suggested to choose the optimal degree of polygonalization by experiment. It generally depends on the ratio of vertex cost to pixel cost in terms of performance. Which in turn depends on the amount of operations performed on a specific vertex on CPU/GPU, as well as the specific content of the fragment shader and the capabilities of supported devices. In some specific cases denser atlas packing may outweigh above mentioned vertex/pixel cost tradeoff, in some cases not.</p>
+<p>Try different values, look at the resulting atlases with the <code>AtlasDebug</code> cooking rule turned on, measure performance on different devices, and make a conclusion about the optimal degree of polygonalization.</p>
+<p>In the graphs below you can observe (hover over the graph for more information):</p>
+<ol>
+<li>The ratio of the total number of vertices to the total pixel area of the sprites.</li>
+<li>Dependence of the number of pixels per vertex on <code>Polygonization.Detail</code>.</li>
+</ol>
+<p>The data was obtained from a large sample set of images from a real project.</p>
+<iframe src="vertex_count_to_pixel_count.html" id="igraph" scrolling="no" style="border:none;" seamless="seamless" height="525" width="100%"></iframe>
+<iframe src="details_to_pixels_per_vertex.html" id="igraph" scrolling="no" style="border:none;" seamless="seamless" height="525" width="100%"></iframe>
+<h2 id="algorithm">Algorithm</h2>
+<ol>
+<li><p>Сheck if the image satisfies the size threshold. If not, the rectangle is used and the polygonization stops.</p>
+</li>
+<li><p>According to the threshold value of alpha the the initial polygonization is constructed, which contains &quot;all&quot; possible vertices.</p>
+</li>
+<li><p>The cycle of vertex reduction begins. By choosing the optimal one from the set of different operations, which can reduce the number of vertices, the contour is transformed into a new contour with fewer vertices. No more than 3 vertices can be reduced at a time.</p>
+</li>
+<li><p>As long as the maximum number of vertices is not reached, the reduction continues unconditionally.</p>
+</li>
+<li><p>In the interval between the minimum and maximum allowed number of vertices, the reduction may stop when the required &quot;detail&quot; is reached.</p>
+</li>
+<li><p>If the required detail has not been reached in the allowed range, the reduction stops when the minimum allowed number of vertices is reached, or the algorithm cannot apply any reduction operation without exceeding the boundaries of the original image rectangle.</p>
+</li>
+</ol>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

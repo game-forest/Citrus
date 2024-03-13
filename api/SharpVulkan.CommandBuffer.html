@@ -1,0 +1,2309 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Struct CommandBuffer
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Struct CommandBuffer
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="SharpVulkan.CommandBuffer">
+
+
+
+  <h1 id="SharpVulkan_CommandBuffer" data-uid="SharpVulkan.CommandBuffer" class="text-break">
+    Struct CommandBuffer
+  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="SharpVulkan.html">SharpVulkan</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public struct CommandBuffer : IEquatable&lt;CommandBuffer&gt;</code></pre>
+  </div>
+
+
+
+
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a>&gt;</div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals">ValueType.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="SharpVulkan_CommandBuffer_Null" data-uid="SharpVulkan.CommandBuffer.Null">
+  Null
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly CommandBuffer Null</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="SharpVulkan_CommandBuffer_Begin_" data-uid="SharpVulkan.CommandBuffer.Begin*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_Begin_SharpVulkan_CommandBufferBeginInfo__" data-uid="SharpVulkan.CommandBuffer.Begin(SharpVulkan.CommandBufferBeginInfo@)">
+  Begin(ref CommandBufferBeginInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Begin(ref CommandBufferBeginInfo beginInfo)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>beginInfo</code> <a class="xref" href="SharpVulkan.CommandBufferBeginInfo.html">CommandBufferBeginInfo</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BeginQuery_" data-uid="SharpVulkan.CommandBuffer.BeginQuery*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BeginQuery_SharpVulkan_QueryPool_System_UInt32_SharpVulkan_QueryControlFlags_" data-uid="SharpVulkan.CommandBuffer.BeginQuery(SharpVulkan.QueryPool,System.UInt32,SharpVulkan.QueryControlFlags)">
+  BeginQuery(QueryPool, uint, QueryControlFlags)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BeginQuery(QueryPool queryPool, uint query, QueryControlFlags flags)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>queryPool</code> <a class="xref" href="SharpVulkan.QueryPool.html">QueryPool</a></dt>
+    <dd></dd>
+    <dt><code>query</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>flags</code> <a class="xref" href="SharpVulkan.QueryControlFlags.html">QueryControlFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BeginRenderPass_" data-uid="SharpVulkan.CommandBuffer.BeginRenderPass*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BeginRenderPass_SharpVulkan_RenderPassBeginInfo__SharpVulkan_SubpassContents_" data-uid="SharpVulkan.CommandBuffer.BeginRenderPass(SharpVulkan.RenderPassBeginInfo@,SharpVulkan.SubpassContents)">
+  BeginRenderPass(ref RenderPassBeginInfo, SubpassContents)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BeginRenderPass(ref RenderPassBeginInfo renderPassBegin, SubpassContents contents)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>renderPassBegin</code> <a class="xref" href="SharpVulkan.RenderPassBeginInfo.html">RenderPassBeginInfo</a></dt>
+    <dd></dd>
+    <dt><code>contents</code> <a class="xref" href="SharpVulkan.SubpassContents.html">SubpassContents</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BindDescriptorSets_" data-uid="SharpVulkan.CommandBuffer.BindDescriptorSets*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BindDescriptorSets_SharpVulkan_PipelineBindPoint_SharpVulkan_PipelineLayout_System_UInt32_System_UInt32_SharpVulkan_DescriptorSet__System_UInt32_System_UInt32__" data-uid="SharpVulkan.CommandBuffer.BindDescriptorSets(SharpVulkan.PipelineBindPoint,SharpVulkan.PipelineLayout,System.UInt32,System.UInt32,SharpVulkan.DescriptorSet*,System.UInt32,System.UInt32*)">
+  BindDescriptorSets(PipelineBindPoint, PipelineLayout, uint, uint, DescriptorSet*, uint, uint*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BindDescriptorSets(PipelineBindPoint pipelineBindPoint, PipelineLayout layout, uint firstSet, uint descriptorSetCount, DescriptorSet* descriptorSets, uint dynamicOffsetCount, uint* dynamicOffsets)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipelineBindPoint</code> <a class="xref" href="SharpVulkan.PipelineBindPoint.html">PipelineBindPoint</a></dt>
+    <dd></dd>
+    <dt><code>layout</code> <a class="xref" href="SharpVulkan.PipelineLayout.html">PipelineLayout</a></dt>
+    <dd></dd>
+    <dt><code>firstSet</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>descriptorSetCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>descriptorSets</code> <a class="xref" href="SharpVulkan.DescriptorSet.html">DescriptorSet</a>*</dt>
+    <dd></dd>
+    <dt><code>dynamicOffsetCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>dynamicOffsets</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BindIndexBuffer_" data-uid="SharpVulkan.CommandBuffer.BindIndexBuffer*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BindIndexBuffer_SharpVulkan_Buffer_System_UInt64_SharpVulkan_IndexType_" data-uid="SharpVulkan.CommandBuffer.BindIndexBuffer(SharpVulkan.Buffer,System.UInt64,SharpVulkan.IndexType)">
+  BindIndexBuffer(Buffer, ulong, IndexType)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BindIndexBuffer(Buffer buffer, ulong offset, IndexType indexType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>indexType</code> <a class="xref" href="SharpVulkan.IndexType.html">IndexType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BindPipeline_" data-uid="SharpVulkan.CommandBuffer.BindPipeline*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BindPipeline_SharpVulkan_PipelineBindPoint_SharpVulkan_Pipeline_" data-uid="SharpVulkan.CommandBuffer.BindPipeline(SharpVulkan.PipelineBindPoint,SharpVulkan.Pipeline)">
+  BindPipeline(PipelineBindPoint, Pipeline)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BindPipeline(PipelineBindPoint pipelineBindPoint, Pipeline pipeline)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipelineBindPoint</code> <a class="xref" href="SharpVulkan.PipelineBindPoint.html">PipelineBindPoint</a></dt>
+    <dd></dd>
+    <dt><code>pipeline</code> <a class="xref" href="SharpVulkan.Pipeline.html">Pipeline</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BindVertexBuffers_" data-uid="SharpVulkan.CommandBuffer.BindVertexBuffers*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BindVertexBuffers_System_UInt32_System_UInt32_SharpVulkan_Buffer__System_UInt64__" data-uid="SharpVulkan.CommandBuffer.BindVertexBuffers(System.UInt32,System.UInt32,SharpVulkan.Buffer*,System.UInt64*)">
+  BindVertexBuffers(uint, uint, Buffer*, ulong*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BindVertexBuffers(uint firstBinding, uint bindingCount, Buffer* buffers, ulong* offsets)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>firstBinding</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>bindingCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>buffers</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a>*</dt>
+    <dd></dd>
+    <dt><code>offsets</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_BlitImage_" data-uid="SharpVulkan.CommandBuffer.BlitImage*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_BlitImage_SharpVulkan_Image_SharpVulkan_ImageLayout_SharpVulkan_Image_SharpVulkan_ImageLayout_System_UInt32_SharpVulkan_ImageBlit__SharpVulkan_Filter_" data-uid="SharpVulkan.CommandBuffer.BlitImage(SharpVulkan.Image,SharpVulkan.ImageLayout,SharpVulkan.Image,SharpVulkan.ImageLayout,System.UInt32,SharpVulkan.ImageBlit*,SharpVulkan.Filter)">
+  BlitImage(Image, ImageLayout, Image, ImageLayout, uint, ImageBlit*, Filter)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BlitImage(Image sourceImage, ImageLayout sourceImageLayout, Image destinationImage, ImageLayout destinationImageLayout, uint regionCount, ImageBlit* regions, Filter filter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>sourceImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>destinationImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>destinationImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>regionCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>regions</code> <a class="xref" href="SharpVulkan.ImageBlit.html">ImageBlit</a>*</dt>
+    <dd></dd>
+    <dt><code>filter</code> <a class="xref" href="SharpVulkan.Filter.html">Filter</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ClearAttachments_" data-uid="SharpVulkan.CommandBuffer.ClearAttachments*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ClearAttachments_System_UInt32_SharpVulkan_ClearAttachment__System_UInt32_SharpVulkan_ClearRect__" data-uid="SharpVulkan.CommandBuffer.ClearAttachments(System.UInt32,SharpVulkan.ClearAttachment@,System.UInt32,SharpVulkan.ClearRect*)">
+  ClearAttachments(uint, ref ClearAttachment, uint, ClearRect*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearAttachments(uint attachmentCount, ref ClearAttachment attachments, uint rectCount, ClearRect* rects)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>attachmentCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>attachments</code> <a class="xref" href="SharpVulkan.ClearAttachment.html">ClearAttachment</a></dt>
+    <dd></dd>
+    <dt><code>rectCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>rects</code> <a class="xref" href="SharpVulkan.ClearRect.html">ClearRect</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ClearColorImage_" data-uid="SharpVulkan.CommandBuffer.ClearColorImage*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ClearColorImage_SharpVulkan_Image_SharpVulkan_ImageLayout_SharpVulkan_ClearColorValue_System_UInt32_SharpVulkan_ImageSubresourceRange__" data-uid="SharpVulkan.CommandBuffer.ClearColorImage(SharpVulkan.Image,SharpVulkan.ImageLayout,SharpVulkan.ClearColorValue,System.UInt32,SharpVulkan.ImageSubresourceRange*)">
+  ClearColorImage(Image, ImageLayout, ClearColorValue, uint, ImageSubresourceRange*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearColorImage(Image image, ImageLayout imageLayout, ClearColorValue color, uint rangeCount, ImageSubresourceRange* ranges)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>image</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>imageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="SharpVulkan.ClearColorValue.html">ClearColorValue</a></dt>
+    <dd></dd>
+    <dt><code>rangeCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>ranges</code> <a class="xref" href="SharpVulkan.ImageSubresourceRange.html">ImageSubresourceRange</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ClearDepthStencilImage_" data-uid="SharpVulkan.CommandBuffer.ClearDepthStencilImage*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ClearDepthStencilImage_SharpVulkan_Image_SharpVulkan_ImageLayout_SharpVulkan_ClearDepthStencilValue_System_UInt32_SharpVulkan_ImageSubresourceRange__" data-uid="SharpVulkan.CommandBuffer.ClearDepthStencilImage(SharpVulkan.Image,SharpVulkan.ImageLayout,SharpVulkan.ClearDepthStencilValue,System.UInt32,SharpVulkan.ImageSubresourceRange*)">
+  ClearDepthStencilImage(Image, ImageLayout, ClearDepthStencilValue, uint, ImageSubresourceRange*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearDepthStencilImage(Image image, ImageLayout imageLayout, ClearDepthStencilValue depthStencil, uint rangeCount, ImageSubresourceRange* ranges)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>image</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>imageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>depthStencil</code> <a class="xref" href="SharpVulkan.ClearDepthStencilValue.html">ClearDepthStencilValue</a></dt>
+    <dd></dd>
+    <dt><code>rangeCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>ranges</code> <a class="xref" href="SharpVulkan.ImageSubresourceRange.html">ImageSubresourceRange</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_CopyBuffer_" data-uid="SharpVulkan.CommandBuffer.CopyBuffer*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_CopyBuffer_SharpVulkan_Buffer_SharpVulkan_Buffer_System_UInt32_SharpVulkan_BufferCopy__" data-uid="SharpVulkan.CommandBuffer.CopyBuffer(SharpVulkan.Buffer,SharpVulkan.Buffer,System.UInt32,SharpVulkan.BufferCopy*)">
+  CopyBuffer(Buffer, Buffer, uint, BufferCopy*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyBuffer(Buffer sourceBuffer, Buffer destinationBuffer, uint regionCount, BufferCopy* regions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>destinationBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>regionCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>regions</code> <a class="xref" href="SharpVulkan.BufferCopy.html">BufferCopy</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_CopyBufferToImage_" data-uid="SharpVulkan.CommandBuffer.CopyBufferToImage*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_CopyBufferToImage_SharpVulkan_Buffer_SharpVulkan_Image_SharpVulkan_ImageLayout_System_UInt32_SharpVulkan_BufferImageCopy__" data-uid="SharpVulkan.CommandBuffer.CopyBufferToImage(SharpVulkan.Buffer,SharpVulkan.Image,SharpVulkan.ImageLayout,System.UInt32,SharpVulkan.BufferImageCopy*)">
+  CopyBufferToImage(Buffer, Image, ImageLayout, uint, BufferImageCopy*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyBufferToImage(Buffer sourceBuffer, Image destinationImage, ImageLayout destinationImageLayout, uint regionCount, BufferImageCopy* regions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>destinationImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>destinationImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>regionCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>regions</code> <a class="xref" href="SharpVulkan.BufferImageCopy.html">BufferImageCopy</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_CopyImage_" data-uid="SharpVulkan.CommandBuffer.CopyImage*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_CopyImage_SharpVulkan_Image_SharpVulkan_ImageLayout_SharpVulkan_Image_SharpVulkan_ImageLayout_System_UInt32_SharpVulkan_ImageCopy__" data-uid="SharpVulkan.CommandBuffer.CopyImage(SharpVulkan.Image,SharpVulkan.ImageLayout,SharpVulkan.Image,SharpVulkan.ImageLayout,System.UInt32,SharpVulkan.ImageCopy*)">
+  CopyImage(Image, ImageLayout, Image, ImageLayout, uint, ImageCopy*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyImage(Image sourceImage, ImageLayout sourceImageLayout, Image destinationImage, ImageLayout destinationImageLayout, uint regionCount, ImageCopy* regions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>sourceImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>destinationImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>destinationImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>regionCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>regions</code> <a class="xref" href="SharpVulkan.ImageCopy.html">ImageCopy</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_CopyImageToBuffer_" data-uid="SharpVulkan.CommandBuffer.CopyImageToBuffer*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_CopyImageToBuffer_SharpVulkan_Image_SharpVulkan_ImageLayout_SharpVulkan_Buffer_System_UInt32_SharpVulkan_BufferImageCopy__" data-uid="SharpVulkan.CommandBuffer.CopyImageToBuffer(SharpVulkan.Image,SharpVulkan.ImageLayout,SharpVulkan.Buffer,System.UInt32,SharpVulkan.BufferImageCopy*)">
+  CopyImageToBuffer(Image, ImageLayout, Buffer, uint, BufferImageCopy*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyImageToBuffer(Image sourceImage, ImageLayout sourceImageLayout, Buffer destinationBuffer, uint regionCount, BufferImageCopy* regions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>sourceImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>destinationBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>regionCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>regions</code> <a class="xref" href="SharpVulkan.BufferImageCopy.html">BufferImageCopy</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_CopyQueryPoolResults_" data-uid="SharpVulkan.CommandBuffer.CopyQueryPoolResults*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_CopyQueryPoolResults_SharpVulkan_QueryPool_System_UInt32_System_UInt32_SharpVulkan_Buffer_System_UInt64_System_UInt64_SharpVulkan_QueryResultFlags_" data-uid="SharpVulkan.CommandBuffer.CopyQueryPoolResults(SharpVulkan.QueryPool,System.UInt32,System.UInt32,SharpVulkan.Buffer,System.UInt64,System.UInt64,SharpVulkan.QueryResultFlags)">
+  CopyQueryPoolResults(QueryPool, uint, uint, Buffer, ulong, ulong, QueryResultFlags)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyQueryPoolResults(QueryPool queryPool, uint firstQuery, uint queryCount, Buffer destinationBuffer, ulong destinationOffset, ulong stride, QueryResultFlags flags)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>queryPool</code> <a class="xref" href="SharpVulkan.QueryPool.html">QueryPool</a></dt>
+    <dd></dd>
+    <dt><code>firstQuery</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>queryCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>destinationBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>destinationOffset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>stride</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>flags</code> <a class="xref" href="SharpVulkan.QueryResultFlags.html">QueryResultFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DebugMarkerBegin_" data-uid="SharpVulkan.CommandBuffer.DebugMarkerBegin*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DebugMarkerBegin_SharpVulkan_DebugMarkerMarkerInfo__" data-uid="SharpVulkan.CommandBuffer.DebugMarkerBegin(SharpVulkan.DebugMarkerMarkerInfo@)">
+  DebugMarkerBegin(ref DebugMarkerMarkerInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DebugMarkerBegin(ref DebugMarkerMarkerInfo markerInfo)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>markerInfo</code> <a class="xref" href="SharpVulkan.DebugMarkerMarkerInfo.html">DebugMarkerMarkerInfo</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DebugMarkerEnd_" data-uid="SharpVulkan.CommandBuffer.DebugMarkerEnd*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DebugMarkerEnd" data-uid="SharpVulkan.CommandBuffer.DebugMarkerEnd">
+  DebugMarkerEnd()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DebugMarkerEnd()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DebugMarkerInsert_" data-uid="SharpVulkan.CommandBuffer.DebugMarkerInsert*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DebugMarkerInsert_SharpVulkan_DebugMarkerMarkerInfo__" data-uid="SharpVulkan.CommandBuffer.DebugMarkerInsert(SharpVulkan.DebugMarkerMarkerInfo@)">
+  DebugMarkerInsert(ref DebugMarkerMarkerInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DebugMarkerInsert(ref DebugMarkerMarkerInfo markerInfo)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>markerInfo</code> <a class="xref" href="SharpVulkan.DebugMarkerMarkerInfo.html">DebugMarkerMarkerInfo</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_Dispatch_" data-uid="SharpVulkan.CommandBuffer.Dispatch*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_Dispatch_System_UInt32_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.Dispatch(System.UInt32,System.UInt32,System.UInt32)">
+  Dispatch(uint, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispatch(uint x, uint y, uint z)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>z</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DispatchIndirect_" data-uid="SharpVulkan.CommandBuffer.DispatchIndirect*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DispatchIndirect_SharpVulkan_Buffer_System_UInt64_" data-uid="SharpVulkan.CommandBuffer.DispatchIndirect(SharpVulkan.Buffer,System.UInt64)">
+  DispatchIndirect(Buffer, ulong)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DispatchIndirect(Buffer buffer, ulong offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_Draw_" data-uid="SharpVulkan.CommandBuffer.Draw*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_Draw_System_UInt32_System_UInt32_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.Draw(System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+  Draw(uint, uint, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Draw(uint vertexCount, uint instanceCount, uint firstVertex, uint firstInstance)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>vertexCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>instanceCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>firstVertex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>firstInstance</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DrawIndexed_" data-uid="SharpVulkan.CommandBuffer.DrawIndexed*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DrawIndexed_System_UInt32_System_UInt32_System_UInt32_System_Int32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.DrawIndexed(System.UInt32,System.UInt32,System.UInt32,System.Int32,System.UInt32)">
+  DrawIndexed(uint, uint, uint, int, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawIndexed(uint indexCount, uint instanceCount, uint firstIndex, int vertexOffset, uint firstInstance)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>indexCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>instanceCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>firstIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>vertexOffset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>firstInstance</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DrawIndexedIndirect_" data-uid="SharpVulkan.CommandBuffer.DrawIndexedIndirect*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DrawIndexedIndirect_SharpVulkan_Buffer_System_UInt64_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.DrawIndexedIndirect(SharpVulkan.Buffer,System.UInt64,System.UInt32,System.UInt32)">
+  DrawIndexedIndirect(Buffer, ulong, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawIndexedIndirect(Buffer buffer, ulong offset, uint drawCount, uint stride)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>drawCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>stride</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DrawIndexedIndirectCount_" data-uid="SharpVulkan.CommandBuffer.DrawIndexedIndirectCount*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DrawIndexedIndirectCount_SharpVulkan_Buffer_System_UInt64_SharpVulkan_Buffer_System_UInt64_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.DrawIndexedIndirectCount(SharpVulkan.Buffer,System.UInt64,SharpVulkan.Buffer,System.UInt64,System.UInt32,System.UInt32)">
+  DrawIndexedIndirectCount(Buffer, ulong, Buffer, ulong, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawIndexedIndirectCount(Buffer buffer, ulong offset, Buffer countBuffer, ulong countBufferOffset, uint maxDrawCount, uint stride)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>countBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>countBufferOffset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>maxDrawCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>stride</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DrawIndirect_" data-uid="SharpVulkan.CommandBuffer.DrawIndirect*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DrawIndirect_SharpVulkan_Buffer_System_UInt64_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.DrawIndirect(SharpVulkan.Buffer,System.UInt64,System.UInt32,System.UInt32)">
+  DrawIndirect(Buffer, ulong, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawIndirect(Buffer buffer, ulong offset, uint drawCount, uint stride)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>drawCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>stride</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_DrawIndirectCount_" data-uid="SharpVulkan.CommandBuffer.DrawIndirectCount*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_DrawIndirectCount_SharpVulkan_Buffer_System_UInt64_SharpVulkan_Buffer_System_UInt64_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.DrawIndirectCount(SharpVulkan.Buffer,System.UInt64,SharpVulkan.Buffer,System.UInt64,System.UInt32,System.UInt32)">
+  DrawIndirectCount(Buffer, ulong, Buffer, ulong, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawIndirectCount(Buffer buffer, ulong offset, Buffer countBuffer, ulong countBufferOffset, uint maxDrawCount, uint stride)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>countBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>countBufferOffset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>maxDrawCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>stride</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_End_" data-uid="SharpVulkan.CommandBuffer.End*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_End" data-uid="SharpVulkan.CommandBuffer.End">
+  End()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void End()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_EndQuery_" data-uid="SharpVulkan.CommandBuffer.EndQuery*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_EndQuery_SharpVulkan_QueryPool_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.EndQuery(SharpVulkan.QueryPool,System.UInt32)">
+  EndQuery(QueryPool, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void EndQuery(QueryPool queryPool, uint query)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>queryPool</code> <a class="xref" href="SharpVulkan.QueryPool.html">QueryPool</a></dt>
+    <dd></dd>
+    <dt><code>query</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_EndRenderPass_" data-uid="SharpVulkan.CommandBuffer.EndRenderPass*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_EndRenderPass" data-uid="SharpVulkan.CommandBuffer.EndRenderPass">
+  EndRenderPass()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void EndRenderPass()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_Equals_" data-uid="SharpVulkan.CommandBuffer.Equals*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_Equals_SharpVulkan_CommandBuffer_" data-uid="SharpVulkan.CommandBuffer.Equals(SharpVulkan.CommandBuffer)">
+  Equals(CommandBuffer)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(CommandBuffer other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a></dt>
+    <dd><p>An object to compare with this object.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the current object is equal to the <code class="paramref">other</code> parameter; otherwise, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ExecuteCommands_" data-uid="SharpVulkan.CommandBuffer.ExecuteCommands*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ExecuteCommands_System_UInt32_SharpVulkan_CommandBuffer__" data-uid="SharpVulkan.CommandBuffer.ExecuteCommands(System.UInt32,SharpVulkan.CommandBuffer*)">
+  ExecuteCommands(uint, CommandBuffer*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ExecuteCommands(uint commandBufferCount, CommandBuffer* commandBuffers)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>commandBufferCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>commandBuffers</code> <a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_FillBuffer_" data-uid="SharpVulkan.CommandBuffer.FillBuffer*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_FillBuffer_SharpVulkan_Buffer_System_UInt64_System_UInt64_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.FillBuffer(SharpVulkan.Buffer,System.UInt64,System.UInt64,System.UInt32)">
+  FillBuffer(Buffer, ulong, ulong, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FillBuffer(Buffer destinationBuffer, ulong destinationOffset, ulong size, uint data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>destinationBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>destinationOffset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_GetHashCode_" data-uid="SharpVulkan.CommandBuffer.GetHashCode*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_GetHashCode" data-uid="SharpVulkan.CommandBuffer.GetHashCode">
+  GetHashCode()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the hash code for this instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>A 32-bit signed integer that is the hash code for this instance.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_NextSubpass_" data-uid="SharpVulkan.CommandBuffer.NextSubpass*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_NextSubpass_SharpVulkan_SubpassContents_" data-uid="SharpVulkan.CommandBuffer.NextSubpass(SharpVulkan.SubpassContents)">
+  NextSubpass(SubpassContents)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void NextSubpass(SubpassContents contents)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>contents</code> <a class="xref" href="SharpVulkan.SubpassContents.html">SubpassContents</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_PipelineBarrier_" data-uid="SharpVulkan.CommandBuffer.PipelineBarrier*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_PipelineBarrier_SharpVulkan_PipelineStageFlags_SharpVulkan_PipelineStageFlags_SharpVulkan_DependencyFlags_System_UInt32_SharpVulkan_MemoryBarrier__System_UInt32_SharpVulkan_BufferMemoryBarrier__System_UInt32_SharpVulkan_ImageMemoryBarrier__" data-uid="SharpVulkan.CommandBuffer.PipelineBarrier(SharpVulkan.PipelineStageFlags,SharpVulkan.PipelineStageFlags,SharpVulkan.DependencyFlags,System.UInt32,SharpVulkan.MemoryBarrier*,System.UInt32,SharpVulkan.BufferMemoryBarrier*,System.UInt32,SharpVulkan.ImageMemoryBarrier*)">
+  PipelineBarrier(PipelineStageFlags, PipelineStageFlags, DependencyFlags, uint, MemoryBarrier*, uint, BufferMemoryBarrier*, uint, ImageMemoryBarrier*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PipelineBarrier(PipelineStageFlags sourceStageMask, PipelineStageFlags destinationStageMask, DependencyFlags dependencyFlags, uint memoryBarrierCount, MemoryBarrier* memoryBarriers, uint bufferMemoryBarrierCount, BufferMemoryBarrier* bufferMemoryBarriers, uint imageMemoryBarrierCount, ImageMemoryBarrier* imageMemoryBarriers)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceStageMask</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+    <dt><code>destinationStageMask</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+    <dt><code>dependencyFlags</code> <a class="xref" href="SharpVulkan.DependencyFlags.html">DependencyFlags</a></dt>
+    <dd></dd>
+    <dt><code>memoryBarrierCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>memoryBarriers</code> <a class="xref" href="SharpVulkan.MemoryBarrier.html">MemoryBarrier</a>*</dt>
+    <dd></dd>
+    <dt><code>bufferMemoryBarrierCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>bufferMemoryBarriers</code> <a class="xref" href="SharpVulkan.BufferMemoryBarrier.html">BufferMemoryBarrier</a>*</dt>
+    <dd></dd>
+    <dt><code>imageMemoryBarrierCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>imageMemoryBarriers</code> <a class="xref" href="SharpVulkan.ImageMemoryBarrier.html">ImageMemoryBarrier</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ProcessCommands_" data-uid="SharpVulkan.CommandBuffer.ProcessCommands*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ProcessCommands_SharpVulkan_CommandProcessCommandsInfo__" data-uid="SharpVulkan.CommandBuffer.ProcessCommands(SharpVulkan.CommandProcessCommandsInfo@)">
+  ProcessCommands(ref CommandProcessCommandsInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessCommands(ref CommandProcessCommandsInfo processCommandsInfo)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>processCommandsInfo</code> <a class="xref" href="SharpVulkan.CommandProcessCommandsInfo.html">CommandProcessCommandsInfo</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_PushConstants_" data-uid="SharpVulkan.CommandBuffer.PushConstants*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_PushConstants_SharpVulkan_PipelineLayout_SharpVulkan_ShaderStageFlags_System_UInt32_System_UInt32_System_IntPtr_" data-uid="SharpVulkan.CommandBuffer.PushConstants(SharpVulkan.PipelineLayout,SharpVulkan.ShaderStageFlags,System.UInt32,System.UInt32,System.IntPtr)">
+  PushConstants(PipelineLayout, ShaderStageFlags, uint, uint, nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PushConstants(PipelineLayout layout, ShaderStageFlags stageFlags, uint offset, uint size, nint values)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>layout</code> <a class="xref" href="SharpVulkan.PipelineLayout.html">PipelineLayout</a></dt>
+    <dd></dd>
+    <dt><code>stageFlags</code> <a class="xref" href="SharpVulkan.ShaderStageFlags.html">ShaderStageFlags</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>values</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ReserveSpaceForCommands_" data-uid="SharpVulkan.CommandBuffer.ReserveSpaceForCommands*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ReserveSpaceForCommands_SharpVulkan_CommandReserveSpaceForCommandsInfo__" data-uid="SharpVulkan.CommandBuffer.ReserveSpaceForCommands(SharpVulkan.CommandReserveSpaceForCommandsInfo@)">
+  ReserveSpaceForCommands(ref CommandReserveSpaceForCommandsInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReserveSpaceForCommands(ref CommandReserveSpaceForCommandsInfo reserveSpaceInfo)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>reserveSpaceInfo</code> <a class="xref" href="SharpVulkan.CommandReserveSpaceForCommandsInfo.html">CommandReserveSpaceForCommandsInfo</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_Reset_" data-uid="SharpVulkan.CommandBuffer.Reset*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_Reset_SharpVulkan_CommandBufferResetFlags_" data-uid="SharpVulkan.CommandBuffer.Reset(SharpVulkan.CommandBufferResetFlags)">
+  Reset(CommandBufferResetFlags)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset(CommandBufferResetFlags flags)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>flags</code> <a class="xref" href="SharpVulkan.CommandBufferResetFlags.html">CommandBufferResetFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ResetEvent_" data-uid="SharpVulkan.CommandBuffer.ResetEvent*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ResetEvent_SharpVulkan_Event_SharpVulkan_PipelineStageFlags_" data-uid="SharpVulkan.CommandBuffer.ResetEvent(SharpVulkan.Event,SharpVulkan.PipelineStageFlags)">
+  ResetEvent(Event, PipelineStageFlags)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ResetEvent(Event @event, PipelineStageFlags stageMask)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>event</code> <a class="xref" href="SharpVulkan.Event.html">Event</a></dt>
+    <dd></dd>
+    <dt><code>stageMask</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ResetQueryPool_" data-uid="SharpVulkan.CommandBuffer.ResetQueryPool*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ResetQueryPool_SharpVulkan_QueryPool_System_UInt32_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.ResetQueryPool(SharpVulkan.QueryPool,System.UInt32,System.UInt32)">
+  ResetQueryPool(QueryPool, uint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ResetQueryPool(QueryPool queryPool, uint firstQuery, uint queryCount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>queryPool</code> <a class="xref" href="SharpVulkan.QueryPool.html">QueryPool</a></dt>
+    <dd></dd>
+    <dt><code>firstQuery</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>queryCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ResolveImage_" data-uid="SharpVulkan.CommandBuffer.ResolveImage*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ResolveImage_SharpVulkan_Image_SharpVulkan_ImageLayout_SharpVulkan_Image_SharpVulkan_ImageLayout_System_UInt32_SharpVulkan_ImageResolve__" data-uid="SharpVulkan.CommandBuffer.ResolveImage(SharpVulkan.Image,SharpVulkan.ImageLayout,SharpVulkan.Image,SharpVulkan.ImageLayout,System.UInt32,SharpVulkan.ImageResolve*)">
+  ResolveImage(Image, ImageLayout, Image, ImageLayout, uint, ImageResolve*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ResolveImage(Image sourceImage, ImageLayout sourceImageLayout, Image destinationImage, ImageLayout destinationImageLayout, uint regionCount, ImageResolve* regions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>sourceImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>destinationImage</code> <a class="xref" href="SharpVulkan.Image.html">Image</a></dt>
+    <dd></dd>
+    <dt><code>destinationImageLayout</code> <a class="xref" href="SharpVulkan.ImageLayout.html">ImageLayout</a></dt>
+    <dd></dd>
+    <dt><code>regionCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>regions</code> <a class="xref" href="SharpVulkan.ImageResolve.html">ImageResolve</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetBlendConstants_" data-uid="SharpVulkan.CommandBuffer.SetBlendConstants*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetBlendConstants_System_Single_" data-uid="SharpVulkan.CommandBuffer.SetBlendConstants(System.Single)">
+  SetBlendConstants(float)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetBlendConstants(float blendConstants)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>blendConstants</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetDepthBias_" data-uid="SharpVulkan.CommandBuffer.SetDepthBias*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetDepthBias_System_Single_System_Single_System_Single_" data-uid="SharpVulkan.CommandBuffer.SetDepthBias(System.Single,System.Single,System.Single)">
+  SetDepthBias(float, float, float)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetDepthBias(float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>depthBiasConstantFactor</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>depthBiasClamp</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>depthBiasSlopeFactor</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetDepthBounds_" data-uid="SharpVulkan.CommandBuffer.SetDepthBounds*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetDepthBounds_System_Single_System_Single_" data-uid="SharpVulkan.CommandBuffer.SetDepthBounds(System.Single,System.Single)">
+  SetDepthBounds(float, float)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetDepthBounds(float minDepthBounds, float maxDepthBounds)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>minDepthBounds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>maxDepthBounds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetEvent_" data-uid="SharpVulkan.CommandBuffer.SetEvent*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetEvent_SharpVulkan_Event_SharpVulkan_PipelineStageFlags_" data-uid="SharpVulkan.CommandBuffer.SetEvent(SharpVulkan.Event,SharpVulkan.PipelineStageFlags)">
+  SetEvent(Event, PipelineStageFlags)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetEvent(Event @event, PipelineStageFlags stageMask)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>event</code> <a class="xref" href="SharpVulkan.Event.html">Event</a></dt>
+    <dd></dd>
+    <dt><code>stageMask</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetLineWidth_" data-uid="SharpVulkan.CommandBuffer.SetLineWidth*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetLineWidth_System_Single_" data-uid="SharpVulkan.CommandBuffer.SetLineWidth(System.Single)">
+  SetLineWidth(float)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetLineWidth(float lineWidth)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>lineWidth</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetScissor_" data-uid="SharpVulkan.CommandBuffer.SetScissor*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetScissor_System_UInt32_System_UInt32_SharpVulkan_Rect2D__" data-uid="SharpVulkan.CommandBuffer.SetScissor(System.UInt32,System.UInt32,SharpVulkan.Rect2D*)">
+  SetScissor(uint, uint, Rect2D*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetScissor(uint firstScissor, uint scissorCount, Rect2D* scissors)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>firstScissor</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>scissorCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>scissors</code> <a class="xref" href="SharpVulkan.Rect2D.html">Rect2D</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetStencilCompareMask_" data-uid="SharpVulkan.CommandBuffer.SetStencilCompareMask*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetStencilCompareMask_SharpVulkan_StencilFaceFlags_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.SetStencilCompareMask(SharpVulkan.StencilFaceFlags,System.UInt32)">
+  SetStencilCompareMask(StencilFaceFlags, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStencilCompareMask(StencilFaceFlags faceMask, uint compareMask)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>faceMask</code> <a class="xref" href="SharpVulkan.StencilFaceFlags.html">StencilFaceFlags</a></dt>
+    <dd></dd>
+    <dt><code>compareMask</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetStencilReference_" data-uid="SharpVulkan.CommandBuffer.SetStencilReference*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetStencilReference_SharpVulkan_StencilFaceFlags_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.SetStencilReference(SharpVulkan.StencilFaceFlags,System.UInt32)">
+  SetStencilReference(StencilFaceFlags, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStencilReference(StencilFaceFlags faceMask, uint reference)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>faceMask</code> <a class="xref" href="SharpVulkan.StencilFaceFlags.html">StencilFaceFlags</a></dt>
+    <dd></dd>
+    <dt><code>reference</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetStencilWriteMask_" data-uid="SharpVulkan.CommandBuffer.SetStencilWriteMask*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetStencilWriteMask_SharpVulkan_StencilFaceFlags_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.SetStencilWriteMask(SharpVulkan.StencilFaceFlags,System.UInt32)">
+  SetStencilWriteMask(StencilFaceFlags, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStencilWriteMask(StencilFaceFlags faceMask, uint writeMask)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>faceMask</code> <a class="xref" href="SharpVulkan.StencilFaceFlags.html">StencilFaceFlags</a></dt>
+    <dd></dd>
+    <dt><code>writeMask</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_SetViewport_" data-uid="SharpVulkan.CommandBuffer.SetViewport*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_SetViewport_System_UInt32_System_UInt32_SharpVulkan_Viewport__" data-uid="SharpVulkan.CommandBuffer.SetViewport(System.UInt32,System.UInt32,SharpVulkan.Viewport*)">
+  SetViewport(uint, uint, Viewport*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetViewport(uint firstViewport, uint viewportCount, Viewport* viewports)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>firstViewport</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>viewportCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>viewports</code> <a class="xref" href="SharpVulkan.Viewport.html">Viewport</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_ToString_" data-uid="SharpVulkan.CommandBuffer.ToString*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_ToString" data-uid="SharpVulkan.CommandBuffer.ToString">
+  ToString()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the fully qualified type name of this instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The fully qualified type name.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_UpdateBuffer_" data-uid="SharpVulkan.CommandBuffer.UpdateBuffer*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_UpdateBuffer_SharpVulkan_Buffer_System_UInt64_System_UInt64_System_IntPtr_" data-uid="SharpVulkan.CommandBuffer.UpdateBuffer(SharpVulkan.Buffer,System.UInt64,System.UInt64,System.IntPtr)">
+  UpdateBuffer(Buffer, ulong, ulong, nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UpdateBuffer(Buffer destinationBuffer, ulong destinationOffset, ulong dataSize, nint data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>destinationBuffer</code> <a class="xref" href="SharpVulkan.Buffer.html">Buffer</a></dt>
+    <dd></dd>
+    <dt><code>destinationOffset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>dataSize</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_WaitEvents_" data-uid="SharpVulkan.CommandBuffer.WaitEvents*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_WaitEvents_System_UInt32_SharpVulkan_Event_SharpVulkan_PipelineStageFlags_SharpVulkan_PipelineStageFlags_System_UInt32_SharpVulkan_MemoryBarrier__System_UInt32_SharpVulkan_BufferMemoryBarrier__System_UInt32_SharpVulkan_ImageMemoryBarrier__" data-uid="SharpVulkan.CommandBuffer.WaitEvents(System.UInt32,SharpVulkan.Event,SharpVulkan.PipelineStageFlags,SharpVulkan.PipelineStageFlags,System.UInt32,SharpVulkan.MemoryBarrier*,System.UInt32,SharpVulkan.BufferMemoryBarrier*,System.UInt32,SharpVulkan.ImageMemoryBarrier*)">
+  WaitEvents(uint, Event, PipelineStageFlags, PipelineStageFlags, uint, MemoryBarrier*, uint, BufferMemoryBarrier*, uint, ImageMemoryBarrier*)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WaitEvents(uint eventCount, Event events, PipelineStageFlags sourceStageMask, PipelineStageFlags destinationStageMask, uint memoryBarrierCount, MemoryBarrier* memoryBarriers, uint bufferMemoryBarrierCount, BufferMemoryBarrier* bufferMemoryBarriers, uint imageMemoryBarrierCount, ImageMemoryBarrier* imageMemoryBarriers)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>eventCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>events</code> <a class="xref" href="SharpVulkan.Event.html">Event</a></dt>
+    <dd></dd>
+    <dt><code>sourceStageMask</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+    <dt><code>destinationStageMask</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+    <dt><code>memoryBarrierCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>memoryBarriers</code> <a class="xref" href="SharpVulkan.MemoryBarrier.html">MemoryBarrier</a>*</dt>
+    <dd></dd>
+    <dt><code>bufferMemoryBarrierCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>bufferMemoryBarriers</code> <a class="xref" href="SharpVulkan.BufferMemoryBarrier.html">BufferMemoryBarrier</a>*</dt>
+    <dd></dd>
+    <dt><code>imageMemoryBarrierCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+    <dt><code>imageMemoryBarriers</code> <a class="xref" href="SharpVulkan.ImageMemoryBarrier.html">ImageMemoryBarrier</a>*</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_WriteTimestamp_" data-uid="SharpVulkan.CommandBuffer.WriteTimestamp*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_WriteTimestamp_SharpVulkan_PipelineStageFlags_SharpVulkan_QueryPool_System_UInt32_" data-uid="SharpVulkan.CommandBuffer.WriteTimestamp(SharpVulkan.PipelineStageFlags,SharpVulkan.QueryPool,System.UInt32)">
+  WriteTimestamp(PipelineStageFlags, QueryPool, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteTimestamp(PipelineStageFlags pipelineStage, QueryPool queryPool, uint query)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipelineStage</code> <a class="xref" href="SharpVulkan.PipelineStageFlags.html">PipelineStageFlags</a></dt>
+    <dd></dd>
+    <dt><code>queryPool</code> <a class="xref" href="SharpVulkan.QueryPool.html">QueryPool</a></dt>
+    <dd></dd>
+    <dt><code>query</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="operators">Operators
+</h2>
+
+
+  <a id="SharpVulkan_CommandBuffer_op_Equality_" data-uid="SharpVulkan.CommandBuffer.op_Equality*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_op_Equality_SharpVulkan_CommandBuffer_SharpVulkan_CommandBuffer_" data-uid="SharpVulkan.CommandBuffer.op_Equality(SharpVulkan.CommandBuffer,SharpVulkan.CommandBuffer)">
+  operator ==(CommandBuffer, CommandBuffer)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(CommandBuffer left, CommandBuffer right)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>left</code> <a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a></dt>
+    <dd></dd>
+    <dt><code>right</code> <a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="SharpVulkan_CommandBuffer_op_Inequality_" data-uid="SharpVulkan.CommandBuffer.op_Inequality*"></a>
+
+  <h3 id="SharpVulkan_CommandBuffer_op_Inequality_SharpVulkan_CommandBuffer_SharpVulkan_CommandBuffer_" data-uid="SharpVulkan.CommandBuffer.op_Inequality(SharpVulkan.CommandBuffer,SharpVulkan.CommandBuffer)">
+  operator !=(CommandBuffer, CommandBuffer)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(CommandBuffer left, CommandBuffer right)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>left</code> <a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a></dt>
+    <dd></dd>
+    <dt><code>right</code> <a class="xref" href="SharpVulkan.CommandBuffer.html">CommandBuffer</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

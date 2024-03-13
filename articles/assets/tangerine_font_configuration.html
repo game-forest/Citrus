@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Tangerine font configuration | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tangerine font configuration | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="tangerine-font-configuration">Tangerine font configuration</h1>
+
+<p>Tangerine Font Configuration (tftconf) is an asset describing how to create Tangerine Font asset (tft).</p>
+<p>The format is JSON:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Height</code></td>
+<td>float</td>
+<td>Font's point size that will be used to generate the font's texture.</td>
+</tr>
+<tr>
+<td><code>Padding</code></td>
+<td>int</td>
+<td>Characters in the font texture need some padding between them so they can be rendered separately. This padding is specified in pixels.Padding also creates room for the SDF gradient. The larger the padding, the smoother the transition, which allows for higher-quality rendering and larger effects, like thicker outlines.</td>
+</tr>
+<tr>
+<td><code>CharSets</code></td>
+<td><a href="#charset">CharSet</a></td>
+<td>That's the main part of configuration file that describes what font files and symbols should be used for Tangerine Font creation.</td>
+</tr>
+<tr>
+<td><code>ExcludeChars</code></td>
+<td>string</td>
+<td>Characters that will be ignored during the font generation step.</td>
+</tr>
+<tr>
+<td><code>IsSdf</code></td>
+<td>bool</td>
+<td>If it's <code>true</code> Signed Distance Font (SDF) will be generated otherwise simple bitmap font.</td>
+</tr>
+<tr>
+<td><code>SdfScale</code></td>
+<td>float</td>
+<td>When using an SFD font, a higher resolution results in finer gradients, which produces higher quality text. That's why it's a common way to sample characters at high resolution to create good gradients and then downscale. For example you can generated 8k textures with bigger font size and then downscale them to 4k with <code>SdfScale = 0.5f</code>.</td>
+</tr>
+<tr>
+<td><code>TextureSize</code></td>
+<td><a href="#vector2">Vector2</a></td>
+<td>Size for each texture <strong>before</strong> downscale.</td>
+</tr>
+<tr>
+<td><code>CustomKerningPairs</code></td>
+<td><a href="#customkerningpairs">CustomKerningPairs</a></td>
+<td>Kerning pairs are used to adjust the spacing between specific character pairs, to produce a more visually pleasing result. Note that many fonts do not have kerning pairs or may not satisfy your needs so you can simply add your own pairs or override ones taken from the font file.</td>
+</tr>
+<tr>
+<td><code>Margin</code></td>
+<td>float</td>
+<td><strong>Obsolete</strong>. Expands AC width. Was used for workarounds.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="charset"><code>CharSet</code></h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Chars</code></td>
+<td>string</td>
+<td>A list of characters to be used for font generation. Can be <code>null</code> or empty (see <code>ExtractFromDictionaries</code>).</td>
+</tr>
+<tr>
+<td><code>Font</code></td>
+<td>string</td>
+<td>Path (relative to asset directory) to font file from which glyphs will be taken. See <a href="#supported-formats">supported font formats</a>.</td>
+</tr>
+<tr>
+<td><code>ExtractFromDictionaries</code></td>
+<td>string</td>
+<td>A comma separated set of localizations (e.g. &quot;EN,RU,CN&quot;). If it's null or empty existing Chars are used, otherwise Chars are extracted from localization dictionaries (e.g. &quot;Dictionary.RU.txt&quot; or &quot;Dictionary.txt&quot; for EN).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vector2"><code>Vector2</code></h2>
+<p>array of two numbers (YuzuCompact).</p>
+<pre><code class="lang-json">[12, 34]
+</code></pre>
+<h2 id="customkerningpairs"><code>CustomKerningPairs</code></h2>
+<p>It's a dictionary with character key and array of <a href="#kerningpair">KerningPair</a> values. Each kerning pair in array represents kerning amount that should be applied if character follows array's key of the dictionary. For example this:</p>
+<pre><code class="lang-json">CustomKerningPairs: { 'A': [['V', -2]] }
+</code></pre>
+<p>means that position of <code>V</code> should be decreased by 2 if it follows <code>A</code>.</p>
+<h2 id="kerningpair"><code>KerningPair</code></h2>
+<p>Array of two elements: char and float (YuzuCompact).</p>
+<pre><code class="lang-json">['V', -3]
+</code></pre>
+<h2 id="supported-formats">Supported formats</h2>
+<p>Supported font formats are those that are supported by FreeType:</p>
+<ul>
+<li>TrueType files (.ttf) and collections (.ttc)</li>
+<li>Type 1 font files both in ASCII (.pfa) or binary (.pfb) format</li>
+<li>Type 1 Multiple Master fonts</li>
+<li>Type 1 CID-keyed fonts</li>
+<li>OpenType/CFF (.otf) font</li>
+<li>CFF/Type 2 fonts</li>
+<li>Adobe CEF fonts (.cef), used to embed fonts in SVG documents with the Adobe SVG viewer plugin</li>
+<li>Windows FNT/FON bitmap fonts</li>
+<li>Apple's TrueType GX fonts are supported as normal TTFs (the advanced tables are ignored)</li>
+</ul>
+<h2 id="the-kern-table">The 'kern' table</h2>
+<p>Only old, windows-only-compatible 'kern' table is supported. If your font have &quot;new&quot; 'kern' table - extracting kerning pairs won't work. You should resave font, forcing old 'kern' table in any font editor (for example - FontForge).</p>
+<p>More info info about 'kern' table can be found here <a href="https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6kern.html">https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6kern.html</a></p>
+<p>Info about resaving font can be found here <a href="https://github.com/fontforge/fontforge/issues/3435">https://github.com/fontforge/fontforge/issues/3435</a></p>
+<h1 id="how-to-generate-font">How to generate font</h1>
+<ul>
+<li>Place a font file inside <code>Fonts</code> directory (e.g. Digits.ttf)</li>
+<li>Place a configuration file inside <code>Fonts</code> directory. Example of .tftconf to generate SDF font with digits only:</li>
+</ul>
+<pre><code class="lang-json">{
+    &quot;CharSets&quot;:[
+		{
+			&quot;Chars&quot;:&quot;0123456789&quot;,
+			&quot;Font&quot;:&quot;Fonts/Digits.ttf&quot;
+		}
+	],
+	&quot;Height&quot;:170,
+	&quot;IsSdf&quot;:true,
+    &quot;SdfScale&quot;: 0.25,
+	&quot;Padding&quot;:36,
+	&quot;TextureSize&quot;:[4096,4096]
+}
+</code></pre>
+<ul>
+<li>Run <code>Invalidate Fonts</code> action via Orange or Tangerine (Orange -&gt; Invalidate Fonts)</li>
+<li>You'll be notified after engine finishes font generation. You should be able to see <code>Digits.ttf</code> and <code>Digit.png</code> files in <code>Fonts</code> directory</li>
+<li>Unfortunately you have to restart Tangerine for changes to take place :(</li>
+</ul>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<h2 id="i-generated-my-font-but-dont-see-any-kind-of-kerning-pairs-from-initial-font">I generated my font, but don't see any kind of kerning pairs from initial font</h2>
+<p>This will happen when font has any kind of kerning pairs (GPOS, for example) table instead of legacy, windows-compatible ones. This can be fixed by resaving original font within font editor (fontforge) with compatible 'kern' table. This problem fully described there <a href="https://github.com/fontforge/fontforge/issues/3435">https://github.com/fontforge/fontforge/issues/3435</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

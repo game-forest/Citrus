@@ -1,1907 +1,2045 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Context
-   | Citrus Engine </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Context
-   | Citrus Engine ">
-    <meta name="generator" content="docfx 2.58.9.0">
-    
-    <link rel="shortcut icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    
+      <title>Class Context
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Context
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
         </div>
-      </header>
-      <div class="container body-content">
-        
-        <div id="search-results">
-          <div class="search-list">Search Results for <span></span></div>
-          <div class="sr-items">
-            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
         </div>
       </div>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.NanoVG.Context">
+
+        <article data-uid="Lime.NanoVG.Context">
+
+
+
+  <h1 id="Lime_NanoVG_Context" data-uid="Lime.NanoVG.Context" class="text-break">
+    Class Context
   
-  
-  <h1 id="Lime_NanoVG_Context" data-uid="Lime.NanoVG.Context" class="text-break">Class Context
   </h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Context</span></div>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Lime.html">Lime</a>.<a class="xref" href="Lime.NanoVG.html">NanoVG</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.NanoVG.html">Lime.NanoVG</a></h6>
-  <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_NanoVG_Context_syntax">Syntax</h5>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class Context : IDisposable</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Context</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
   <a id="Lime_NanoVG_Context__ctor_" data-uid="Lime.NanoVG.Context.#ctor*"></a>
-  <h4 id="Lime_NanoVG_Context__ctor_System_Boolean_" data-uid="Lime.NanoVG.Context.#ctor(System.Boolean)">Context(Boolean)</h4>
+
+  <h3 id="Lime_NanoVG_Context__ctor_System_Boolean_" data-uid="Lime.NanoVG.Context.#ctor(System.Boolean)">
+  Context(bool)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Context(bool edgeAntiAlias = true)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">edgeAntiAlias</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="fields">Fields
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>edgeAntiAlias</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="Lime_NanoVG_Context_Instance" data-uid="Lime.NanoVG.Context.Instance">
+  Instance
+  
   </h3>
-  
-  
-  <h4 id="Lime_NanoVG_Context_Instance" data-uid="Lime.NanoVG.Context.Instance">Instance</h4>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static readonly Context Instance</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.NanoVG.Context.html">Context</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.NanoVG.Context.html">Context</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
   <a id="Lime_NanoVG_Context_Arc_" data-uid="Lime.NanoVG.Context.Arc*"></a>
-  <h4 id="Lime_NanoVG_Context_Arc_System_Single_System_Single_System_Single_System_Single_System_Single_Lime_NanoVG_Winding_" data-uid="Lime.NanoVG.Context.Arc(System.Single,System.Single,System.Single,System.Single,System.Single,Lime.NanoVG.Winding)">Arc(Single, Single, Single, Single, Single, Winding)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Arc_System_Single_System_Single_System_Single_System_Single_System_Single_Lime_NanoVG_Winding_" data-uid="Lime.NanoVG.Context.Arc(System.Single,System.Single,System.Single,System.Single,System.Single,Lime.NanoVG.Winding)">
+  Arc(float, float, float, float, float, Winding)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Arc(float cx, float cy, float r, float a0, float a1, Winding dir)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cy</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">r</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">a0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">a1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.NanoVG.Winding.html">Winding</a></td>
-        <td><span class="parametername">dir</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>cy</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>r</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>a0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>a1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>dir</code> <a class="xref" href="Lime.NanoVG.Winding.html">Winding</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_ArcTo_" data-uid="Lime.NanoVG.Context.ArcTo*"></a>
-  <h4 id="Lime_NanoVG_Context_ArcTo_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.ArcTo(System.Single,System.Single,System.Single,System.Single,System.Single)">ArcTo(Single, Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_ArcTo_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.ArcTo(System.Single,System.Single,System.Single,System.Single,System.Single)">
+  ArcTo(float, float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ArcTo(float x1, float y1, float x2, float y2, float radius)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radius</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x2</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y2</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>radius</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_BeginPath_" data-uid="Lime.NanoVG.Context.BeginPath*"></a>
-  <h4 id="Lime_NanoVG_Context_BeginPath" data-uid="Lime.NanoVG.Context.BeginPath">BeginPath()</h4>
+
+  <h3 id="Lime_NanoVG_Context_BeginPath" data-uid="Lime.NanoVG.Context.BeginPath">
+  BeginPath()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void BeginPath()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_BezierTo_" data-uid="Lime.NanoVG.Context.BezierTo*"></a>
-  <h4 id="Lime_NanoVG_Context_BezierTo_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.BezierTo(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">BezierTo(Single, Single, Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_BezierTo_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.BezierTo(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+  BezierTo(float, float, float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void BezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">c1x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">c1y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">c2x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">c2y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>c1x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>c1y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>c2x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>c2y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Circle_" data-uid="Lime.NanoVG.Context.Circle*"></a>
-  <h4 id="Lime_NanoVG_Context_Circle_Lime_Vector2_System_Single_" data-uid="Lime.NanoVG.Context.Circle(Lime.Vector2,System.Single)">Circle(Vector2, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Circle_Lime_Vector2_System_Single_" data-uid="Lime.NanoVG.Context.Circle(Lime.Vector2,System.Single)">
+  Circle(Vector2, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Circle(Vector2 v, float r)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">v</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">r</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>v</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>r</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Circle_" data-uid="Lime.NanoVG.Context.Circle*"></a>
-  <h4 id="Lime_NanoVG_Context_Circle_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Circle(System.Single,System.Single,System.Single)">Circle(Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Circle_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Circle(System.Single,System.Single,System.Single)">
+  Circle(float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Circle(float cx, float cy, float r)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cy</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">r</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>cy</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>r</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_ClosePath_" data-uid="Lime.NanoVG.Context.ClosePath*"></a>
-  <h4 id="Lime_NanoVG_Context_ClosePath" data-uid="Lime.NanoVG.Context.ClosePath">ClosePath()</h4>
+
+  <h3 id="Lime_NanoVG_Context_ClosePath" data-uid="Lime.NanoVG.Context.ClosePath">
+  ClosePath()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ClosePath()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_CreateImageRGBA_" data-uid="Lime.NanoVG.Context.CreateImageRGBA*"></a>
-  <h4 id="Lime_NanoVG_Context_CreateImageRGBA_System_Int32_System_Int32_Lime_NanoVG_ImageFlags_System_Byte___" data-uid="Lime.NanoVG.Context.CreateImageRGBA(System.Int32,System.Int32,Lime.NanoVG.ImageFlags,System.Byte[])">CreateImageRGBA(Int32, Int32, ImageFlags, Byte[])</h4>
+
+  <h3 id="Lime_NanoVG_Context_CreateImageRGBA_System_Int32_System_Int32_Lime_NanoVG_ImageFlags_System_Byte___" data-uid="Lime.NanoVG.Context.CreateImageRGBA(System.Int32,System.Int32,Lime.NanoVG.ImageFlags,System.Byte[])">
+  CreateImageRGBA(int, int, ImageFlags, byte[])
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public int CreateImageRGBA(int w, int h, ImageFlags imageFlags, byte[] data)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">w</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">h</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.NanoVG.ImageFlags.html">ImageFlags</a></td>
-        <td><span class="parametername">imageFlags</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Byte</span>[]</td>
-        <td><span class="parametername">data</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>imageFlags</code> <a class="xref" href="Lime.NanoVG.ImageFlags.html">ImageFlags</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_CurrentTransform_" data-uid="Lime.NanoVG.Context.CurrentTransform*"></a>
-  <h4 id="Lime_NanoVG_Context_CurrentTransform_Lime_Matrix32_" data-uid="Lime.NanoVG.Context.CurrentTransform(Lime.Matrix32)">CurrentTransform(Matrix32)</h4>
+
+  <h3 id="Lime_NanoVG_Context_CurrentTransform_Lime_Matrix32_" data-uid="Lime.NanoVG.Context.CurrentTransform(Lime.Matrix32)">
+  CurrentTransform(Matrix32)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void CurrentTransform(Matrix32 transform)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td><span class="parametername">transform</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_DeleteImage_" data-uid="Lime.NanoVG.Context.DeleteImage*"></a>
-  <h4 id="Lime_NanoVG_Context_DeleteImage_System_Int32_" data-uid="Lime.NanoVG.Context.DeleteImage(System.Int32)">DeleteImage(Int32)</h4>
+
+  <h3 id="Lime_NanoVG_Context_DeleteImage_System_Int32_" data-uid="Lime.NanoVG.Context.DeleteImage(System.Int32)">
+  DeleteImage(int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void DeleteImage(int image)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">image</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>image</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Dispose_" data-uid="Lime.NanoVG.Context.Dispose*"></a>
-  <h4 id="Lime_NanoVG_Context_Dispose" data-uid="Lime.NanoVG.Context.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="Lime_NanoVG_Context_Dispose" data-uid="Lime.NanoVG.Context.Dispose">
+  Dispose()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Ellipse_" data-uid="Lime.NanoVG.Context.Ellipse*"></a>
-  <h4 id="Lime_NanoVG_Context_Ellipse_Lime_Vector2_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Ellipse(Lime.Vector2,System.Single,System.Single)">Ellipse(Vector2, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Ellipse_Lime_Vector2_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Ellipse(Lime.Vector2,System.Single,System.Single)">
+  Ellipse(Vector2, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Ellipse(Vector2 v, float rx, float ry)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">v</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">rx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">ry</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>v</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>rx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>ry</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Ellipse_" data-uid="Lime.NanoVG.Context.Ellipse*"></a>
-  <h4 id="Lime_NanoVG_Context_Ellipse_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Ellipse(System.Single,System.Single,System.Single,System.Single)">Ellipse(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Ellipse_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Ellipse(System.Single,System.Single,System.Single,System.Single)">
+  Ellipse(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Ellipse(float cx, float cy, float rx, float ry)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cy</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">rx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">ry</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>cy</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>rx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>ry</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Fill_" data-uid="Lime.NanoVG.Context.Fill*"></a>
-  <h4 id="Lime_NanoVG_Context_Fill" data-uid="Lime.NanoVG.Context.Fill">Fill()</h4>
+
+  <h3 id="Lime_NanoVG_Context_Fill" data-uid="Lime.NanoVG.Context.Fill">
+  Fill()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Fill()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_FillColor_" data-uid="Lime.NanoVG.Context.FillColor*"></a>
-  <h4 id="Lime_NanoVG_Context_FillColor_Lime_Color4_" data-uid="Lime.NanoVG.Context.FillColor(Lime.Color4)">FillColor(Color4)</h4>
+
+  <h3 id="Lime_NanoVG_Context_FillColor_Lime_Color4_" data-uid="Lime.NanoVG.Context.FillColor(Lime.Color4)">
+  FillColor(Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void FillColor(Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_FillPaint_" data-uid="Lime.NanoVG.Context.FillPaint*"></a>
-  <h4 id="Lime_NanoVG_Context_FillPaint_Lime_NanoVG_Paint_" data-uid="Lime.NanoVG.Context.FillPaint(Lime.NanoVG.Paint)">FillPaint(Paint)</h4>
+
+  <h3 id="Lime_NanoVG_Context_FillPaint_Lime_NanoVG_Paint_" data-uid="Lime.NanoVG.Context.FillPaint(Lime.NanoVG.Paint)">
+  FillPaint(Paint)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void FillPaint(Paint paint)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.NanoVG.Paint.html">Paint</a></td>
-        <td><span class="parametername">paint</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>paint</code> <a class="xref" href="Lime.NanoVG.Paint.html">Paint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_GlobalAlpha_" data-uid="Lime.NanoVG.Context.GlobalAlpha*"></a>
-  <h4 id="Lime_NanoVG_Context_GlobalAlpha_System_Single_" data-uid="Lime.NanoVG.Context.GlobalAlpha(System.Single)">GlobalAlpha(Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_GlobalAlpha_System_Single_" data-uid="Lime.NanoVG.Context.GlobalAlpha(System.Single)">
+  GlobalAlpha(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void GlobalAlpha(float alpha)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">alpha</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>alpha</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_ImageSize_" data-uid="Lime.NanoVG.Context.ImageSize*"></a>
-  <h4 id="Lime_NanoVG_Context_ImageSize_System_Int32_System_Int32__System_Int32__" data-uid="Lime.NanoVG.Context.ImageSize(System.Int32,System.Int32@,System.Int32@)">ImageSize(Int32, out Int32, out Int32)</h4>
+
+  <h3 id="Lime_NanoVG_Context_ImageSize_System_Int32_System_Int32__System_Int32__" data-uid="Lime.NanoVG.Context.ImageSize(System.Int32,System.Int32@,System.Int32@)">
+  ImageSize(int, out int, out int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ImageSize(int image, out int w, out int h)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">image</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">w</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">h</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>image</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_IntersectScissor_" data-uid="Lime.NanoVG.Context.IntersectScissor*"></a>
-  <h4 id="Lime_NanoVG_Context_IntersectScissor_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.IntersectScissor(Lime.Vector2,Lime.Vector2)">IntersectScissor(Vector2, Vector2)</h4>
+
+  <h3 id="Lime_NanoVG_Context_IntersectScissor_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.IntersectScissor(Lime.Vector2,Lime.Vector2)">
+  IntersectScissor(Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void IntersectScissor(Vector2 position, Vector2 size)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_IntersectScissor_" data-uid="Lime.NanoVG.Context.IntersectScissor*"></a>
-  <h4 id="Lime_NanoVG_Context_IntersectScissor_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.IntersectScissor(System.Single,System.Single,System.Single,System.Single)">IntersectScissor(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_IntersectScissor_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.IntersectScissor(System.Single,System.Single,System.Single,System.Single)">
+  IntersectScissor(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void IntersectScissor(float x, float y, float w, float h)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">w</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">h</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Line_" data-uid="Lime.NanoVG.Context.Line*"></a>
-  <h4 id="Lime_NanoVG_Context_Line_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.Line(Lime.Vector2,Lime.Vector2)">Line(Vector2, Vector2)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Line_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.Line(Lime.Vector2,Lime.Vector2)">
+  Line(Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Line(Vector2 a, Vector2 b)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Line_" data-uid="Lime.NanoVG.Context.Line*"></a>
-  <h4 id="Lime_NanoVG_Context_Line_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Line(System.Single,System.Single,System.Single,System.Single)">Line(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Line_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Line(System.Single,System.Single,System.Single,System.Single)">
+  Line(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Line(float ax, float ay, float bx, float by)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">ax</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">ay</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">bx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">by</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ax</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>ay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>bx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>by</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_LineCap_" data-uid="Lime.NanoVG.Context.LineCap*"></a>
-  <h4 id="Lime_NanoVG_Context_LineCap_Lime_LineCap_" data-uid="Lime.NanoVG.Context.LineCap(Lime.LineCap)">LineCap(LineCap)</h4>
+
+  <h3 id="Lime_NanoVG_Context_LineCap_Lime_LineCap_" data-uid="Lime.NanoVG.Context.LineCap(Lime.LineCap)">
+  LineCap(LineCap)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void LineCap(LineCap cap)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.LineCap.html">LineCap</a></td>
-        <td><span class="parametername">cap</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cap</code> <a class="xref" href="Lime.LineCap.html">LineCap</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_LineJoin_" data-uid="Lime.NanoVG.Context.LineJoin*"></a>
-  <h4 id="Lime_NanoVG_Context_LineJoin_Lime_LineCap_" data-uid="Lime.NanoVG.Context.LineJoin(Lime.LineCap)">LineJoin(LineCap)</h4>
+
+  <h3 id="Lime_NanoVG_Context_LineJoin_Lime_LineCap_" data-uid="Lime.NanoVG.Context.LineJoin(Lime.LineCap)">
+  LineJoin(LineCap)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void LineJoin(LineCap join)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.LineCap.html">LineCap</a></td>
-        <td><span class="parametername">join</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>join</code> <a class="xref" href="Lime.LineCap.html">LineCap</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_LineTo_" data-uid="Lime.NanoVG.Context.LineTo*"></a>
-  <h4 id="Lime_NanoVG_Context_LineTo_Lime_Vector2_" data-uid="Lime.NanoVG.Context.LineTo(Lime.Vector2)">LineTo(Vector2)</h4>
+
+  <h3 id="Lime_NanoVG_Context_LineTo_Lime_Vector2_" data-uid="Lime.NanoVG.Context.LineTo(Lime.Vector2)">
+  LineTo(Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void LineTo(Vector2 v)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">v</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>v</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_LineTo_" data-uid="Lime.NanoVG.Context.LineTo*"></a>
-  <h4 id="Lime_NanoVG_Context_LineTo_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.LineTo(System.Single,System.Single)">LineTo(Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_LineTo_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.LineTo(System.Single,System.Single)">
+  LineTo(float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void LineTo(float x, float y)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_MiterLimit_" data-uid="Lime.NanoVG.Context.MiterLimit*"></a>
-  <h4 id="Lime_NanoVG_Context_MiterLimit_System_Single_" data-uid="Lime.NanoVG.Context.MiterLimit(System.Single)">MiterLimit(Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_MiterLimit_System_Single_" data-uid="Lime.NanoVG.Context.MiterLimit(System.Single)">
+  MiterLimit(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void MiterLimit(float limit)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">limit</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>limit</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_MoveTo_" data-uid="Lime.NanoVG.Context.MoveTo*"></a>
-  <h4 id="Lime_NanoVG_Context_MoveTo_Lime_Vector2_" data-uid="Lime.NanoVG.Context.MoveTo(Lime.Vector2)">MoveTo(Vector2)</h4>
+
+  <h3 id="Lime_NanoVG_Context_MoveTo_Lime_Vector2_" data-uid="Lime.NanoVG.Context.MoveTo(Lime.Vector2)">
+  MoveTo(Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void MoveTo(Vector2 v)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">v</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>v</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_MoveTo_" data-uid="Lime.NanoVG.Context.MoveTo*"></a>
-  <h4 id="Lime_NanoVG_Context_MoveTo_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.MoveTo(System.Single,System.Single)">MoveTo(Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_MoveTo_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.MoveTo(System.Single,System.Single)">
+  MoveTo(float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void MoveTo(float x, float y)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_PathWinding_" data-uid="Lime.NanoVG.Context.PathWinding*"></a>
-  <h4 id="Lime_NanoVG_Context_PathWinding_Lime_NanoVG_Solidity_" data-uid="Lime.NanoVG.Context.PathWinding(Lime.NanoVG.Solidity)">PathWinding(Solidity)</h4>
+
+  <h3 id="Lime_NanoVG_Context_PathWinding_Lime_NanoVG_Solidity_" data-uid="Lime.NanoVG.Context.PathWinding(Lime.NanoVG.Solidity)">
+  PathWinding(Solidity)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void PathWinding(Solidity dir)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.NanoVG.Solidity.html">Solidity</a></td>
-        <td><span class="parametername">dir</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>dir</code> <a class="xref" href="Lime.NanoVG.Solidity.html">Solidity</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_QuadTo_" data-uid="Lime.NanoVG.Context.QuadTo*"></a>
-  <h4 id="Lime_NanoVG_Context_QuadTo_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.QuadTo(System.Single,System.Single,System.Single,System.Single)">QuadTo(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_QuadTo_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.QuadTo(System.Single,System.Single,System.Single,System.Single)">
+  QuadTo(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void QuadTo(float cx, float cy, float x, float y)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cx</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">cy</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cx</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>cy</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Rect_" data-uid="Lime.NanoVG.Context.Rect*"></a>
-  <h4 id="Lime_NanoVG_Context_Rect_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.Rect(Lime.Vector2,Lime.Vector2)">Rect(Vector2, Vector2)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Rect_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.Rect(Lime.Vector2,Lime.Vector2)">
+  Rect(Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Rect(Vector2 position, Vector2 size)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Rect_" data-uid="Lime.NanoVG.Context.Rect*"></a>
-  <h4 id="Lime_NanoVG_Context_Rect_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Rect(System.Single,System.Single,System.Single,System.Single)">Rect(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Rect_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Rect(System.Single,System.Single,System.Single,System.Single)">
+  Rect(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Rect(float x, float y, float w, float h)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">w</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">h</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Reset_" data-uid="Lime.NanoVG.Context.Reset*"></a>
-  <h4 id="Lime_NanoVG_Context_Reset" data-uid="Lime.NanoVG.Context.Reset">Reset()</h4>
+
+  <h3 id="Lime_NanoVG_Context_Reset" data-uid="Lime.NanoVG.Context.Reset">
+  Reset()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_ResetScissor_" data-uid="Lime.NanoVG.Context.ResetScissor*"></a>
-  <h4 id="Lime_NanoVG_Context_ResetScissor" data-uid="Lime.NanoVG.Context.ResetScissor">ResetScissor()</h4>
+
+  <h3 id="Lime_NanoVG_Context_ResetScissor" data-uid="Lime.NanoVG.Context.ResetScissor">
+  ResetScissor()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ResetScissor()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_ResetTransform_" data-uid="Lime.NanoVG.Context.ResetTransform*"></a>
-  <h4 id="Lime_NanoVG_Context_ResetTransform" data-uid="Lime.NanoVG.Context.ResetTransform">ResetTransform()</h4>
+
+  <h3 id="Lime_NanoVG_Context_ResetTransform" data-uid="Lime.NanoVG.Context.ResetTransform">
+  ResetTransform()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ResetTransform()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Restore_" data-uid="Lime.NanoVG.Context.Restore*"></a>
-  <h4 id="Lime_NanoVG_Context_Restore" data-uid="Lime.NanoVG.Context.Restore">Restore()</h4>
+
+  <h3 id="Lime_NanoVG_Context_Restore" data-uid="Lime.NanoVG.Context.Restore">
+  Restore()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Restore()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Rotate_" data-uid="Lime.NanoVG.Context.Rotate*"></a>
-  <h4 id="Lime_NanoVG_Context_Rotate_System_Single_" data-uid="Lime.NanoVG.Context.Rotate(System.Single)">Rotate(Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Rotate_System_Single_" data-uid="Lime.NanoVG.Context.Rotate(System.Single)">
+  Rotate(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Rotate(float angle)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">angle</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>angle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_RoundedRect_" data-uid="Lime.NanoVG.Context.RoundedRect*"></a>
-  <h4 id="Lime_NanoVG_Context_RoundedRect_Lime_Vector2_Lime_Vector2_System_Single_" data-uid="Lime.NanoVG.Context.RoundedRect(Lime.Vector2,Lime.Vector2,System.Single)">RoundedRect(Vector2, Vector2, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_RoundedRect_Lime_Vector2_Lime_Vector2_System_Single_" data-uid="Lime.NanoVG.Context.RoundedRect(Lime.Vector2,Lime.Vector2,System.Single)">
+  RoundedRect(Vector2, Vector2, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RoundedRect(Vector2 position, Vector2 size, float r)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">r</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>r</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_RoundedRect_" data-uid="Lime.NanoVG.Context.RoundedRect*"></a>
-  <h4 id="Lime_NanoVG_Context_RoundedRect_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.RoundedRect(System.Single,System.Single,System.Single,System.Single,System.Single)">RoundedRect(Single, Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_RoundedRect_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.RoundedRect(System.Single,System.Single,System.Single,System.Single,System.Single)">
+  RoundedRect(float, float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RoundedRect(float x, float y, float w, float h, float r)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">w</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">h</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">r</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>r</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_RoundedRectVarying_" data-uid="Lime.NanoVG.Context.RoundedRectVarying*"></a>
-  <h4 id="Lime_NanoVG_Context_RoundedRectVarying_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.RoundedRectVarying(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">RoundedRectVarying(Single, Single, Single, Single, Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_RoundedRectVarying_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.RoundedRectVarying(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+  RoundedRectVarying(float, float, float, float, float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RoundedRectVarying(float x, float y, float width, float height, float radTopLeft, float radTopRight, float radBottomRight, float radBottomLeft)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">width</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">height</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radTopLeft</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radTopRight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radBottomRight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radBottomLeft</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>radTopLeft</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>radTopRight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>radBottomRight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>radBottomLeft</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Save_" data-uid="Lime.NanoVG.Context.Save*"></a>
-  <h4 id="Lime_NanoVG_Context_Save" data-uid="Lime.NanoVG.Context.Save">Save()</h4>
+
+  <h3 id="Lime_NanoVG_Context_Save" data-uid="Lime.NanoVG.Context.Save">
+  Save()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Save()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Scale_" data-uid="Lime.NanoVG.Context.Scale*"></a>
-  <h4 id="Lime_NanoVG_Context_Scale_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Scale(System.Single,System.Single)">Scale(Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Scale_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Scale(System.Single,System.Single)">
+  Scale(float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Scale(float x, float y)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Scissor_" data-uid="Lime.NanoVG.Context.Scissor*"></a>
-  <h4 id="Lime_NanoVG_Context_Scissor_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.Scissor(Lime.Vector2,Lime.Vector2)">Scissor(Vector2, Vector2)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Scissor_Lime_Vector2_Lime_Vector2_" data-uid="Lime.NanoVG.Context.Scissor(Lime.Vector2,Lime.Vector2)">
+  Scissor(Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Scissor(Vector2 position, Vector2 size)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Scissor_" data-uid="Lime.NanoVG.Context.Scissor*"></a>
-  <h4 id="Lime_NanoVG_Context_Scissor_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Scissor(System.Single,System.Single,System.Single,System.Single)">Scissor(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Scissor_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Scissor(System.Single,System.Single,System.Single,System.Single)">
+  Scissor(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Scissor(float x, float y, float w, float h)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">w</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">h</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_ShapeAntiAlias_" data-uid="Lime.NanoVG.Context.ShapeAntiAlias*"></a>
-  <h4 id="Lime_NanoVG_Context_ShapeAntiAlias_System_Int32_" data-uid="Lime.NanoVG.Context.ShapeAntiAlias(System.Int32)">ShapeAntiAlias(Int32)</h4>
+
+  <h3 id="Lime_NanoVG_Context_ShapeAntiAlias_System_Int32_" data-uid="Lime.NanoVG.Context.ShapeAntiAlias(System.Int32)">
+  ShapeAntiAlias(int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ShapeAntiAlias(int enabled)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">enabled</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>enabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_SkewX_" data-uid="Lime.NanoVG.Context.SkewX*"></a>
-  <h4 id="Lime_NanoVG_Context_SkewX_System_Single_" data-uid="Lime.NanoVG.Context.SkewX(System.Single)">SkewX(Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_SkewX_System_Single_" data-uid="Lime.NanoVG.Context.SkewX(System.Single)">
+  SkewX(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void SkewX(float angle)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">angle</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>angle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_SkewY_" data-uid="Lime.NanoVG.Context.SkewY*"></a>
-  <h4 id="Lime_NanoVG_Context_SkewY_System_Single_" data-uid="Lime.NanoVG.Context.SkewY(System.Single)">SkewY(Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_SkewY_System_Single_" data-uid="Lime.NanoVG.Context.SkewY(System.Single)">
+  SkewY(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void SkewY(float angle)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">angle</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>angle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Stroke_" data-uid="Lime.NanoVG.Context.Stroke*"></a>
-  <h4 id="Lime_NanoVG_Context_Stroke" data-uid="Lime.NanoVG.Context.Stroke">Stroke()</h4>
+
+  <h3 id="Lime_NanoVG_Context_Stroke" data-uid="Lime.NanoVG.Context.Stroke">
+  Stroke()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Stroke()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_StrokeColor_" data-uid="Lime.NanoVG.Context.StrokeColor*"></a>
-  <h4 id="Lime_NanoVG_Context_StrokeColor_Lime_Color4_" data-uid="Lime.NanoVG.Context.StrokeColor(Lime.Color4)">StrokeColor(Color4)</h4>
+
+  <h3 id="Lime_NanoVG_Context_StrokeColor_Lime_Color4_" data-uid="Lime.NanoVG.Context.StrokeColor(Lime.Color4)">
+  StrokeColor(Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void StrokeColor(Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_StrokePaint_" data-uid="Lime.NanoVG.Context.StrokePaint*"></a>
-  <h4 id="Lime_NanoVG_Context_StrokePaint_Lime_NanoVG_Paint_" data-uid="Lime.NanoVG.Context.StrokePaint(Lime.NanoVG.Paint)">StrokePaint(Paint)</h4>
+
+  <h3 id="Lime_NanoVG_Context_StrokePaint_Lime_NanoVG_Paint_" data-uid="Lime.NanoVG.Context.StrokePaint(Lime.NanoVG.Paint)">
+  StrokePaint(Paint)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void StrokePaint(Paint paint)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.NanoVG.Paint.html">Paint</a></td>
-        <td><span class="parametername">paint</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>paint</code> <a class="xref" href="Lime.NanoVG.Paint.html">Paint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_StrokeWidth_" data-uid="Lime.NanoVG.Context.StrokeWidth*"></a>
-  <h4 id="Lime_NanoVG_Context_StrokeWidth_System_Single_" data-uid="Lime.NanoVG.Context.StrokeWidth(System.Single)">StrokeWidth(Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_StrokeWidth_System_Single_" data-uid="Lime.NanoVG.Context.StrokeWidth(System.Single)">
+  StrokeWidth(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void StrokeWidth(float width)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">width</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Transform_" data-uid="Lime.NanoVG.Context.Transform*"></a>
-  <h4 id="Lime_NanoVG_Context_Transform_Lime_Matrix32_" data-uid="Lime.NanoVG.Context.Transform(Lime.Matrix32)">Transform(Matrix32)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Transform_Lime_Matrix32_" data-uid="Lime.NanoVG.Context.Transform(Lime.Matrix32)">
+  Transform(Matrix32)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Transform(Matrix32 transform)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td><span class="parametername">transform</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_Translate_" data-uid="Lime.NanoVG.Context.Translate*"></a>
-  <h4 id="Lime_NanoVG_Context_Translate_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Translate(System.Single,System.Single)">Translate(Single, Single)</h4>
+
+  <h3 id="Lime_NanoVG_Context_Translate_System_Single_System_Single_" data-uid="Lime.NanoVG.Context.Translate(System.Single,System.Single)">
+  Translate(float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Translate(float x, float y)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_NanoVG_Context_UpdateImage_" data-uid="Lime.NanoVG.Context.UpdateImage*"></a>
-  <h4 id="Lime_NanoVG_Context_UpdateImage_System_Int32_System_Byte___" data-uid="Lime.NanoVG.Context.UpdateImage(System.Int32,System.Byte[])">UpdateImage(Int32, Byte[])</h4>
+
+  <h3 id="Lime_NanoVG_Context_UpdateImage_System_Int32_System_Byte___" data-uid="Lime.NanoVG.Context.UpdateImage(System.Int32,System.Byte[])">
+  UpdateImage(int, byte[])
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void UpdateImage(int image, byte[] data)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">image</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Byte</span>[]</td>
-        <td><span class="parametername">data</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>image</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                </ul>
-              </div>
-              <div class="toggle-mode">
-                <div class="icon">
-                  <i aria-hidden="true">☀</i>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="switch-style">
-                  <span class="slider round"></span>
-                </label>
-                <div class="icon">
-                  <i aria-hidden="true">☾</i>
-                </div>
-              </div>
-          
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <h5>In This Article</h5>
-              <div></div>
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <div class="pull-left">
-              GameForest 2020
-              
-            </div>
-            <div class="toggle-mode pull-right visible-sm visible-xs">
-              <div class="icon">
-                <i aria-hidden="true">☀</i>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="switch-style-m">
-                <span class="slider round"></span>
-              </label>
-              <div class="icon">
-                <i aria-hidden="true">☾</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
-      </footer>    </div>
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
-    <script>
-        mermaid.initialize({
-            startOnLoad: false
-        });
-        mermaid.init(undefined, ".lang-mermaid");
-    </script>  </body>
+    </footer>
+  </body>
 </html>

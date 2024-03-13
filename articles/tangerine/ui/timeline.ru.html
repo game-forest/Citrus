@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Окно &#171;Timeline&#187; | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Окно &#171;Timeline&#187; | Citrus Engine ">
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="окно-timeline">Окно «Timeline»</h1>
+
+<h6 id="en--ru">[<a href="timeline.html">EN</a> | RU]</h6>
+<p>Окно таймлайна служит для отображения кадров и маркеров в хронологическом порядке.</p>
+<p>Оно состоит из ленты превью, панели инструментов, списка виджетов и хронологической ленты.</p>
+<p>На превью можно видеть весь таймлайн целиком и передвигать рабочую область, драгая и перемещая её влево или вправо. Также, на <code>Alt + Mousewheel</code> есть возможность выставить зум так, как удобно.</p>
+<p>Панель инструментов состоит из нескольких элементов:</p>
+<p><img src="images/timeline.png" alt="Timeline"></p>
+<ul>
+<li><img src="images/icons/timeline/animation_mode.png" alt="AnimMode"> <strong>Animation mode</strong> - режим анимации, при котором редактор будет заходить во все вложенные анимации</li>
+<li><img src="images/icons/timeline/key.png" alt="AutoKeys"> <strong>Automatic keyframes</strong> - режим автоматического расставления ключей анимации</li>
+<li><img src="images/icons/timeline/new_folder.png" alt="Folder"> <strong>Create folder</strong> - создать папку</li>
+<li><img src="images/icons/timeline/curve.png" alt="Kurwa"> <strong>Edit curves</strong> - режим отображения кривых (WIP)</li>
+<li><img src="images/icons/timeline/animation_stretch.png" alt="AniStretch"> <strong>Animation stretch mode</strong> - режим &quot;растягивания&quot; анимации, при котором можно увеличить или уменьшить проигрываемую анимацию по времени, просто потянув за ее края временного промежутка</li>
+<li><img src="images/icons/timeline/slow_motion_mode.png" alt="SlowMode"> <strong>Slow motion mode</strong> <code>~</code> - режим замедления времени, замедляется на x0.10 раз</li>
+<li><strong>Col: N</strong> - индикатор текущего столбца</li>
+<li><img src="images/icons/timeline/exit_container.png" alt="ExitCont"> <strong>Exit current container</strong> <code>Backspace</code> - выходит из текущего контейнера</li>
+<li><img src="images/icons/timeline/animation_enabled.png" alt="LockAni"> <strong>Lock animation</strong> - включает/выключает анимирование нода, причем для всех анимаций. Зеленый цвет – все аниматоры enabled, серый – все disabled, синий – часть так, часть так (синий появляется когда например мы создаем новый аниматор (он станет enabled), а существующие – disabled).</li>
+<li><img src="images/icons/timeline/eye.png" alt="ShowNode"> <strong>Show Node</strong> - отображение виджетов на Viewport (Shown/Hidden), при клике через <code>Shift</code> изменяет параметр только для выбранных виджетов</li>
+<li><img src="images/icons/timeline/lock.png" alt="LockNode"> <strong>Lock Node</strong> - блокирует виджет, не давая вносить в него какие-либо изменения</li>
+</ul>
+<p>Список виджетов используется для навигации по всем виджетам, используемым в сцене</p>
+<p>По ПКМ с виджетами доступны действия:</p>
+<ul>
+<li><strong>Copy/Cut/Paste/Delete</strong> - копировать/вырезать/вставить/удалить виджеты</li>
+<li><strong>Rename</strong> - переименовать виджет</li>
+<li><strong>Color mark</strong> - выставляет &quot;цвет&quot; виджету, используется только для цветовой дифференциации внутри редактора</li>
+<li><strong>Convert to Button</strong> - конвертирует виджет в кнопку (работает только для объектов типа Frame)</li>
+</ul>
+<p>Также по <code>Shift + Space</code> на виджете (или кликнув на значок выпадающего списка слева) можно раскрыть список аниматоров, используемых в виджете.
+Для аниматоров доступны операции <strong>Copy/Cut/Paste/Delete</strong></p>
+<p><img src="images/animators.png" alt="Ani"></p>
+<p>Хронологическая лента отображает анимации покадрово, также она используется для того, чтобы производить действия с кейфреймами и анимациями:</p>
+<ul>
+<li><strong>Cut Keyframes</strong> <code>Ctrl + Alt + X</code> - вырезать выделенные кейфреймы (со всеми ключами анимации)</li>
+<li><strong>Copy Keyframes</strong> <code>Ctrl + Alt + C</code> - копировать выделенные кейфреймы</li>
+<li><strong>Paste Keyframes</strong> <code>Ctrl + Alt + V</code> - вставить выделенные/скопированные кейфреймы в выбранный кадр. Если у виджета отсутствует какое-то анимированное свойство, оно будет игнорироваться.</li>
+<li><strong>Reverse Keyframes</strong> - &quot;переворачивает&quot; анимацию на выбранном временном отрезке. Т.е. если виджет двигался из A -&gt; B, то станет двигаться из B -&gt; A и так далее.</li>
+<li><strong>Insert Timeline Column</strong> <code>Ctrl + Q</code> - вставить колонку на таймлайне</li>
+<li><strong>Remove Timeline Column</strong> <code>Ctrl + W</code> - удалить колонку на таймлайне. При этом, если колонка содержала ключи анимации, они будут смещены влево</li>
+<li><strong>Delete Selected Keyframes</strong> <code>Ctrl + Del</code> - удалить выделенные кейфреймы</li>
+<li><strong>Numeric Move</strong> - смещение выбранного участка таймлайна на N кадров вправо. При вводе <em>отрицательного</em> значения - влево</li>
+<li><strong>Numeric Scale</strong> - масштабирование выбранного участка таймлайна, используя множитель</li>
+</ul>
+<p>Даблкликом на таймлайне создаются маркеры. Также их можно создать, используя горячие клавиши (<code>Alt + 1/2/3</code>)
+Окно создания маркера выглядит так:</p>
+<p><img src="images/marker.png" alt="Marker"></p>
+<ul>
+<li><strong>Marker Id</strong> - идентификатор (имя) маркера</li>
+<li><strong>Action</strong> - действие, которые будет выполняться, когда каретка достигнет маркера (Play/Jump/Stop)</li>
+<li><strong>Jump to</strong> - маркер, на который будет &quot;прыгать&quot; каретка при достижении маркера, если выбран маркер типа &quot;Jump&quot;</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

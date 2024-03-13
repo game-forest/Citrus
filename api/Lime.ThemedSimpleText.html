@@ -1,109 +1,141 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class ThemedSimpleText
-   | Citrus Engine </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class ThemedSimpleText
-   | Citrus Engine ">
-    <meta name="generator" content="docfx 2.58.9.0">
-    
-    <link rel="shortcut icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    
+      <title>Class ThemedSimpleText
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class ThemedSimpleText
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
         </div>
-      </header>
-      <div class="container body-content">
-        
-        <div id="search-results">
-          <div class="search-list">Search Results for <span></span></div>
-          <div class="sr-items">
-            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
         </div>
       </div>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.ThemedSimpleText">
+
+        <article data-uid="Lime.ThemedSimpleText">
+
+
+
+  <h1 id="Lime_ThemedSimpleText" data-uid="Lime.ThemedSimpleText" class="text-break">
+    Class ThemedSimpleText
   
-  
-  <h1 id="Lime_ThemedSimpleText" data-uid="Lime.ThemedSimpleText" class="text-break">Class ThemedSimpleText
   </h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="Lime.Node.html">Node</a></div>
-    <div class="level2"><a class="xref" href="Lime.Widget.html">Widget</a></div>
-    <div class="level3"><a class="xref" href="Lime.SimpleText.html">SimpleText</a></div>
-    <div class="level4"><span class="xref">ThemedSimpleText</span></div>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Lime.html">Lime</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-    <div><a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a></div>
-    <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
-    <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
-    <div><span class="xref">System.ICloneable</span></div>
-    <div><a class="xref" href="Lime.IText.html">IText</a></div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ThemedSimpleText : SimpleText, IDisposable, IAnimatorHost, IRenderChainBuilder, IAnimable, ICloneable, IText</code></pre>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="Lime.Node.html">Node</a></div>
+      <div><a class="xref" href="Lime.Widget.html">Widget</a></div>
+      <div><a class="xref" href="Lime.SimpleText.html">SimpleText</a></div>
+      <div><span class="xref">ThemedSimpleText</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+      <div><a class="xref" href="Lime.IAnimatorHost.html">IAnimatorHost</a></div>
+      <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
+      <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.icloneable">ICloneable</a></div>
+      <div><a class="xref" href="Lime.IText.html">IText</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
     <div>
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_GlobalTextProcessor">SimpleText.GlobalTextProcessor</a>
     </div>
@@ -174,10 +206,7 @@
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_AddToRenderChain_Lime_RenderChain_">SimpleText.AddToRenderChain(RenderChain)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_Lime_IText_Submit">SimpleText.IText.Submit()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_CanDisplay_System_Char_">SimpleText.CanDisplay(Char)</a>
+      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_CanDisplay_System_Char_">SimpleText.CanDisplay(char)</a>
     </div>
     <div>
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_OnSizeChanged_Lime_Vector2_">SimpleText.OnSizeChanged(Vector2)</a>
@@ -186,28 +215,25 @@
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_GetRenderObject">SimpleText.GetRenderObject()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_Lime_IText_SyncCaretPosition">SimpleText.IText.SyncCaretPosition()</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_MeasureText">SimpleText.MeasureText()</a>
     </div>
     <div>
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_MeasureUncutText">SimpleText.MeasureUncutText()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_StaticScale_System_Single_System_Boolean_">SimpleText.StaticScale(Single, Boolean)</a>
+      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_StaticScale_System_Single_System_Boolean_">SimpleText.StaticScale(float, bool)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_FitTextInsideWidgetArea_System_Single_">SimpleText.FitTextInsideWidgetArea(Single)</a>
+      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_FitTextInsideWidgetArea_System_Single_">SimpleText.FitTextInsideWidgetArea(float)</a>
     </div>
     <div>
       <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_Invalidate">SimpleText.Invalidate()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_GetCharPair_Lime_Vector2_System_ValueTuple_Lime_CharPosition_Lime_CharPosition___">SimpleText.GetCharPair(Vector2, (T1, T2)&lt;CharPosition, CharPosition&gt;)</a>
+      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_GetCharPair_Lime_Vector2_System_ValueTuple_Lime_CharPosition_Lime_CharPosition___">SimpleText.GetCharPair(Vector2, out (CharPosition, CharPosition))</a>
     </div>
     <div>
-      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_SetLocalizeArguments_System_String___">SimpleText.SetLocalizeArguments(String[])</a>
+      <a class="xref" href="Lime.SimpleText.html#Lime_SimpleText_SetLocalizeArguments_System_String___">SimpleText.SetLocalizeArguments(params string[])</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_globalColor">Widget.globalColor</a>
@@ -241,9 +267,6 @@
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_Layout">Widget.Layout</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_LayoutCell">Widget.LayoutCell</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_LayoutConstraints">Widget.LayoutConstraints</a>
@@ -408,6 +431,9 @@
       <a class="xref" href="Lime.Widget.html#Lime_Widget_GloballyVisible">Widget.GloballyVisible</a>
     </div>
     <div>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_RecalcGloballyVisible">Widget.RecalcGloballyVisible()</a>
+    </div>
+    <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_FreezeInvisible">Widget.FreezeInvisible</a>
     </div>
     <div>
@@ -444,19 +470,19 @@
       <a class="xref" href="Lime.Widget.html#Lime_Widget_CalcContentSize">Widget.CalcContentSize()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_Item_System_String_">Widget.Item[String]</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_Item_System_String_">Widget.this[string]</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_Item_System_String_System_Object___">Widget.Item[String, Object[]]</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_Item_System_String_System_Object___">Widget.this[string, object[]]</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_OnParentChanged_Lime_Node_">Widget.OnParentChanged(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_RaiseUpdating_System_Single_">Widget.RaiseUpdating(Single)</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_RaiseUpdating_System_Single_">Widget.RaiseUpdating(float)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_RaiseUpdated_System_Single_">Widget.RaiseUpdated(Single)</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_RaiseUpdated_System_Single_">Widget.RaiseUpdated(float)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_ClipRegionTest_Lime_Rectangle_">Widget.ClipRegionTest(Rectangle)</a>
@@ -474,16 +500,16 @@
       <a class="xref" href="Lime.Widget.html#Lime_Widget_GetEffectiveLayer">Widget.GetEffectiveLayer()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_LocalHitTest_Lime_HitTestArgs__">Widget.LocalHitTest(HitTestArgs)</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_LocalHitTest_Lime_HitTestArgs__">Widget.LocalHitTest(ref HitTestArgs)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_LocalHitTest_Lime_Vector2_">Widget.LocalHitTest(Vector2)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_PartialHitTest_Lime_HitTestArgs__">Widget.PartialHitTest(HitTestArgs)</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_PartialHitTest_Lime_HitTestArgs__">Widget.PartialHitTest(ref HitTestArgs)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_PartialHitTestByContents_Lime_HitTestArgs__">Widget.PartialHitTestByContents(HitTestArgs)</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_PartialHitTestByContents_Lime_HitTestArgs__">Widget.PartialHitTestByContents(ref HitTestArgs)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_BoundingRectHitTest_Lime_Vector2_">Widget.BoundingRectHitTest(Vector2)</a>
@@ -501,7 +527,7 @@
       <a class="xref" href="Lime.Widget.html#Lime_Widget_CalcAABBInSpaceOf_Lime_Widget_">Widget.CalcAABBInSpaceOf(Widget)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Widget.html#Lime_Widget_CalcHull">Widget.CalcHull()</a>
+      <a class="xref" href="Lime.Widget.html#Lime_Widget_CalcHull_System_Nullable_Lime_Matrix32___">Widget.CalcHull(in Matrix32?)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Widget.html#Lime_Widget_CalcAABBInViewportSpace_Lime_WindowRect_Lime_Matrix44_">Widget.CalcAABBInViewportSpace(WindowRect, Matrix44)</a>
@@ -543,9 +569,6 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_Trigger">Node.Trigger</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Lime_IAnimable_Owner">Node.IAnimable.Owner</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Parent">Node.Parent</a>
     </div>
     <div>
@@ -555,7 +578,7 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_GetTangerineFlag_Lime_TangerineFlags_">Node.GetTangerineFlag(TangerineFlags)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_SetTangerineFlag_Lime_TangerineFlags_System_Boolean_">Node.SetTangerineFlag(TangerineFlags, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_SetTangerineFlag_Lime_TangerineFlags_System_Boolean_">Node.SetTangerineFlag(TangerineFlags, bool)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_AsWidget">Node.AsWidget</a>
@@ -612,9 +635,6 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_Components">Node.Components</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Lime_IAnimationHost_GetComponent_System_Type_">Node.IAnimationHost.GetComponent(Type)</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Animators">Node.Animators</a>
     </div>
     <div>
@@ -643,9 +663,6 @@
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Animations">Node.Animations</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Lime_IAnimationHost_OnAnimatorCollectionChanged">Node.IAnimationHost.OnAnimatorCollectionChanged()</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_NeedSerializeAnimations">Node.NeedSerializeAnimations()</a>
@@ -705,10 +722,10 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_SameOrDescendantOf_Lime_Node_">Node.SameOrDescendantOf(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryRunAnimation_System_String_System_String_System_Double_">Node.TryRunAnimation(String, String, Double)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryRunAnimation_System_String_System_String_System_Double_">Node.TryRunAnimation(string, string, double)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_RunAnimation_System_String_System_String_">Node.RunAnimation(String, String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_RunAnimation_System_String_System_String_">Node.RunAnimation(string, string)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_OnBeforeSerialization">Node.OnBeforeSerialization()</a>
@@ -726,16 +743,16 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_UnlinkAndDispose">Node.UnlinkAndDispose()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfAndChildrenToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfAndChildrenToRenderChain(RenderChain, Int32)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfAndChildrenToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfAndChildrenToRenderChain(RenderChain, int)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfToRenderChain(RenderChain, Int32)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfToRenderChain(RenderChain, int)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(String, Object, Double)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(string, object, double)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TriggerMultipleAnimations_System_String_System_Double_">Node.TriggerMultipleAnimations(String, Double)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TriggerMultipleAnimations_System_String_System_Double_">Node.TriggerMultipleAnimations(string, double)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_AddNode_Lime_Node_">Node.AddNode(Node)</a>
@@ -750,25 +767,25 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_PushToNode_Lime_Node_">Node.PushToNode(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_">Node.Find&lt;T&gt;(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_">Node.Find&lt;T&gt;(string)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_System_Object___">Node.Find&lt;T&gt;(String, Object[])</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_System_Object___">Node.Find&lt;T&gt;(string, params object[])</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String___0__">Node.TryFind&lt;T&gt;(String, T)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String___0__">Node.TryFind&lt;T&gt;(string, out T)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_">Node.TryFind&lt;T&gt;(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_">Node.TryFind&lt;T&gt;(string)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_System_Object___">Node.TryFind&lt;T&gt;(String, Object[])</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_System_Object___">Node.TryFind&lt;T&gt;(string, params object[])</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_FindNode_System_String_">Node.FindNode(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_FindNode_System_String_">Node.FindNode(string)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFindNode_System_String_">Node.TryFindNode(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFindNode_System_String_">Node.TryFindNode(string)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Descendants">Node.Descendants</a>
@@ -792,22 +809,25 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_SceneLoaded">Node.SceneLoaded</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_System_ICloneable_Clone">Node.ICloneable.Clone()</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Clone">Node.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_Lime_Persistence_Format_">Node.Save(String, Persistence.Format)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_CloneRaw">Node.CloneRaw()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_System_IO_Stream_Lime_Persistence_Format_">Node.Save(String, Stream, Persistence.Format)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_Lime_Persistence_Format_">Node.Save(string, Persistence.Format)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Load__1_System_String___0_System_Boolean_">Node.Load&lt;T&gt;(String, T, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_System_IO_Stream_Lime_Persistence_Format_">Node.Save(string, Stream, Persistence.Format)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_String_Lime_Node_System_Boolean_">Node.Load(String, Node, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Load__1_System_String___0_System_Boolean_">Node.Load&lt;T&gt;(string, T, bool)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_IO_Stream_System_String_Lime_Node_System_Boolean_">Node.Load(Stream, String, Node, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_String_Lime_Node_System_Boolean_">Node.Load(string, Node, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_IO_Stream_System_String_Lime_Node_System_Boolean_">Node.Load(Stream, string, Node, bool)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_NotifyOnBuilt">Node.NotifyOnBuilt()</a>
@@ -825,7 +845,7 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_ReplaceContent_Lime_Node_">Node.ReplaceContent(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_ResolveScenePath_System_String_">Node.ResolveScenePath(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_ResolveScenePath_System_String_">Node.ResolveScenePath(string)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_IsMouseOver">Node.IsMouseOver()</a>
@@ -843,203 +863,170 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_GloballyFrozen">Node.GloballyFrozen</a>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
+      <a class="xref" href="Lime.Node.html#Lime_Node_ForceFilterNodes">Node.ForceFilterNodes()</a>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
     </div>
     <div>
-      <span class="xref">System.Object.GetHashCode()</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
     </div>
     <div>
-      <span class="xref">System.Object.GetType()</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
     </div>
     <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
     </div>
     <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
     </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
-  <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_ThemedSimpleText_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ThemedSimpleText : SimpleText, IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable, IText</code></pre>
-  </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="Lime_ThemedSimpleText__ctor_" data-uid="Lime.ThemedSimpleText.#ctor*"></a>
-  <h4 id="Lime_ThemedSimpleText__ctor" data-uid="Lime.ThemedSimpleText.#ctor">ThemedSimpleText()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ThemedSimpleText()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_ThemedSimpleText__ctor_" data-uid="Lime.ThemedSimpleText.#ctor*"></a>
-  <h4 id="Lime_ThemedSimpleText__ctor_System_String_" data-uid="Lime.ThemedSimpleText.#ctor(System.String)">ThemedSimpleText(String)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ThemedSimpleText(string text)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
-  <a id="Lime_ThemedSimpleText_IsNotDecorated_" data-uid="Lime.ThemedSimpleText.IsNotDecorated*"></a>
-  <h4 id="Lime_ThemedSimpleText_IsNotDecorated" data-uid="Lime.ThemedSimpleText.IsNotDecorated">IsNotDecorated()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool IsNotDecorated()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_IsNotDecorated">Node.IsNotDecorated()</a></div>
-  <h3 id="implements">Implements</h3>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+  <dl class="typelist extensionMethods">
+    <dt>Extension Methods</dt>
+    <dd>
   <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IAnimable.html">IAnimable</a>
-  </div>
-  <div>
-      <span class="xref">System.ICloneable</span>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IText.html">IText</a>
-  </div>
-  <h3 id="extensionmethods">Extension Methods</h3>
-  <div>
-      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_GetAnimationHost_Lime_IAnimable_">IAnimableExtensions.GetAnimationHost(IAnimable)</a>
+      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_GetAnimatorHost_Lime_IAnimable_">IAnimableExtensions.GetAnimatorHost(IAnimable)</a>
   </div>
   <div>
       <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_UnbindAnimators_Lime_IAnimable_">IAnimableExtensions.UnbindAnimators(IAnimable)</a>
   </div>
   <div>
+      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_AdvanceAnimationsRecursive_Lime_Node_System_Single_">NodeCompatibilityExtensions.AdvanceAnimationsRecursive(Node, float)</a>
+  </div>
+  <div>
       <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Clone__1_Lime_Node_">NodeCompatibilityExtensions.Clone&lt;T&gt;(Node)</a>
   </div>
   <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Clone_Lime_Node_">NodeCompatibilityExtensions.Clone(Node)</a>
+      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Update_Lime_Node_System_Single_">NodeCompatibilityExtensions.Update(Node, float)</a>
   </div>
-  <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_AdvanceAnimationsRecursive_Lime_Node_System_Single_">NodeCompatibilityExtensions.AdvanceAnimationsRecursive(Node, Single)</a>
+  </dd></dl>
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Lime_ThemedSimpleText__ctor_" data-uid="Lime.ThemedSimpleText.#ctor*"></a>
+
+  <h3 id="Lime_ThemedSimpleText__ctor" data-uid="Lime.ThemedSimpleText.#ctor">
+  ThemedSimpleText()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ThemedSimpleText()</code></pre>
   </div>
-  <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Update_Lime_Node_System_Single_">NodeCompatibilityExtensions.Update(Node, Single)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_ThemedSimpleText__ctor_" data-uid="Lime.ThemedSimpleText.#ctor*"></a>
+
+  <h3 id="Lime_ThemedSimpleText__ctor_System_String_" data-uid="Lime.ThemedSimpleText.#ctor(System.String)">
+  ThemedSimpleText(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ThemedSimpleText(string text)</code></pre>
   </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Lime_ThemedSimpleText_IsNotDecorated_" data-uid="Lime.ThemedSimpleText.IsNotDecorated*"></a>
+
+  <h3 id="Lime_ThemedSimpleText_IsNotDecorated" data-uid="Lime.ThemedSimpleText.IsNotDecorated">
+  IsNotDecorated()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IsNotDecorated()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                </ul>
-              </div>
-              <div class="toggle-mode">
-                <div class="icon">
-                  <i aria-hidden="true">☀</i>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="switch-style">
-                  <span class="slider round"></span>
-                </label>
-                <div class="icon">
-                  <i aria-hidden="true">☾</i>
-                </div>
-              </div>
-          
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <h5>In This Article</h5>
-              <div></div>
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <div class="pull-left">
-              GameForest 2020
-              
-            </div>
-            <div class="toggle-mode pull-right visible-sm visible-xs">
-              <div class="icon">
-                <i aria-hidden="true">☀</i>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="switch-style-m">
-                <span class="slider round"></span>
-              </label>
-              <div class="icon">
-                <i aria-hidden="true">☾</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
-      </footer>    </div>
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
-    <script>
-        mermaid.initialize({
-            startOnLoad: false
-        });
-        mermaid.init(undefined, ".lang-mermaid");
-    </script>  </body>
+    </footer>
+  </body>
 </html>

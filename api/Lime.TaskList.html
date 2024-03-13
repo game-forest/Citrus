@@ -1,903 +1,850 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TaskList
-   | Citrus Engine </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TaskList
-   | Citrus Engine ">
-    <meta name="generator" content="docfx 2.58.9.0">
-    
-    <link rel="shortcut icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    
+      <title>Class TaskList
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class TaskList
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
         </div>
-      </header>
-      <div class="container body-content">
-        
-        <div id="search-results">
-          <div class="search-list">Search Results for <span></span></div>
-          <div class="sr-items">
-            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
         </div>
       </div>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.TaskList">
+
+        <article data-uid="Lime.TaskList">
+
+
+
+  <h1 id="Lime_TaskList" data-uid="Lime.TaskList" class="text-break">
+    Class TaskList
   
-  
-  <h1 id="Lime_TaskList" data-uid="Lime.TaskList" class="text-break">Class TaskList
   </h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
-    <div class="level2"><span class="xref">TaskList</span></div>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Lime.html">Lime</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
-    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
-    <div><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
-    <div><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
-    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
-    <div><span class="xref">System.Collections.IList</span></div>
-    <div><span class="xref">System.Collections.ICollection</span></div>
-    <div><span class="xref">System.Collections.IEnumerable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.get_Item(System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.set_Item(System.Int32, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Add(Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.AddRange(System.Collections.Generic.IEnumerable&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.AsReadOnly()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.BinarySearch(System.Int32, System.Int32, Lime.Task, System.Collections.Generic.IComparer&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.BinarySearch(Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.BinarySearch(Lime.Task, System.Collections.Generic.IComparer&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Clear()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Contains(Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.ConvertAll&lt;TOutput&gt;(System.Converter&lt;Lime.Task, TOutput&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.CopyTo(System.Int32, Lime.Task[], System.Int32, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.CopyTo(Lime.Task[])</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.CopyTo(Lime.Task[], System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Exists(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Find(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindAll(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindIndex(System.Int32, System.Int32, System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindIndex(System.Int32, System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindIndex(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindLast(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindLastIndex(System.Int32, System.Int32, System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindLastIndex(System.Int32, System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.FindLastIndex(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.ForEach(System.Action&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.GetEnumerator()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.GetRange(System.Int32, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.IndexOf(Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.IndexOf(Lime.Task, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.IndexOf(Lime.Task, System.Int32, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Insert(System.Int32, Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.InsertRange(System.Int32, System.Collections.Generic.IEnumerable&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.LastIndexOf(Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.LastIndexOf(Lime.Task, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.LastIndexOf(Lime.Task, System.Int32, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Remove(Lime.Task)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.RemoveAll(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.RemoveAt(System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.RemoveRange(System.Int32, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Reverse()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Reverse(System.Int32, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Sort()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Sort(System.Collections.Generic.IComparer&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Sort(System.Comparison&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Sort(System.Int32, System.Int32, System.Collections.Generic.IComparer&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.Generic.IEnumerable&lt;Lime.Task&gt;.GetEnumerator()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.ICollection.CopyTo(System.Array, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IEnumerable.GetEnumerator()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.Add(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.Contains(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.IndexOf(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.Insert(System.Int32, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.Remove(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.ToArray()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.TrimExcess()</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.TrueForAll(System.Predicate&lt;Lime.Task&gt;)</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Capacity</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Count</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.Item[System.Int32]</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.Generic.ICollection&lt;Lime.Task&gt;.IsReadOnly</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.ICollection.IsSynchronized</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.ICollection.SyncRoot</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.IsFixedSize</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.IsReadOnly</span>
-    </div>
-    <div>
-      <span class="xref">System.Collections.Generic.List&lt;Lime.Task&gt;.System.Collections.IList.Item[System.Int32]</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
-  <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_TaskList_syntax">Syntax</h5>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class TaskList : List&lt;Task&gt;, IList&lt;Task&gt;, ICollection&lt;Task&gt;, IReadOnlyList&lt;Task&gt;, IReadOnlyCollection&lt;Task&gt;, IEnumerable&lt;Task&gt;, IList, ICollection, IEnumerable</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="Lime_TaskList__ctor_" data-uid="Lime.TaskList.#ctor*"></a>
-  <h4 id="Lime_TaskList__ctor" data-uid="Lime.TaskList.#ctor">TaskList()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TaskList()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_TaskList__ctor_" data-uid="Lime.TaskList.#ctor*"></a>
-  <h4 id="Lime_TaskList__ctor_Lime_Node_" data-uid="Lime.TaskList.#ctor(Lime.Node)">TaskList(Node)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TaskList(Node node)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Node.html">Node</a></td>
-        <td><span class="parametername">node</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
-  </h3>
-  
-  
-  <a id="Lime_TaskList_Current_" data-uid="Lime.TaskList.Current*"></a>
-  <h4 id="Lime_TaskList_Current" data-uid="Lime.TaskList.Current">Current</h4>
-  <div class="markdown level1 summary"><p>Currently processing TaskList.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static TaskList Current { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TaskList.html">TaskList</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_Node_" data-uid="Lime.TaskList.Node*"></a>
-  <h4 id="Lime_TaskList_Node" data-uid="Lime.TaskList.Node">Node</h4>
-  <div class="markdown level1 summary"><p>Gets the widget this instance belongs to.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Node Node { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Node.html">Node</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
-  <a id="Lime_TaskList_Add_" data-uid="Lime.TaskList.Add*"></a>
-  <h4 id="Lime_TaskList_Add_System_Collections_Generic_IEnumerator_System_Object__System_Object_" data-uid="Lime.TaskList.Add(System.Collections.Generic.IEnumerator{System.Object},System.Object)">Add(IEnumerator&lt;Object&gt;, Object)</h4>
-  <div class="markdown level1 summary"><p>Adds task to the end of this list.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task Add(IEnumerator&lt;object&gt; e, object tag = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Object</span>&gt;</td>
-        <td><span class="parametername">e</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Task.html">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_Add_" data-uid="Lime.TaskList.Add*"></a>
-  <h4 id="Lime_TaskList_Add_System_Func_System_Collections_Generic_IEnumerator_System_Object___System_Object_" data-uid="Lime.TaskList.Add(System.Func{System.Collections.Generic.IEnumerator{System.Object}},System.Object)">Add(Func&lt;IEnumerator&lt;Object&gt;&gt;, Object)</h4>
-  <div class="markdown level1 summary"><p>Adds task to the end of this list.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task Add(Func&lt;IEnumerator&lt;object&gt;&gt; e, object tag = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Object</span>&gt;&gt;</td>
-        <td><span class="parametername">e</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Task.html">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_AddConcurrent_" data-uid="Lime.TaskList.AddConcurrent*"></a>
-  <h4 id="Lime_TaskList_AddConcurrent_System_Collections_Generic_IEnumerator_System_Object____" data-uid="Lime.TaskList.AddConcurrent(System.Collections.Generic.IEnumerator{System.Object}[])">AddConcurrent(IEnumerator&lt;Object&gt;[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public List&lt;Task&gt; AddConcurrent(params IEnumerator&lt;object&gt;[] args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Object</span>&gt;[]</td>
-        <td><span class="parametername">args</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_AddLoop_" data-uid="Lime.TaskList.AddLoop*"></a>
-  <h4 id="Lime_TaskList_AddLoop_System_Action_System_Object_" data-uid="Lime.TaskList.AddLoop(System.Action,System.Object)">AddLoop(Action, Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task AddLoop(Action action, object tag = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
-        <td><span class="parametername">action</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Task.html">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_AddSequence_" data-uid="Lime.TaskList.AddSequence*"></a>
-  <h4 id="Lime_TaskList_AddSequence_System_Collections_Generic_IEnumerator_System_Object____" data-uid="Lime.TaskList.AddSequence(System.Collections.Generic.IEnumerator{System.Object}[])">AddSequence(IEnumerator&lt;Object&gt;[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task AddSequence(params IEnumerator&lt;object&gt;[] args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Object</span>&gt;[]</td>
-        <td><span class="parametername">args</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Task.html">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_AnyTagged_" data-uid="Lime.TaskList.AnyTagged*"></a>
-  <h4 id="Lime_TaskList_AnyTagged_System_Object_" data-uid="Lime.TaskList.AnyTagged(System.Object)">AnyTagged(Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool AnyTagged(object tag)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_Stop_" data-uid="Lime.TaskList.Stop*"></a>
-  <h4 id="Lime_TaskList_Stop" data-uid="Lime.TaskList.Stop">Stop()</h4>
-  <div class="markdown level1 summary"><p>Stops all tasks.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_TaskList_Stop_" data-uid="Lime.TaskList.Stop*"></a>
-  <h4 id="Lime_TaskList_Stop_System_Predicate_Lime_Task__" data-uid="Lime.TaskList.Stop(System.Predicate{Lime.Task})">Stop(Predicate&lt;Task&gt;)</h4>
-  <div class="markdown level1 summary"><p>Stops all tasks that match the conditions defined by the specified predicate.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Stop(Predicate&lt;Task&gt; match)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Predicate</span>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</td>
-        <td><span class="parametername">match</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_StopByTag_" data-uid="Lime.TaskList.StopByTag*"></a>
-  <h4 id="Lime_TaskList_StopByTag_System_Object_" data-uid="Lime.TaskList.StopByTag(System.Object)">StopByTag(Object)</h4>
-  <div class="markdown level1 summary"><p>Stops all tasks with specified tag (null is also a tag).</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void StopByTag(object tag)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TaskList_Update_" data-uid="Lime.TaskList.Update*"></a>
-  <h4 id="Lime_TaskList_Update_System_Single_" data-uid="Lime.TaskList.Update(System.Single)">Update(Single)</h4>
-  <div class="markdown level1 summary"><p>Advances tasks by provided delta and removes completed ones.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Update(float delta)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
-        <td><p>Time delta since last Update.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.Collections.Generic.IList&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.Generic.IReadOnlyList&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.IList</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.ICollection</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.IEnumerable</span>
-  </div>
-  <h3 id="extensionmethods">Extension Methods</h3>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
+      <div><span class="xref">TaskList</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlycollection-1">IReadOnlyCollection</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ilist">IList</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.icollection">ICollection</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.add">List&lt;Task&gt;.Add(Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.addrange">List&lt;Task&gt;.AddRange(IEnumerable&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.asreadonly">List&lt;Task&gt;.AsReadOnly()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.binarysearch#system-collections-generic-list-1-binarysearch(system-int32-system-int32-0-system-collections-generic-icomparer((-0)))">List&lt;Task&gt;.BinarySearch(int, int, Task, IComparer&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.binarysearch#system-collections-generic-list-1-binarysearch(-0)">List&lt;Task&gt;.BinarySearch(Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.binarysearch#system-collections-generic-list-1-binarysearch(-0-system-collections-generic-icomparer((-0)))">List&lt;Task&gt;.BinarySearch(Task, IComparer&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.clear">List&lt;Task&gt;.Clear()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.contains">List&lt;Task&gt;.Contains(Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.convertall">List&lt;Task&gt;.ConvertAll&lt;TOutput&gt;(Converter&lt;Task, TOutput&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.copyto#system-collections-generic-list-1-copyto(system-int32-0()-system-int32-system-int32)">List&lt;Task&gt;.CopyTo(int, Task[], int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.copyto#system-collections-generic-list-1-copyto(-0())">List&lt;Task&gt;.CopyTo(Task[])</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.copyto#system-collections-generic-list-1-copyto(-0()-system-int32)">List&lt;Task&gt;.CopyTo(Task[], int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.ensurecapacity">List&lt;Task&gt;.EnsureCapacity(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.exists">List&lt;Task&gt;.Exists(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.find">List&lt;Task&gt;.Find(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findall">List&lt;Task&gt;.FindAll(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findindex#system-collections-generic-list-1-findindex(system-int32-system-int32-system-predicate((-0)))">List&lt;Task&gt;.FindIndex(int, int, Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findindex#system-collections-generic-list-1-findindex(system-int32-system-predicate((-0)))">List&lt;Task&gt;.FindIndex(int, Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findindex#system-collections-generic-list-1-findindex(system-predicate((-0)))">List&lt;Task&gt;.FindIndex(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findlast">List&lt;Task&gt;.FindLast(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findlastindex#system-collections-generic-list-1-findlastindex(system-int32-system-int32-system-predicate((-0)))">List&lt;Task&gt;.FindLastIndex(int, int, Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findlastindex#system-collections-generic-list-1-findlastindex(system-int32-system-predicate((-0)))">List&lt;Task&gt;.FindLastIndex(int, Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.findlastindex#system-collections-generic-list-1-findlastindex(system-predicate((-0)))">List&lt;Task&gt;.FindLastIndex(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.foreach">List&lt;Task&gt;.ForEach(Action&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.getenumerator">List&lt;Task&gt;.GetEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.getrange">List&lt;Task&gt;.GetRange(int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.indexof#system-collections-generic-list-1-indexof(-0)">List&lt;Task&gt;.IndexOf(Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.indexof#system-collections-generic-list-1-indexof(-0-system-int32)">List&lt;Task&gt;.IndexOf(Task, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.indexof#system-collections-generic-list-1-indexof(-0-system-int32-system-int32)">List&lt;Task&gt;.IndexOf(Task, int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.insert">List&lt;Task&gt;.Insert(int, Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.insertrange">List&lt;Task&gt;.InsertRange(int, IEnumerable&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.lastindexof#system-collections-generic-list-1-lastindexof(-0)">List&lt;Task&gt;.LastIndexOf(Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.lastindexof#system-collections-generic-list-1-lastindexof(-0-system-int32)">List&lt;Task&gt;.LastIndexOf(Task, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.lastindexof#system-collections-generic-list-1-lastindexof(-0-system-int32-system-int32)">List&lt;Task&gt;.LastIndexOf(Task, int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.remove">List&lt;Task&gt;.Remove(Task)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.removeall">List&lt;Task&gt;.RemoveAll(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.removeat">List&lt;Task&gt;.RemoveAt(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.removerange">List&lt;Task&gt;.RemoveRange(int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.reverse#system-collections-generic-list-1-reverse">List&lt;Task&gt;.Reverse()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.reverse#system-collections-generic-list-1-reverse(system-int32-system-int32)">List&lt;Task&gt;.Reverse(int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.slice">List&lt;Task&gt;.Slice(int, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.sort#system-collections-generic-list-1-sort">List&lt;Task&gt;.Sort()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.sort#system-collections-generic-list-1-sort(system-collections-generic-icomparer((-0)))">List&lt;Task&gt;.Sort(IComparer&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.sort#system-collections-generic-list-1-sort(system-comparison((-0)))">List&lt;Task&gt;.Sort(Comparison&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.sort#system-collections-generic-list-1-sort(system-int32-system-int32-system-collections-generic-icomparer((-0)))">List&lt;Task&gt;.Sort(int, int, IComparer&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.toarray">List&lt;Task&gt;.ToArray()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.trimexcess">List&lt;Task&gt;.TrimExcess()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.trueforall">List&lt;Task&gt;.TrueForAll(Predicate&lt;Task&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.capacity">List&lt;Task&gt;.Capacity</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.count">List&lt;Task&gt;.Count</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">List&lt;Task&gt;.this[int]</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+  <dl class="typelist extensionMethods">
+    <dt>Extension Methods</dt>
+    <dd>
   <div>
       <a class="xref" href="Lime.Mathf.html#Lime_Mathf_RandomItem__1_System_Collections_Generic_ICollection___0__">Mathf.RandomItem&lt;T&gt;(ICollection&lt;T&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.LinqExtensions.html#Lime_LinqExtensions_Distinct__1_System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">LinqExtensions.Distinct&lt;TSource&gt;(IEnumerable&lt;TSource&gt;, Func&lt;TSource, TSource, bool&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.LinqExtensions.html#Lime_LinqExtensions_Except__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">LinqExtensions.Except&lt;TSource&gt;(IEnumerable&lt;TSource&gt;, IEnumerable&lt;TSource&gt;, Func&lt;TSource, TSource, bool&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.LinqExtensions.html#Lime_LinqExtensions_Intersect__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">LinqExtensions.Intersect&lt;T&gt;(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, Func&lt;T, T, bool&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.Mathf.html#Lime_Mathf_Shuffle__1_System_Collections_Generic_IEnumerable___0__Lime_IRandom_">Mathf.Shuffle&lt;T&gt;(IEnumerable&lt;T&gt;, IRandom)</a>
   </div>
   <div>
       <a class="xref" href="Lime.Mathf.html#Lime_Mathf_Shuffle__1_System_Collections_Generic_IEnumerable___0__System_Random_">Mathf.Shuffle&lt;T&gt;(IEnumerable&lt;T&gt;, Random)</a>
   </div>
   <div>
-      <a class="xref" href="Lime.Toolbox.html#Lime_Toolbox_RemoveTail__1_System_Collections_Generic_List___0__System_Int32_">Toolbox.RemoveTail&lt;T&gt;(List&lt;T&gt;, Int32)</a>
+      <a class="xref" href="Lime.Toolbox.html#Lime_Toolbox_RemoveTail__1_System_Collections_Generic_List___0__System_Int32_">Toolbox.RemoveTail&lt;T&gt;(List&lt;T&gt;, int)</a>
   </div>
-  <div>
-      <a class="xref" href="Lime.LinqExtensions.html#Lime_LinqExtensions_Distinct__1_System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">LinqExtensions.Distinct&lt;TSource&gt;(IEnumerable&lt;TSource&gt;, Func&lt;TSource, TSource, Boolean&gt;)</a>
+  </dd></dl>
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Lime_TaskList__ctor_" data-uid="Lime.TaskList.#ctor*"></a>
+
+  <h3 id="Lime_TaskList__ctor" data-uid="Lime.TaskList.#ctor">
+  TaskList()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TaskList()</code></pre>
   </div>
-  <div>
-      <a class="xref" href="Lime.LinqExtensions.html#Lime_LinqExtensions_Except__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">LinqExtensions.Except&lt;TSource&gt;(IEnumerable&lt;TSource&gt;, IEnumerable&lt;TSource&gt;, Func&lt;TSource, TSource, Boolean&gt;)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList__ctor_" data-uid="Lime.TaskList.#ctor*"></a>
+
+  <h3 id="Lime_TaskList__ctor_Lime_Node_" data-uid="Lime.TaskList.#ctor(Lime.Node)">
+  TaskList(Node)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TaskList(Node node)</code></pre>
   </div>
-  <div>
-      <a class="xref" href="Lime.LinqExtensions.html#Lime_LinqExtensions_Intersect__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">LinqExtensions.Intersect&lt;T&gt;(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, Func&lt;T, T, Boolean&gt;)</a>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>node</code> <a class="xref" href="Lime.Node.html">Node</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Lime_TaskList_Current_" data-uid="Lime.TaskList.Current*"></a>
+
+  <h3 id="Lime_TaskList_Current" data-uid="Lime.TaskList.Current">
+  Current
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Currently processing TaskList.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TaskList Current { get; }</code></pre>
   </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.TaskList.html">TaskList</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_Node_" data-uid="Lime.TaskList.Node*"></a>
+
+  <h3 id="Lime_TaskList_Node" data-uid="Lime.TaskList.Node">
+  Node
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the widget this instance belongs to.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Node Node { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Node.html">Node</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Lime_TaskList_Add_" data-uid="Lime.TaskList.Add*"></a>
+
+  <h3 id="Lime_TaskList_Add_System_Collections_Generic_IEnumerator_System_Object__System_Object_" data-uid="Lime.TaskList.Add(System.Collections.Generic.IEnumerator{System.Object},System.Object)">
+  Add(IEnumerator&lt;object&gt;, object)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds task to the end of this list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task Add(IEnumerator&lt;object&gt; e, object tag = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>e</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>tag</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Task.html">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_Add_" data-uid="Lime.TaskList.Add*"></a>
+
+  <h3 id="Lime_TaskList_Add_System_Func_System_Collections_Generic_IEnumerator_System_Object___System_Object_" data-uid="Lime.TaskList.Add(System.Func{System.Collections.Generic.IEnumerator{System.Object}},System.Object)">
+  Add(Func&lt;IEnumerator&lt;object&gt;&gt;, object)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds task to the end of this list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task Add(Func&lt;IEnumerator&lt;object&gt;&gt; e, object tag = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>e</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-1">Func</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;&gt;</dt>
+    <dd></dd>
+    <dt><code>tag</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Task.html">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_AddConcurrent_" data-uid="Lime.TaskList.AddConcurrent*"></a>
+
+  <h3 id="Lime_TaskList_AddConcurrent_System_Collections_Generic_IEnumerator_System_Object____" data-uid="Lime.TaskList.AddConcurrent(System.Collections.Generic.IEnumerator{System.Object}[])">
+  AddConcurrent(params IEnumerator&lt;object&gt;[])
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;Task&gt; AddConcurrent(params IEnumerator&lt;object&gt;[] args)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>args</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_AddLoop_" data-uid="Lime.TaskList.AddLoop*"></a>
+
+  <h3 id="Lime_TaskList_AddLoop_System_Action_System_Object_" data-uid="Lime.TaskList.AddLoop(System.Action,System.Object)">
+  AddLoop(Action, object)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddLoop(Action action, object tag = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></dt>
+    <dd></dd>
+    <dt><code>tag</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Task.html">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_AddSequence_" data-uid="Lime.TaskList.AddSequence*"></a>
+
+  <h3 id="Lime_TaskList_AddSequence_System_Collections_Generic_IEnumerator_System_Object____" data-uid="Lime.TaskList.AddSequence(System.Collections.Generic.IEnumerator{System.Object}[])">
+  AddSequence(params IEnumerator&lt;object&gt;[])
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddSequence(params IEnumerator&lt;object&gt;[] args)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>args</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Task.html">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_AnyTagged_" data-uid="Lime.TaskList.AnyTagged*"></a>
+
+  <h3 id="Lime_TaskList_AnyTagged_System_Object_" data-uid="Lime.TaskList.AnyTagged(System.Object)">
+  AnyTagged(object)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool AnyTagged(object tag)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>tag</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_Stop_" data-uid="Lime.TaskList.Stop*"></a>
+
+  <h3 id="Lime_TaskList_Stop" data-uid="Lime.TaskList.Stop">
+  Stop()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stops all tasks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_Stop_" data-uid="Lime.TaskList.Stop*"></a>
+
+  <h3 id="Lime_TaskList_Stop_System_Predicate_Lime_Task__" data-uid="Lime.TaskList.Stop(System.Predicate{Lime.Task})">
+  Stop(Predicate&lt;Task&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stops all tasks that match the conditions defined by the specified predicate.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Stop(Predicate&lt;Task&gt; match)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>match</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Lime.Task.html">Task</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_StopByTag_" data-uid="Lime.TaskList.StopByTag*"></a>
+
+  <h3 id="Lime_TaskList_StopByTag_System_Object_" data-uid="Lime.TaskList.StopByTag(System.Object)">
+  StopByTag(object)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stops all tasks with specified tag (null is also a tag).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void StopByTag(object tag)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>tag</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_TaskList_Update_" data-uid="Lime.TaskList.Update*"></a>
+
+  <h3 id="Lime_TaskList_Update_System_Single_" data-uid="Lime.TaskList.Update(System.Single)">
+  Update(float)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Advances tasks by provided delta and removes completed ones.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Update(float delta)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>delta</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Time delta since last Update.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                </ul>
-              </div>
-              <div class="toggle-mode">
-                <div class="icon">
-                  <i aria-hidden="true">☀</i>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="switch-style">
-                  <span class="slider round"></span>
-                </label>
-                <div class="icon">
-                  <i aria-hidden="true">☾</i>
-                </div>
-              </div>
-          
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <h5>In This Article</h5>
-              <div></div>
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <div class="pull-left">
-              GameForest 2020
-              
-            </div>
-            <div class="toggle-mode pull-right visible-sm visible-xs">
-              <div class="icon">
-                <i aria-hidden="true">☀</i>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="switch-style-m">
-                <span class="slider round"></span>
-              </label>
-              <div class="icon">
-                <i aria-hidden="true">☾</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
-      </footer>    </div>
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
-    <script>
-        mermaid.initialize({
-            startOnLoad: false
-        });
-        mermaid.init(undefined, ".lang-mermaid");
-    </script>  </body>
+    </footer>
+  </body>
 </html>

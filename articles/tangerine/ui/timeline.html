@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Panel &#171;Timeline&#187; | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Panel &#171;Timeline&#187; | Citrus Engine ">
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="panel-timeline">Panel «Timeline»</h1>
+
+<h6 id="en--ru">[EN | <a href="timeline.ru.html">RU</a>]</h6>
+<p>Timeline Panel provides all information about frames, animators, markers and scene hierarchy.
+It organizes and controls a scenes's content over time.</p>
+<p>It includes:</p>
+<ul>
+<li>preview scrollbar;</li>
+<li>toolbar;</li>
+<li>list / tree of widgets;</li>
+<li>chronological roll pane with markers and keyframes.</li>
+</ul>
+<p>Preview Scrollbar gives you ability to see the whole timeline and drag &amp; move your workspace along timeline.</p>
+<p>Use <code>Alt + MouseWheel</code> hotkey to zoom-in / zoom-out for more comfortable and efficient animating experience.</p>
+<h3 id="toolbar">Toolbar</h3>
+<p><img src="images/timeline.png" alt="Timeline"></p>
+<ul>
+<li><img src="../images/icons/timeline/animation_mode.png" alt="AnimMode"> <strong>Animation mode</strong> -- animation mode allows editor to enter all nested animations;</li>
+<li><img src="../images/icons/timeline/key.png" alt="AutoKeys"> <strong>Automatic keyframes</strong> -- auto-keyframe mode sets animators automatically when you change any property of the widget on scene;</li>
+<li><img src="../images/icons/timeline/new_folder.png" alt="Folder"> <strong>Create folder</strong> -- create folder for grouping widgets on timeline;</li>
+<li><img src="../images/icons/timeline/curve.png" alt="Kurwa"> <strong>Edit curves</strong> -- curves mode allows to edit blending curves between animators;</li>
+<li><img src="../images/icons/timeline/animation_stretch.png" alt="AniStretch"> <strong>Animation stretch mode</strong> -- stretch mode allows you to scale animators in the selected range by dragging it with left and right edges;</li>
+<li><img src="../images/icons/timeline/slow_motion_mode.png" alt="SlowMode"> <strong>Slow motion mode</strong> (hotkey <code>~</code>) -- slow-mo mode slows the animation x0.10 times during preview;</li>
+<li><strong>Col: N</strong> -- current timeline column indicator (shows ou current frame or range of frames);</li>
+<li><img src="../images/icons/timeline/exit_container.png" alt="ExitCont"> <strong>Exit current container</strong> (hotkey <code>Backspace</code>) -- exit from the current container;</li>
+<li><img src="../images/icons/timeline/animation_enabled.png" alt="LockAni"> <strong>Lock animation</strong> -- enable/disable node animation for all animators. Green - all animators enabled, grey - all animators disabled, blue - partly disabled (it can happen when you create a new animator while others are disabled);</li>
+<li><img src="../images/icons/timeline/eye.png" alt="ShowNode"> <strong>Show Node</strong> -- toggle widget visibility (shown / hidden) inside Viewport (also known as &quot;SceneView&quot;). Use hotket <code>Shift</code> to toggle only selected widgets;</li>
+<li><img src="../images/icons/timeline/lock.png" alt="LockNode"> <strong>Lock Node</strong> -- block widget transformation and modification.</li>
+</ul>
+<p>List of widgets on the left side of the timeline allows you to navigate through scenes' hierarchy.</p>
+<p>Press RMB on any widget to open context menu:</p>
+<ul>
+<li><strong>Inline external scene</strong> -- inline selected external scene (frame with &quot;ContentsPath&quot;) into current document;</li>
+<li><strong>Export Scene...</strong> -- export seleted @Lime.Frame-based widget as &quot;.tan&quot; document;</li>
+<li><strong>Copy Asset Path</strong> -- copy path to the selected widget relative to the bundle it is in;</li>
+<li><strong>Copy/Cut/Paste/Delete</strong> -- move / remove operations;</li>
+<li><strong>Rename</strong> -- rename selected widget;</li>
+<li><strong>Color mark</strong> -- set an indicator color for the selected widget. It does not change the real widget's color and is available only from Tangerine;</li>
+<li><strong>Convert to</strong> -- convert selected item to widget of another type (only if applicable).</li>
+</ul>
+<p>For parallel animations with enabled <a href="/articles/tangerine/prefs.md">&quot;Experimental: timeline hierarchy&quot; option</a> you can use <code>Shift + Space</code> hotkey or click on the toggle icon (left to the widget item's name) to expand / hide list of children widgets.</p>
+<p><img src="images/timeline-hierarchy.png" alt="Hierarchy"></p>
+<h3 id="animators">Animators</h3>
+<p><img src="images/animators.png" alt="Ani"></p>
+<p>All animators (and their keyframes) are available from a rollpane on the right side of the Timeline.</p>
+<p>There are several operations available to manipulate keyframes / animations:</p>
+<ul>
+<li><strong>Cut Keyframes</strong> (hotkey <code>Ctrl + Alt + X</code>) -- cut selected keyframes (including their animators);</li>
+<li><strong>Copy Keyframes</strong> (hotkey <code>Ctrl + Alt + C</code>) -- copy selected keyframes;</li>
+<li><strong>Paste Keyframes</strong> (hotkey <code>Ctrl + Alt + V</code>) -- paste selected/copied keyframes starting at current frame. If widget does not have some animated property (animator), it will be ignored.</li>
+<li><strong>Reverse Keyframes</strong> -- &quot;reverse&quot; order of keyframes on the selected range of frames. Ex. if widget changes its position from A to B it would change it from B to A and so on.</li>
+<li><strong>Insert Timeline Column</strong> (hotkey <code>Ctrl + Q</code>) -- insert a new column on the timeline;</li>
+<li><strong>Remove Timeline Column</strong> (hotkey <code>Ctrl + W</code>) -- remove the current column on the timeline. If column had keyframes they will be shifted left;</li>
+<li><strong>Delete Selected Keyframes</strong> (hotkey <code>Ctrl + Del</code>) -- remove selected keyframes (including their animators);</li>
+<li><strong>Numeric Move</strong> -- shiftig a range of the selected frames on timeline with N frames to the right. Use <em>negative</em> value for shifting to the left.</li>
+<li><strong>Numeric Scale</strong> -- scaling a range of the selected frames on timeline with a specified multiplier.</li>
+</ul>
+<h3 id="markers">Markers</h3>
+<p><code>Double-Click</code> on the Timeline's frame meter creates new markers. Also you can create them using <code>Alt + 1/2/3</code> hotkeys for Play/Stop/Jump markers respectively.</p>
+<p><img src="images/marker.png" alt="Marker"></p>
+<ul>
+<li><strong>Marker Id</strong> -- marker's indentificator / name;</li>
+<li><strong>Action</strong> -- action type for marker, one of: Play, Jump or Stop. Action happens when animation reaches marker's frame;</li>
+<li><strong>Jump to</strong> -- transition marker used for &quot;Jump&quot; action. Animation &quot;jumps&quot; onto it when it reaches marker's frame;</li>
+<li><strong>Easing</strong> -- marker easing / interpolation function, read <a href="/articles/tangerine/animation/easing.md">Easing</a> page for more information.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

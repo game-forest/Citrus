@@ -1,0 +1,1821 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Struct PhysicalDeviceFeatures
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Struct PhysicalDeviceFeatures
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="SharpVulkan.PhysicalDeviceFeatures">
+
+
+
+  <h1 id="SharpVulkan_PhysicalDeviceFeatures" data-uid="SharpVulkan.PhysicalDeviceFeatures" class="text-break">
+    Struct PhysicalDeviceFeatures
+  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="SharpVulkan.html">SharpVulkan</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public struct PhysicalDeviceFeatures</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals">ValueType.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode">ValueType.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.tostring">ValueType.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_AlphaToOne" data-uid="SharpVulkan.PhysicalDeviceFeatures.AlphaToOne">
+  AlphaToOne
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool AlphaToOne</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_DepthBiasClamp" data-uid="SharpVulkan.PhysicalDeviceFeatures.DepthBiasClamp">
+  DepthBiasClamp
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool DepthBiasClamp</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_DepthBounds" data-uid="SharpVulkan.PhysicalDeviceFeatures.DepthBounds">
+  DepthBounds
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool DepthBounds</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_DepthClamp" data-uid="SharpVulkan.PhysicalDeviceFeatures.DepthClamp">
+  DepthClamp
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool DepthClamp</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_DrawIndirectFirstInstance" data-uid="SharpVulkan.PhysicalDeviceFeatures.DrawIndirectFirstInstance">
+  DrawIndirectFirstInstance
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool DrawIndirectFirstInstance</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_DualSrcBlend" data-uid="SharpVulkan.PhysicalDeviceFeatures.DualSrcBlend">
+  DualSrcBlend
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool DualSrcBlend</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_FillModeNonSolid" data-uid="SharpVulkan.PhysicalDeviceFeatures.FillModeNonSolid">
+  FillModeNonSolid
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool FillModeNonSolid</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_FragmentStoresAndAtomics" data-uid="SharpVulkan.PhysicalDeviceFeatures.FragmentStoresAndAtomics">
+  FragmentStoresAndAtomics
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool FragmentStoresAndAtomics</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_FullDrawIndexUInt32" data-uid="SharpVulkan.PhysicalDeviceFeatures.FullDrawIndexUInt32">
+  FullDrawIndexUInt32
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool FullDrawIndexUInt32</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_GeometryShader" data-uid="SharpVulkan.PhysicalDeviceFeatures.GeometryShader">
+  GeometryShader
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool GeometryShader</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ImageCubeArray" data-uid="SharpVulkan.PhysicalDeviceFeatures.ImageCubeArray">
+  ImageCubeArray
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ImageCubeArray</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_IndependentBlend" data-uid="SharpVulkan.PhysicalDeviceFeatures.IndependentBlend">
+  IndependentBlend
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool IndependentBlend</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_InheritedQueries" data-uid="SharpVulkan.PhysicalDeviceFeatures.InheritedQueries">
+  InheritedQueries
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool InheritedQueries</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_LargePoints" data-uid="SharpVulkan.PhysicalDeviceFeatures.LargePoints">
+  LargePoints
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool LargePoints</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_LogicOperation" data-uid="SharpVulkan.PhysicalDeviceFeatures.LogicOperation">
+  LogicOperation
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool LogicOperation</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_MultiDrawIndirect" data-uid="SharpVulkan.PhysicalDeviceFeatures.MultiDrawIndirect">
+  MultiDrawIndirect
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool MultiDrawIndirect</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_MultiViewport" data-uid="SharpVulkan.PhysicalDeviceFeatures.MultiViewport">
+  MultiViewport
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool MultiViewport</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_OcclusionQueryPrecise" data-uid="SharpVulkan.PhysicalDeviceFeatures.OcclusionQueryPrecise">
+  OcclusionQueryPrecise
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool OcclusionQueryPrecise</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_PipelineStatisticsQuery" data-uid="SharpVulkan.PhysicalDeviceFeatures.PipelineStatisticsQuery">
+  PipelineStatisticsQuery
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool PipelineStatisticsQuery</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_RobustBufferAccess" data-uid="SharpVulkan.PhysicalDeviceFeatures.RobustBufferAccess">
+  RobustBufferAccess
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool RobustBufferAccess</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SampleRateShading" data-uid="SharpVulkan.PhysicalDeviceFeatures.SampleRateShading">
+  SampleRateShading
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SampleRateShading</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SamplerAnisotropy" data-uid="SharpVulkan.PhysicalDeviceFeatures.SamplerAnisotropy">
+  SamplerAnisotropy
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SamplerAnisotropy</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderClipDistance" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderClipDistance">
+  ShaderClipDistance
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderClipDistance</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderCullDistance" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderCullDistance">
+  ShaderCullDistance
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderCullDistance</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderFloat64" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderFloat64">
+  ShaderFloat64
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderFloat64</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderImageGatherExtended" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderImageGatherExtended">
+  ShaderImageGatherExtended
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderImageGatherExtended</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderInt16" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderInt16">
+  ShaderInt16
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderInt16</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderInt64" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderInt64">
+  ShaderInt64
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderInt64</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderResourceMinLod" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderResourceMinLod">
+  ShaderResourceMinLod
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderResourceMinLod</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderResourceResidency" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderResourceResidency">
+  ShaderResourceResidency
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderResourceResidency</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderSampledImageArrayDynamicIndexing" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderSampledImageArrayDynamicIndexing">
+  ShaderSampledImageArrayDynamicIndexing
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderSampledImageArrayDynamicIndexing</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderStorageBufferArrayDynamicIndexing" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderStorageBufferArrayDynamicIndexing">
+  ShaderStorageBufferArrayDynamicIndexing
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderStorageBufferArrayDynamicIndexing</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderStorageImageArrayDynamicIndexing" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderStorageImageArrayDynamicIndexing">
+  ShaderStorageImageArrayDynamicIndexing
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderStorageImageArrayDynamicIndexing</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderStorageImageExtendedFormats" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderStorageImageExtendedFormats">
+  ShaderStorageImageExtendedFormats
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderStorageImageExtendedFormats</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderStorageImageMultisample" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderStorageImageMultisample">
+  ShaderStorageImageMultisample
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderStorageImageMultisample</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderStorageImageReadWithoutFormat" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderStorageImageReadWithoutFormat">
+  ShaderStorageImageReadWithoutFormat
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderStorageImageReadWithoutFormat</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderStorageImageWriteWithoutFormat" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderStorageImageWriteWithoutFormat">
+  ShaderStorageImageWriteWithoutFormat
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderStorageImageWriteWithoutFormat</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderTessellationAndGeometryPointSize" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderTessellationAndGeometryPointSize">
+  ShaderTessellationAndGeometryPointSize
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderTessellationAndGeometryPointSize</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_ShaderUniformBufferArrayDynamicIndexing" data-uid="SharpVulkan.PhysicalDeviceFeatures.ShaderUniformBufferArrayDynamicIndexing">
+  ShaderUniformBufferArrayDynamicIndexing
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool ShaderUniformBufferArrayDynamicIndexing</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseBinding" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseBinding">
+  SparseBinding
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseBinding</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidency16Samples" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidency16Samples">
+  SparseResidency16Samples
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidency16Samples</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidency2Samples" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidency2Samples">
+  SparseResidency2Samples
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidency2Samples</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidency4Samples" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidency4Samples">
+  SparseResidency4Samples
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidency4Samples</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidency8Samples" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidency8Samples">
+  SparseResidency8Samples
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidency8Samples</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidencyAliased" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidencyAliased">
+  SparseResidencyAliased
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidencyAliased</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidencyBuffer" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidencyBuffer">
+  SparseResidencyBuffer
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidencyBuffer</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidencyImage2D" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidencyImage2D">
+  SparseResidencyImage2D
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidencyImage2D</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_SparseResidencyImage3D" data-uid="SharpVulkan.PhysicalDeviceFeatures.SparseResidencyImage3D">
+  SparseResidencyImage3D
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool SparseResidencyImage3D</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_TessellationShader" data-uid="SharpVulkan.PhysicalDeviceFeatures.TessellationShader">
+  TessellationShader
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool TessellationShader</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_TextureCompressionAstcLdr" data-uid="SharpVulkan.PhysicalDeviceFeatures.TextureCompressionAstcLdr">
+  TextureCompressionAstcLdr
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool TextureCompressionAstcLdr</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_TextureCompressionBc" data-uid="SharpVulkan.PhysicalDeviceFeatures.TextureCompressionBc">
+  TextureCompressionBc
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool TextureCompressionBc</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_TextureCompressionEtc2" data-uid="SharpVulkan.PhysicalDeviceFeatures.TextureCompressionEtc2">
+  TextureCompressionEtc2
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool TextureCompressionEtc2</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_VariableMultisampleRate" data-uid="SharpVulkan.PhysicalDeviceFeatures.VariableMultisampleRate">
+  VariableMultisampleRate
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool VariableMultisampleRate</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_VertexPipelineStoresAndAtomics" data-uid="SharpVulkan.PhysicalDeviceFeatures.VertexPipelineStoresAndAtomics">
+  VertexPipelineStoresAndAtomics
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool VertexPipelineStoresAndAtomics</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="SharpVulkan_PhysicalDeviceFeatures_WideLines" data-uid="SharpVulkan.PhysicalDeviceFeatures.WideLines">
+  WideLines
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RawBool WideLines</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="SharpVulkan.RawBool.html">RawBool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

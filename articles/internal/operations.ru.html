@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Пользователи меняют состояние документа, а потом хотят отменить свои действия | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Пользователи меняют состояние документа, а потом хотят отменить свои действия | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="пользователи-меняют-состояние-документа-а-потом-хотят-отменить-свои-действия">Пользователи меняют состояние документа, а потом хотят отменить свои действия</h1>
+
+<p>Функциональность, которая решает эту проблему называется обычно Undo/Redo.</p>
+<p>В танжерине у нас есть всё чтобы это обеспечить.</p>
+<p>Заводим инстанс <code>OperationHistory</code> и отдаём ему инстанс <code>OperationProcessors</code> в который уже добавлены или можно добавлять потом реализации <code>IOperationProcessor</code>. Реализуем <code>IOperation</code> -- это у нас будут операции, они только хранят данные. Код, который применяет или отменяет операцию надо писать в реализации <code>IOperationProcessor</code>. И теперь когда хотим что-то сделать, делаем так:</p>
+<pre><code class="lang-C#">using (operationHistory.BeginTransaction()) {
+	// ...
+	someOperation.Perform(someData);
+}
+</code></pre>
+<p>Вкратце -- это всё. Дальше подробности.</p>
+<h2 id="операции">Операции</h2>
+<p>Операциями называем реализации <code>IOperation</code>. Но для удобства есть класс <code>Operation</code> в котором уже есть общие удобные методы для большинства операций.</p>
+<p>Операции хранят данные, кода который применяет операцию в самих операциях нет. Этот код лежит в их процессорах.</p>
+<p>Операции бывают примитивные и производные.</p>
+<h3 id="примитивные">Примитивные</h3>
+<p>Примитивные -- это которые реализуют <code>IOperation</code>. Это те операции, которые работают непосредственно с изменяемой моделью данных и НЕ используют никакие другие примитивные операции. Т.е. только работа с моделью данных.</p>
+<p>У примтивных операций мы по соглашению, а не по интерфейсу реализуем какой-то метод, который должен отдать новый инстанс этой операции в текущий инстанс <code>OperationHistory</code> без активации транзации. По соглашению этот метод мы называем <code>public static void Perform(&lt;args...&gt;)</code></p>
+<pre><code class="lang-C#">public class AwesomeOperation
+{
+	// ...
+	public static void Perform(&lt;args...&gt;)
+	{
+		OperationHistory.Current.Perform(new AwesomeOperation(&lt;args...&gt;);
+	}
+	//...
+}
+</code></pre>
+<p>Если транзакция в момент этого вызова не активна, то так нельзя -- всё упадёт. Транзакция уже должна быть открыта при вызове.</p>
+<p>Среди примитивных операций мы выделяем натуральные, вот они:</p>
+<ul>
+<li><p><code>DelegateOperation</code></p>
+</li>
+<li><p><code>SetProperty</code></p>
+</li>
+<li><p><code>SetIndexedProperty</code></p>
+</li>
+<li><p><code>InsertIntoList</code></p>
+</li>
+<li><p><code>RemoveFromList</code></p>
+</li>
+<li><p><code>InsertIntoList&lt;TList, TElement&gt;</code></p>
+</li>
+<li><p><code>RemoveFromList&lt;TList, TElement&gt;</code></p>
+</li>
+<li><p><code>AddIntoCollection&lt;TCollection, TElement&gt;</code></p>
+</li>
+<li><p><code>RemoveFromCollection&lt;TCollection, TElement&gt;</code></p>
+</li>
+<li><p><code>RemoveFromDictionary&lt;TDictionary, TKey, TValue&gt;</code></p>
+</li>
+<li><p><code>InsertIntoDictionary&lt;TDictionary, TKey, TValue&gt;</code></p>
+</li>
+</ul>
+<p>Это самые базовые операции, которые ничего не знают про лайм или танжерин и работают со стандартными типами дот нета.</p>
+<p>Их список в <code>Tangerine.Core.OperationProvider.NaturalOperationProcessorTypes</code>.</p>
+<blockquote>
+<p>In English that would be called &quot;Natural Operations&quot;, &quot;Primitive Operations&quot; and &quot;Derivative Operations&quot;.</p>
+</blockquote>
+<h3 id="производные">Производные</h3>
+<p>Производные же операции -- это просто какие-то классы, у которых есть какой-то статический метод, который мы вызываем и они уже вызывают множественные другие примтивные или производные операции, обязательно внутри транзакции, которую они должны открыть сами. Обычно этот метод как и у примтивных называется <code>public static void Perform</code>.</p>
+<p>Важно что производные операции должны сами открывать транзакцию для всего что вызывают. Это значит, что производные операции должны знать про инстанс <code>OperationHistory</code> у которого они будут открывать транзакцию. Это может быть глобальтная переменная, сервис или просто передавать его им в <code>Perform</code>.</p>
+<blockquote>
+<p>Вообще был соблазн назвать производные операции составными -- Compound operations. Но у нас так повелось, что к абстракциям, которые имеют в имени Compound обычно их интерфейс позволяет как-то оперировать с тем, из чего они состоят, тут же такого нет -- пользователь может только &quot;применить операцию&quot;</p>
+</blockquote>
+<h2 id="operation-processor">Operation Processor</h2>
+<p>Вот операции хранят данные, а процессоры -- это непосредственно то, что выполняет работу по модификации модели, используя данные в операции.</p>
+<p>Процессор операций это класс, который реализует <code>IOperationProcessor</code>. Для удобства есть <code>abstract class OperationProcessor&lt;TOperation&gt;</code> или <code>abstract class SymmetricOperationProcessor</code>. Лучше наследоваться от них, если только процессор не &quot;косметический&quot;.</p>
+<p>Обычно процессоры операций пишутся прямо внутри операции как вложенный класс.</p>
+<h2 id="operationhistory">OperationHistory</h2>
+<p><code>OperationHistory</code> -- центральное место через которое осуществляется работа с операциями.</p>
+<p>Когда создаёшь OperationHistory -- туда надо передать все поддерживаемые им процессоры операций. Одну операцию может обрабатывать несколько различных процессоров. Например если хочется как-то косметически отреагировать на происхождение операций.</p>
+<p>В некотором смысле вся эта абстракция -- это такая реализация publish subscribe. Перформ операции -- это рейз ивента с его данными. А процессоры -- это хэндлеры этого ивента. При чём каждый процессор хэндлит как &quot;накатывание&quot; операции, так и её &quot;откатывание&quot;.</p>
+<blockquote>
+<p>Надо написать как происходит выборка какой процессор к какой операции и что можно добавляя интерфейсы на операцию хэндлить специфические операции отдельно.</p>
+</blockquote>
+<p>У <code>OperationHistory</code> есть свойство <code>Current</code> -- оно всегда указывает на текущую <code>OperationHistory</code> в рамках текущей транзакции. Не является потокобезопасным -- одно на все потоки. Если так выйдет, что мы внутри одной транзакции, вызываем другую и при этом эти транзакции вызывются у разных инстансов OperationsHistory и поведение не определено. Не делайте так (пока что). Если транзакция не активна, то это свойство будет <code>null</code>.</p>
+<blockquote>
+<p>Но вообще если вместо зануления после выхода из транзакции возвращать то что &quot;было&quot;, то может этого будет достаточно.</p>
+</blockquote>
+<p>Все операции должны быть вызваны внутри транзакции.</p>
+<p>Чтобы это сделать достаточно просто</p>
+<pre><code class="lang-C#">using (operationHistory.BeginTransaction()) {
+	// ...
+	someOperation.Perform(someData);
+}
+</code></pre>
+<p>Внутри транзакции можно в любой момент вызвать <code>operationHistory.CommitTransaction();</code> чтобы &quot;закоммитить&quot; текущие изменения. Но в конце транзакции изменения всегда коммитятся.</p>
+<blockquote>
+<p>Надо дописать что это значит и выяснить зачем в реализации многих операций вызывается коммит руками, если в конце транзакции коммит вызывается автоматически.</p>
+</blockquote>
+<p>Ещё казалось бы можно делать так</p>
+<pre><code class="lang-C#">operationHistory.BeginTransaction();
+// ...
+someOperation.Perform(someData);
+operationHistory.EndTransaction()
+</code></pre>
+<p>Но так делать не стоит, потому что если код транзации бросит исключение, то окончание транзации вызвано не будет, поэтому используйте using.</p>
+<blockquote>
+<p>Вообще если нет нужды, то я бы эти методы скрыл и сделал один метод NewTransaction который делает то же что и бегин, но только его всегда надо юзать через using</p>
+</blockquote>
+<p>Хотя на такой случай у нас есть <code>public void DoTransaction(Action block)</code> Который выполняет ваш код внутри транзакции. Если внутри такой транзакции будет брошено исключение, то вызовется <code>ExceptionHandler</code>. Это ивент, на который можно подписаться у <code>OperationHistory</code>. В него передаётся исключение. Если хэндлер ивента возвращает тру то, а если нет то. Но пооду в любом случае исключение проглатывается ололо?</p>
+<p>Если вы используете историю документа, то ExceptionHandler назначается документом и отхватывает только установку кейфрейма вне скоупа текущей анимации. Все остальные прглатываются?</p>
+<p>Ещё есть <code>CommitTransaction</code> про него надо сюда написать.</p>
+<p>И есть <code>RollbackTransaction</code> про него надо сюда написать.</p>
+<p>также есть методы <code>Undo()</code> <code>Redo()</code> с ними всё ясно.</p>
+<p>и есть <code>ExternalModification</code> про него надо сюда написать.</p>
+<h2 id="operationprocessors">OperationProcessors</h2>
+<p>Это тот класс, инстанс которого надо создать и наполнить типами всех процессоров, которые мы хотим чтобы поддерживались нашей историей операций. Порядок имеет значение.</p>
+<h2 id="куда-всё-класть">Куда всё класть</h2>
+<p>В каждом из проектов танжерина операции надо класть в отдельный файл на каждую операцию, в папочку <code>Operations</code> внутри проекта. Если есть отдельные от операций процессоры, то их надо класть в папочку <code>Processors</code> внутри папочки <code>Operations</code>.</p>
+<p>Все вообще операции должны попадать в неймспейс <code>Tangerine.Operations</code>, отдельные процессоры соответственно в <code>Tangerine.Processors</code></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

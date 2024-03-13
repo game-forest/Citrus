@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Настройки (Preferences) | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Настройки (Preferences) | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="настройки-preferences">Настройки (Preferences)</h1>
+
+<h6 id="en--ru">[<a href="prefs.html">EN</a> | RU]</h6>
+<p>Настройки редактора вызываются через <em>File -&gt; Preferences</em>, либо использовав комбинацию клавиш Ctrl + P.</p>
+<p>Окно настроек делится на несколько категорий:</p>
+<p><strong>General</strong> - основные настройки.</p>
+<p><img src="images/prefs/general.ru.png" alt="General"></p>
+<ul>
+<li><strong>Target platform</strong> - выбор платформы, с которой работаем.</li>
+<li><strong>Reload modified files</strong> - перегружать ли измененные файлы по-умолчанию.</li>
+<li><strong>Default scene dimensions</strong> - размеры сцены по-умолчанию.</li>
+<li><strong>Automatic keyframes</strong> - выставлять ли ключи анимации при изменении пропертей.</li>
+<li><strong>Animation mode</strong> - активировать ли триггеры при проигрывании анимации.</li>
+<li><strong>Autosave delay</strong> - период сохранения сейвов.</li>
+<li><strong>Stop animation on current frame</strong> - останавливать анимацию на текущем фрейме (вкл/выкл).</li>
+<li><strong>Show scene thumbnail</strong> - показывать ли превью сцены на таймлайне.</li>
+<li><strong>Don't paste at mouse pointer</strong> - отключить вставку на место курсора.</li>
+<li><strong>Inverse Shift behavior when dragging keyframe</strong> - инвертировать поведение Shift при перетаскивании кейфреймов.</li>
+<li><strong>Bone Width</strong> - настроить ширину кости.</li>
+<li><strong>Default interpolation</strong> - выбор способа интерполяции по-умолчанию.</li>
+</ul>
+<p><strong>Appearance</strong> - настройки внешнего вида.</p>
+<p><img src="images/prefs/appearance.png" alt="Apperance"></p>
+<ul>
+<li><strong>Chess background</strong> - использовать ли шахматки для фона.</li>
+<li><strong>Background color A</strong> - цвет бэкграунда А.</li>
+<li><strong>Background color B</strong> - цвет бэкграунда Б.</li>
+<li><strong>Root overlay color</strong> - цвет границы root-сцены.</li>
+<li><strong>Animation preview background</strong> - цвет фона для плеера анимаций.</li>
+</ul>
+<p><strong>Theme</strong> - настройки цветовой схемы.</p>
+<p><img src="images/prefs/theme.png" alt="Theme"></p>
+<ul>
+<li><strong>Dark icon theme</strong> - использовать ли тёмные иконки.</li>
+<li><strong>Dark/Light preset</strong> - захардкоженные дефолтные темы (тёмные/светлые).</li>
+<li><strong>Save theme</strong> - сохранить тему.</li>
+<li><strong>Load theme</strong> - загрузить тему.</li>
+<li><strong>Search</strong> - поиск нужного проперти для изменения цвета.</li>
+</ul>
+<p><strong>Keyboard shortcuts</strong> - настройки хоткеев.</p>
+<p><img src="images/prefs/ks.png" alt="KeyShort"></p>
+<ul>
+<li><strong>Profile</strong> - текущий пресет (профиль) настроек клавиатуры.</li>
+<li><strong>Commands</strong> - список команд, доступных для биндов.</li>
+<li><strong>Export/Import/Delete</strong> - управление профилем.</li>
+<li><strong>Search</strong> - поиск по командам.</li>
+<li><strong>Reset To Defaults</strong> - сбросить настройки по-умолчанию.</li>
+</ul>
+<p><strong>Toolbar</strong> - настройка тулбаров.</p>
+<p><img src="images/prefs/toolbar.png" alt="Toolbar"></p>
+<ul>
+<li><strong>Search</strong> - поиск необходимой команды.</li>
+<li><strong>Available commands</strong> - список доступных команд.</li>
+<li><strong>Used commands</strong> - список использованных команд.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

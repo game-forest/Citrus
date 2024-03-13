@@ -1,133 +1,171 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Widget
-   | Citrus Engine </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Widget
-   | Citrus Engine ">
-    <meta name="generator" content="docfx 2.58.9.0">
-    
-    <link rel="shortcut icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    
+      <title>Class Widget
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Widget
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
         </div>
-      </header>
-      <div class="container body-content">
-        
-        <div id="search-results">
-          <div class="search-list">Search Results for <span></span></div>
-          <div class="sr-items">
-            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
         </div>
       </div>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.Widget">
+
+        <article data-uid="Lime.Widget">
+
+
+
+  <h1 id="Lime_Widget" data-uid="Lime.Widget" class="text-break">
+    Class Widget
   
-  
-  <h1 id="Lime_Widget" data-uid="Lime.Widget" class="text-break">Class Widget
   </h1>
-  <div class="markdown level0 summary"><p>Base class for any rendered object.</p>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Lime.html">Lime</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Base class for any rendered object.</p>
 </div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="Lime.Node.html">Node</a></div>
-    <div class="level2"><span class="xref">Widget</span></div>
-      <div class="level3"><a class="xref" href="Lime.Animesh.html">Animesh</a></div>
-      <div class="level3"><a class="xref" href="Lime.Button.html">Button</a></div>
-      <div class="level3"><a class="xref" href="Lime.CheckBox.html">CheckBox</a></div>
-      <div class="level3"><a class="xref" href="Lime.CommonDropDownList.html">CommonDropDownList</a></div>
-      <div class="level3"><a class="xref" href="Lime.CommonEditBox.html">CommonEditBox</a></div>
-      <div class="level3"><a class="xref" href="Lime.DistortionMesh.html">DistortionMesh</a></div>
-      <div class="level3"><a class="xref" href="Lime.ExpandableListItem.html">ExpandableListItem</a></div>
-      <div class="level3"><a class="xref" href="Lime.Frame.html">Frame</a></div>
-      <div class="level3"><a class="xref" href="Lime.Image.html">Image</a></div>
-      <div class="level3"><a class="xref" href="Lime.Movie.html">Movie</a></div>
-      <div class="level3"><a class="xref" href="Lime.NineGrid.html">NineGrid</a></div>
-      <div class="level3"><a class="xref" href="Lime.ParticleEmitter.html">ParticleEmitter</a></div>
-      <div class="level3"><a class="xref" href="Lime.ParticlesMagnet.html">ParticlesMagnet</a></div>
-      <div class="level3"><a class="xref" href="Lime.Polyline.html">Polyline</a></div>
-      <div class="level3"><a class="xref" href="Lime.RichText.html">RichText</a></div>
-      <div class="level3"><a class="xref" href="Lime.SimpleText.html">SimpleText</a></div>
-      <div class="level3"><a class="xref" href="Lime.Slider.html">Slider</a></div>
-      <div class="level3"><a class="xref" href="Lime.Spline.html">Spline</a></div>
-      <div class="level3"><a class="xref" href="Lime.Splitter.html">Splitter</a></div>
-      <div class="level3"><a class="xref" href="Lime.Tab.html">Tab</a></div>
-      <div class="level3"><a class="xref" href="Lime.TabBar.html">TabBar</a></div>
-      <div class="level3"><a class="xref" href="Lime.ThemedFileChooserButton.html">ThemedFileChooserButton</a></div>
-      <div class="level3"><a class="xref" href="Lime.TiledImage.html">TiledImage</a></div>
-      <div class="level3"><a class="xref" href="Lime.Viewport3D.html">Viewport3D</a></div>
-      <div class="level3"><a class="xref" href="Lime.WebBrowser.html">WebBrowser</a></div>
-      <div class="level3"><a class="xref" href="Lime.WindowWidget.html">WindowWidget</a></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[TangerineVisualHintGroup(&quot;/All/Nodes/Containers&quot;, null)]
+public class Widget : Node, IDisposable, IAnimatorHost, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-    <div><a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a></div>
-    <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
-    <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
-    <div><span class="xref">System.ICloneable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="Lime.Node.html">Node</a></div>
+      <div><span class="xref">Widget</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+      <div><a class="xref" href="Lime.IAnimatorHost.html">IAnimatorHost</a></div>
+      <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
+      <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.icloneable">ICloneable</a></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist derived">
+    <dt>Derived</dt>
+    <dd>
+      <div><a class="xref" href="Lime.Animesh.html">Animesh</a></div>
+      <div><a class="xref" href="Lime.Button.html">Button</a></div>
+      <div><a class="xref" href="Lime.CheckBox.html">CheckBox</a></div>
+      <div><a class="xref" href="Lime.CommonDropDownList.html">CommonDropDownList</a></div>
+      <div><a class="xref" href="Lime.CommonEditBox.html">CommonEditBox</a></div>
+      <div><a class="xref" href="Lime.DistortionMesh.html">DistortionMesh</a></div>
+      <div><a class="xref" href="Lime.ExpandableListItem.html">ExpandableListItem</a></div>
+      <div><a class="xref" href="Lime.Frame.html">Frame</a></div>
+      <div><a class="xref" href="Lime.Image.html">Image</a></div>
+      <div><a class="xref" href="Lime.Movie.html">Movie</a></div>
+      <div><a class="xref" href="Lime.NineGrid.html">NineGrid</a></div>
+      <div><a class="xref" href="Lime.ParticleEmitter.html">ParticleEmitter</a></div>
+      <div><a class="xref" href="Lime.ParticlesMagnet.html">ParticlesMagnet</a></div>
+      <div><a class="xref" href="Lime.Polyline.html">Polyline</a></div>
+      <div><a class="xref" href="Lime.RichText.html">RichText</a></div>
+      <div><a class="xref" href="Lime.SimpleText.html">SimpleText</a></div>
+      <div><a class="xref" href="Lime.Slider.html">Slider</a></div>
+      <div><a class="xref" href="Lime.Spline.html">Spline</a></div>
+      <div><a class="xref" href="Lime.Splitter.html">Splitter</a></div>
+      <div><a class="xref" href="Lime.Tab.html">Tab</a></div>
+      <div><a class="xref" href="Lime.TabBar.html">TabBar</a></div>
+      <div><a class="xref" href="Lime.ThemedFileChooserButton.html">ThemedFileChooserButton</a></div>
+      <div><a class="xref" href="Lime.TiledImage.html">TiledImage</a></div>
+      <div><a class="xref" href="Lime.Viewport3D.html">Viewport3D</a></div>
+      <div><a class="xref" href="Lime.WebBrowser.html">WebBrowser</a></div>
+      <div><a class="xref" href="Lime.WindowWidget.html">WindowWidget</a></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Manager">Node.Manager</a>
     </div>
@@ -144,9 +182,6 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_Trigger">Node.Trigger</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Lime_IAnimable_Owner">Node.IAnimable.Owner</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Parent">Node.Parent</a>
     </div>
     <div>
@@ -156,7 +191,7 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_GetTangerineFlag_Lime_TangerineFlags_">Node.GetTangerineFlag(TangerineFlags)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_SetTangerineFlag_Lime_TangerineFlags_System_Boolean_">Node.SetTangerineFlag(TangerineFlags, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_SetTangerineFlag_Lime_TangerineFlags_System_Boolean_">Node.SetTangerineFlag(TangerineFlags, bool)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_AsWidget">Node.AsWidget</a>
@@ -213,9 +248,6 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_Components">Node.Components</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Lime_IAnimationHost_GetComponent_System_Type_">Node.IAnimationHost.GetComponent(Type)</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Animators">Node.Animators</a>
     </div>
     <div>
@@ -244,9 +276,6 @@
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Animations">Node.Animations</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Lime_IAnimationHost_OnAnimatorCollectionChanged">Node.IAnimationHost.OnAnimatorCollectionChanged()</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_NeedSerializeAnimations">Node.NeedSerializeAnimations()</a>
@@ -309,10 +338,10 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_SameOrDescendantOf_Lime_Node_">Node.SameOrDescendantOf(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryRunAnimation_System_String_System_String_System_Double_">Node.TryRunAnimation(String, String, Double)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryRunAnimation_System_String_System_String_System_Double_">Node.TryRunAnimation(string, string, double)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_RunAnimation_System_String_System_String_">Node.RunAnimation(String, String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_RunAnimation_System_String_System_String_">Node.RunAnimation(string, string)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_OnBeforeSerialization">Node.OnBeforeSerialization()</a>
@@ -333,16 +362,16 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_GetRenderObject">Node.GetRenderObject()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfAndChildrenToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfAndChildrenToRenderChain(RenderChain, Int32)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfAndChildrenToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfAndChildrenToRenderChain(RenderChain, int)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfToRenderChain(RenderChain, Int32)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfToRenderChain(RenderChain, int)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(String, Object, Double)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(string, object, double)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TriggerMultipleAnimations_System_String_System_Double_">Node.TriggerMultipleAnimations(String, Double)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TriggerMultipleAnimations_System_String_System_Double_">Node.TriggerMultipleAnimations(string, double)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_AddNode_Lime_Node_">Node.AddNode(Node)</a>
@@ -357,25 +386,25 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_PushToNode_Lime_Node_">Node.PushToNode(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_">Node.Find&lt;T&gt;(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_">Node.Find&lt;T&gt;(string)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_System_Object___">Node.Find&lt;T&gt;(String, Object[])</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Find__1_System_String_System_Object___">Node.Find&lt;T&gt;(string, params object[])</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String___0__">Node.TryFind&lt;T&gt;(String, T)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String___0__">Node.TryFind&lt;T&gt;(string, out T)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_">Node.TryFind&lt;T&gt;(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_">Node.TryFind&lt;T&gt;(string)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_System_Object___">Node.TryFind&lt;T&gt;(String, Object[])</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFind__1_System_String_System_Object___">Node.TryFind&lt;T&gt;(string, params object[])</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_FindNode_System_String_">Node.FindNode(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_FindNode_System_String_">Node.FindNode(string)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_TryFindNode_System_String_">Node.TryFindNode(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_TryFindNode_System_String_">Node.TryFindNode(string)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_Descendants">Node.Descendants</a>
@@ -399,22 +428,25 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_SceneLoaded">Node.SceneLoaded</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_System_ICloneable_Clone">Node.ICloneable.Clone()</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Clone">Node.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_Lime_Persistence_Format_">Node.Save(String, Persistence.Format)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_CloneRaw">Node.CloneRaw()</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_System_IO_Stream_Lime_Persistence_Format_">Node.Save(String, Stream, Persistence.Format)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_Lime_Persistence_Format_">Node.Save(string, Persistence.Format)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Load__1_System_String___0_System_Boolean_">Node.Load&lt;T&gt;(String, T, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Save_System_String_System_IO_Stream_Lime_Persistence_Format_">Node.Save(string, Stream, Persistence.Format)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_String_Lime_Node_System_Boolean_">Node.Load(String, Node, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Load__1_System_String___0_System_Boolean_">Node.Load&lt;T&gt;(string, T, bool)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_IO_Stream_System_String_Lime_Node_System_Boolean_">Node.Load(Stream, String, Node, Boolean)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_String_Lime_Node_System_Boolean_">Node.Load(string, Node, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Node.html#Lime_Node_Load_System_IO_Stream_System_String_Lime_Node_System_Boolean_">Node.Load(Stream, string, Node, bool)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_NotifyOnBuilt">Node.NotifyOnBuilt()</a>
@@ -432,7 +464,7 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_ReplaceContent_Lime_Node_">Node.ReplaceContent(Node)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_ResolveScenePath_System_String_">Node.ResolveScenePath(String)</a>
+      <a class="xref" href="Lime.Node.html#Lime_Node_ResolveScenePath_System_String_">Node.ResolveScenePath(string)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_IsMouseOver">Node.IsMouseOver()</a>
@@ -450,3187 +482,3700 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_GloballyFrozen">Node.GloballyFrozen</a>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
+      <a class="xref" href="Lime.Node.html#Lime_Node_ForceFilterNodes">Node.ForceFilterNodes()</a>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
     </div>
     <div>
-      <span class="xref">System.Object.GetHashCode()</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
     </div>
     <div>
-      <span class="xref">System.Object.GetType()</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
     </div>
     <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
     </div>
     <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
     </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+  <dl class="typelist extensionMethods">
+    <dt>Extension Methods</dt>
+    <dd>
+  <div>
+      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_GetAnimatorHost_Lime_IAnimable_">IAnimableExtensions.GetAnimatorHost(IAnimable)</a>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
-  <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_Widget_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[TangerineVisualHintGroup(&quot;/All/Nodes/Containers&quot;, null)]
-public class Widget : Node, IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
+  <div>
+      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_UnbindAnimators_Lime_IAnimable_">IAnimableExtensions.UnbindAnimators(IAnimable)</a>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
+  <div>
+      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_AdvanceAnimationsRecursive_Lime_Node_System_Single_">NodeCompatibilityExtensions.AdvanceAnimationsRecursive(Node, float)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Clone__1_Lime_Node_">NodeCompatibilityExtensions.Clone&lt;T&gt;(Node)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Update_Lime_Node_System_Single_">NodeCompatibilityExtensions.Update(Node, float)</a>
+  </div>
+  </dd></dl>
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
   <a id="Lime_Widget__ctor_" data-uid="Lime.Widget.#ctor*"></a>
-  <h4 id="Lime_Widget__ctor" data-uid="Lime.Widget.#ctor">Widget()</h4>
+
+  <h3 id="Lime_Widget__ctor" data-uid="Lime.Widget.#ctor">
+  Widget()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Widget()</code></pre>
   </div>
-  <h3 id="fields">Fields
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="Lime_Widget_BoneArray" data-uid="Lime.Widget.BoneArray">
+  BoneArray
+  
   </h3>
-  
-  
-  <h4 id="Lime_Widget_BoneArray" data-uid="Lime.Widget.BoneArray">BoneArray</h4>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public BoneArray BoneArray</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.BoneArray.html">BoneArray</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.BoneArray.html">BoneArray</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_DefaultWidgetSize" data-uid="Lime.Widget.DefaultWidgetSize">
+  DefaultWidgetSize
   
-  
-  <h4 id="Lime_Widget_DefaultWidgetSize" data-uid="Lime.Widget.DefaultWidgetSize">DefaultWidgetSize</h4>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static readonly Vector2 DefaultWidgetSize</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_EnableViewCulling" data-uid="Lime.Widget.EnableViewCulling">
+  EnableViewCulling
   
-  
-  <h4 id="Lime_Widget_EnableViewCulling" data-uid="Lime.Widget.EnableViewCulling">EnableViewCulling</h4>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static bool EnableViewCulling</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_RenderTransparentWidgets" data-uid="Lime.Widget.RenderTransparentWidgets">
+  RenderTransparentWidgets
   
-  
-  <h4 id="Lime_Widget_globalBlending" data-uid="Lime.Widget.globalBlending">globalBlending</h4>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Blending globalBlending</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Blending.html">Blending</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Widget_globalColor" data-uid="Lime.Widget.globalColor">globalColor</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Color4 globalColor</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Widget_globallyEnabled" data-uid="Lime.Widget.globallyEnabled">globallyEnabled</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected bool globallyEnabled</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Widget_globallyVisible" data-uid="Lime.Widget.globallyVisible">globallyVisible</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected bool globallyVisible</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Widget_globalShader" data-uid="Lime.Widget.globalShader">globalShader</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected ShaderId globalShader</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ShaderId.html">ShaderId</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Widget_RenderTransparentWidgets" data-uid="Lime.Widget.RenderTransparentWidgets">RenderTransparentWidgets</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static bool RenderTransparentWidgets</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_globalBlending" data-uid="Lime.Widget.globalBlending">
+  globalBlending
+  
   </h3>
-  
-  
-  <a id="Lime_Widget_Anchors_" data-uid="Lime.Widget.Anchors*"></a>
-  <h4 id="Lime_Widget_Anchors" data-uid="Lime.Widget.Anchors">Anchors</h4>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Blending globalBlending</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Blending.html">Blending</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_globalColor" data-uid="Lime.Widget.globalColor">
+  globalColor
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Color4 globalColor</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_globalShader" data-uid="Lime.Widget.globalShader">
+  globalShader
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ShaderId globalShader</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ShaderId.html">ShaderId</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_globallyEnabled" data-uid="Lime.Widget.globallyEnabled">
+  globallyEnabled
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool globallyEnabled</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Lime_Widget_globallyVisible" data-uid="Lime.Widget.globallyVisible">
+  globallyVisible
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool globallyVisible</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Lime_Widget_Anchors_" data-uid="Lime.Widget.Anchors*"></a>
+
+  <h3 id="Lime_Widget_Anchors" data-uid="Lime.Widget.Anchors">
+  Anchors
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(17)]
 public Anchors Anchors { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Anchors.html">Anchors</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Anchors.html">Anchors</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Blending_" data-uid="Lime.Widget.Blending*"></a>
-  <h4 id="Lime_Widget_Blending" data-uid="Lime.Widget.Blending">Blending</h4>
+
+  <h3 id="Lime_Widget_Blending" data-uid="Lime.Widget.Blending">
+  Blending
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(22)]
 public Blending Blending { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Blending.html">Blending</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Blending.html">Blending</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_BoundingRect_" data-uid="Lime.Widget.BoundingRect*"></a>
-  <h4 id="Lime_Widget_BoundingRect" data-uid="Lime.Widget.BoundingRect">BoundingRect</h4>
+
+  <h3 id="Lime_Widget_BoundingRect" data-uid="Lime.Widget.BoundingRect">
+  BoundingRect
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Rectangle BoundingRect { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Rectangle.html">Rectangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Rectangle.html">Rectangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Center_" data-uid="Lime.Widget.Center*"></a>
-  <h4 id="Lime_Widget_Center" data-uid="Lime.Widget.Center">Center</h4>
+
+  <h3 id="Lime_Widget_Center" data-uid="Lime.Widget.Center">
+  Center
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Parent-relative position of center of this widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 Center { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Clicked_" data-uid="Lime.Widget.Clicked*"></a>
-  <h4 id="Lime_Widget_Clicked" data-uid="Lime.Widget.Clicked">Clicked</h4>
+
+  <h3 id="Lime_Widget_Clicked" data-uid="Lime.Widget.Clicked">
+  Clicked
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual Action Clicked { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Color_" data-uid="Lime.Widget.Color*"></a>
-  <h4 id="Lime_Widget_Color" data-uid="Lime.Widget.Color">Color</h4>
+
+  <h3 id="Lime_Widget_Color" data-uid="Lime.Widget.Color">
+  Color
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Hue of this widget. Contents color will be multiplied by it on render.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(9)]
 [YuzuSerializeIf(&quot;IsNotDecorated&quot;)]
 public Color4 Color { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ContentHeight_" data-uid="Lime.Widget.ContentHeight*"></a>
-  <h4 id="Lime_Widget_ContentHeight" data-uid="Lime.Widget.ContentHeight">ContentHeight</h4>
+
+  <h3 id="Lime_Widget_ContentHeight" data-uid="Lime.Widget.ContentHeight">
+  ContentHeight
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float ContentHeight { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ContentPosition_" data-uid="Lime.Widget.ContentPosition*"></a>
-  <h4 id="Lime_Widget_ContentPosition" data-uid="Lime.Widget.ContentPosition">ContentPosition</h4>
+
+  <h3 id="Lime_Widget_ContentPosition" data-uid="Lime.Widget.ContentPosition">
+  ContentPosition
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 ContentPosition { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ContentSize_" data-uid="Lime.Widget.ContentSize*"></a>
-  <h4 id="Lime_Widget_ContentSize" data-uid="Lime.Widget.ContentSize">ContentSize</h4>
+
+  <h3 id="Lime_Widget_ContentSize" data-uid="Lime.Widget.ContentSize">
+  ContentSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 ContentSize { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ContentWidth_" data-uid="Lime.Widget.ContentWidth*"></a>
-  <h4 id="Lime_Widget_ContentWidth" data-uid="Lime.Widget.ContentWidth">ContentWidth</h4>
+
+  <h3 id="Lime_Widget_ContentWidth" data-uid="Lime.Widget.ContentWidth">
+  ContentWidth
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float ContentWidth { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_EffectiveMaxSize_" data-uid="Lime.Widget.EffectiveMaxSize*"></a>
-  <h4 id="Lime_Widget_EffectiveMaxSize" data-uid="Lime.Widget.EffectiveMaxSize">EffectiveMaxSize</h4>
+
+  <h3 id="Lime_Widget_EffectiveMaxSize" data-uid="Lime.Widget.EffectiveMaxSize">
+  EffectiveMaxSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual Vector2 EffectiveMaxSize { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_EffectiveMinSize_" data-uid="Lime.Widget.EffectiveMinSize*"></a>
-  <h4 id="Lime_Widget_EffectiveMinSize" data-uid="Lime.Widget.EffectiveMinSize">EffectiveMinSize</h4>
+
+  <h3 id="Lime_Widget_EffectiveMinSize" data-uid="Lime.Widget.EffectiveMinSize">
+  EffectiveMinSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual Vector2 EffectiveMinSize { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Enabled_" data-uid="Lime.Widget.Enabled*"></a>
-  <h4 id="Lime_Widget_Enabled" data-uid="Lime.Widget.Enabled">Enabled</h4>
+
+  <h3 id="Lime_Widget_Enabled" data-uid="Lime.Widget.Enabled">
+  Enabled
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual bool Enabled { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Widget_Focused_" data-uid="Lime.Widget.Focused*"></a>
-  <h4 id="Lime_Widget_Focused" data-uid="Lime.Widget.Focused">Focused</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Widget Focused { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_FocusScope_" data-uid="Lime.Widget.FocusScope*"></a>
-  <h4 id="Lime_Widget_FocusScope" data-uid="Lime.Widget.FocusScope">FocusScope</h4>
+
+  <h3 id="Lime_Widget_FocusScope" data-uid="Lime.Widget.FocusScope">
+  FocusScope
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public KeyboardFocusScope FocusScope { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.KeyboardFocusScope.html">KeyboardFocusScope</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.KeyboardFocusScope.html">KeyboardFocusScope</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_Widget_Focused_" data-uid="Lime.Widget.Focused*"></a>
+
+  <h3 id="Lime_Widget_Focused" data-uid="Lime.Widget.Focused">
+  Focused
   
-  
-  <a id="Lime_Widget_FreezeInvisible_" data-uid="Lime.Widget.FreezeInvisible*"></a>
-  <h4 id="Lime_Widget_FreezeInvisible" data-uid="Lime.Widget.FreezeInvisible">FreezeInvisible</h4>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Widget Focused { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_Widget_FreezeInvisible_" data-uid="Lime.Widget.FreezeInvisible*"></a>
+
+  <h3 id="Lime_Widget_FreezeInvisible" data-uid="Lime.Widget.FreezeInvisible">
+  FreezeInvisible
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(19)]
 public bool FreezeInvisible { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GlobalBlending_" data-uid="Lime.Widget.GlobalBlending*"></a>
-  <h4 id="Lime_Widget_GlobalBlending" data-uid="Lime.Widget.GlobalBlending">GlobalBlending</h4>
+
+  <h3 id="Lime_Widget_GlobalBlending" data-uid="Lime.Widget.GlobalBlending">
+  GlobalBlending
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets the widget's effective blending.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Blending GlobalBlending { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Blending.html">Blending</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Blending.html">Blending</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GlobalCenter_" data-uid="Lime.Widget.GlobalCenter*"></a>
-  <h4 id="Lime_Widget_GlobalCenter" data-uid="Lime.Widget.GlobalCenter">GlobalCenter</h4>
+
+  <h3 id="Lime_Widget_GlobalCenter" data-uid="Lime.Widget.GlobalCenter">
+  GlobalCenter
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets position of this widget's center in the root widget space.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 GlobalCenter { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GlobalColor_" data-uid="Lime.Widget.GlobalColor*"></a>
-  <h4 id="Lime_Widget_GlobalColor" data-uid="Lime.Widget.GlobalColor">GlobalColor</h4>
+
+  <h3 id="Lime_Widget_GlobalColor" data-uid="Lime.Widget.GlobalColor">
+  GlobalColor
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets the widget's effective color.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Color4 GlobalColor { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Widget_GloballyEnabled_" data-uid="Lime.Widget.GloballyEnabled*"></a>
-  <h4 id="Lime_Widget_GloballyEnabled" data-uid="Lime.Widget.GloballyEnabled">GloballyEnabled</h4>
-  <div class="markdown level1 summary"><p>Indicates whether the widget is actually enabled.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool GloballyEnabled { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Widget_GloballyVisible_" data-uid="Lime.Widget.GloballyVisible*"></a>
-  <h4 id="Lime_Widget_GloballyVisible" data-uid="Lime.Widget.GloballyVisible">GloballyVisible</h4>
-  <div class="markdown level1 summary"><p>Indicates whether the widget is actually visible.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool GloballyVisible { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GlobalPivotPosition_" data-uid="Lime.Widget.GlobalPivotPosition*"></a>
-  <h4 id="Lime_Widget_GlobalPivotPosition" data-uid="Lime.Widget.GlobalPivotPosition">GlobalPivotPosition</h4>
+
+  <h3 id="Lime_Widget_GlobalPivotPosition" data-uid="Lime.Widget.GlobalPivotPosition">
+  GlobalPivotPosition
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 GlobalPivotPosition { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GlobalPosition_" data-uid="Lime.Widget.GlobalPosition*"></a>
-  <h4 id="Lime_Widget_GlobalPosition" data-uid="Lime.Widget.GlobalPosition">GlobalPosition</h4>
+
+  <h3 id="Lime_Widget_GlobalPosition" data-uid="Lime.Widget.GlobalPosition">
+  GlobalPosition
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets position of this widget in the root widget space.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 GlobalPosition { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GlobalShader_" data-uid="Lime.Widget.GlobalShader*"></a>
-  <h4 id="Lime_Widget_GlobalShader" data-uid="Lime.Widget.GlobalShader">GlobalShader</h4>
+
+  <h3 id="Lime_Widget_GlobalShader" data-uid="Lime.Widget.GlobalShader">
+  GlobalShader
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets the widget's effective shader.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ShaderId GlobalShader { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ShaderId.html">ShaderId</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ShaderId.html">ShaderId</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_Widget_GloballyEnabled_" data-uid="Lime.Widget.GloballyEnabled*"></a>
+
+  <h3 id="Lime_Widget_GloballyEnabled" data-uid="Lime.Widget.GloballyEnabled">
+  GloballyEnabled
   
+  </h3>
+
+  <div class="markdown level1 summary"><p>Indicates whether the widget is actually enabled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool GloballyEnabled { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_Widget_GloballyVisible_" data-uid="Lime.Widget.GloballyVisible*"></a>
+
+  <h3 id="Lime_Widget_GloballyVisible" data-uid="Lime.Widget.GloballyVisible">
+  GloballyVisible
   
+  </h3>
+
+  <div class="markdown level1 summary"><p>Indicates whether the widget is actually visible.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool GloballyVisible { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Height_" data-uid="Lime.Widget.Height*"></a>
-  <h4 id="Lime_Widget_Height" data-uid="Lime.Widget.Height">Height</h4>
+
+  <h3 id="Lime_Widget_Height" data-uid="Lime.Widget.Height">
+  Height
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float Height { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_HitTestMethod_" data-uid="Lime.Widget.HitTestMethod*"></a>
-  <h4 id="Lime_Widget_HitTestMethod" data-uid="Lime.Widget.HitTestMethod">HitTestMethod</h4>
+
+  <h3 id="Lime_Widget_HitTestMethod" data-uid="Lime.Widget.HitTestMethod">
+  HitTestMethod
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 public HitTestMethod HitTestMethod { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.HitTestMethod.html">HitTestMethod</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.HitTestMethod.html">HitTestMethod</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Input_" data-uid="Lime.Widget.Input*"></a>
-  <h4 id="Lime_Widget_Input" data-uid="Lime.Widget.Input">Input</h4>
+
+  <h3 id="Lime_Widget_Input" data-uid="Lime.Widget.Input">
+  Input
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public WidgetInput Input { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.WidgetInput.html">WidgetInput</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.WidgetInput.html">WidgetInput</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Item_" data-uid="Lime.Widget.Item*"></a>
-  <h4 id="Lime_Widget_Item_System_String_" data-uid="Lime.Widget.Item(System.String)">Item[String]</h4>
+
+  <h3 id="Lime_Widget_Item_System_String_" data-uid="Lime.Widget.Item(System.String)">
+  this[string]
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Searches for widget with provided path or id in this widget's descendants.
 Throws an exception if sought-for widget doesn't exist.</p>
 <p>This function is thread safe.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Widget this[string path] { get; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td><p>Id or path of widget. Path can be incomplete
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Id or path of widget. Path can be incomplete
 (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Item_" data-uid="Lime.Widget.Item*"></a>
-  <h4 id="Lime_Widget_Item_System_String_System_Object___" data-uid="Lime.Widget.Item(System.String,System.Object[])">Item[String, Object[]]</h4>
+
+  <h3 id="Lime_Widget_Item_System_String_System_Object___" data-uid="Lime.Widget.Item(System.String,System.Object[])">
+  this[string, object[]]
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Searches for widget with provided path or id in this widget's descendants.
 Throws an exception if sought-for widget doesn't exist.</p>
 <p>This function is thread safe.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Widget this[string format, params object[] arg] { get; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">format</span></td>
-        <td><p>Id or path of widget. Path can be incomplete
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>format</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Id or path of widget. Path can be incomplete
 (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span>[]</td>
-        <td><span class="parametername">arg</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+</dd>
+    <dt><code>arg</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Layout_" data-uid="Lime.Widget.Layout*"></a>
-  <h4 id="Lime_Widget_Layout" data-uid="Lime.Widget.Layout">Layout</h4>
+
+  <h3 id="Lime_Widget_Layout" data-uid="Lime.Widget.Layout">
+  Layout
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ILayout Layout { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ILayout.html">ILayout</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Widget_LayoutCell_" data-uid="Lime.Widget.LayoutCell*"></a>
-  <h4 id="Lime_Widget_LayoutCell" data-uid="Lime.Widget.LayoutCell">LayoutCell</h4>
-  <div class="markdown level1 summary"><p>Gets the layout-specific data.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public LayoutCell LayoutCell { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.LayoutCell.html">LayoutCell</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ILayout.html">ILayout</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_LayoutConstraints_" data-uid="Lime.Widget.LayoutConstraints*"></a>
-  <h4 id="Lime_Widget_LayoutConstraints" data-uid="Lime.Widget.LayoutConstraints">LayoutConstraints</h4>
+
+  <h3 id="Lime_Widget_LayoutConstraints" data-uid="Lime.Widget.LayoutConstraints">
+  LayoutConstraints
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public LayoutConstraints LayoutConstraints { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.LayoutConstraints.html">LayoutConstraints</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.LayoutConstraints.html">LayoutConstraints</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_LayoutManager_" data-uid="Lime.Widget.LayoutManager*"></a>
-  <h4 id="Lime_Widget_LayoutManager" data-uid="Lime.Widget.LayoutManager">LayoutManager</h4>
+
+  <h3 id="Lime_Widget_LayoutManager" data-uid="Lime.Widget.LayoutManager">
+  LayoutManager
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public LayoutManager LayoutManager { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.LayoutManager.html">LayoutManager</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.LayoutManager.html">LayoutManager</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_LocalToWorldTransform_" data-uid="Lime.Widget.LocalToWorldTransform*"></a>
-  <h4 id="Lime_Widget_LocalToWorldTransform" data-uid="Lime.Widget.LocalToWorldTransform">LocalToWorldTransform</h4>
-  <div class="markdown level1 summary"><p>Get the matrix represents transformation from this widget space into the root widget space.</p>
+
+  <h3 id="Lime_Widget_LocalToWorldTransform" data-uid="Lime.Widget.LocalToWorldTransform">
+  LocalToWorldTransform
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the matrix represents transformation from this widget space into the root widget space.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Matrix32 LocalToWorldTransform { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MaxHeight_" data-uid="Lime.Widget.MaxHeight*"></a>
-  <h4 id="Lime_Widget_MaxHeight" data-uid="Lime.Widget.MaxHeight">MaxHeight</h4>
+
+  <h3 id="Lime_Widget_MaxHeight" data-uid="Lime.Widget.MaxHeight">
+  MaxHeight
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float MaxHeight { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MaxSize_" data-uid="Lime.Widget.MaxSize*"></a>
-  <h4 id="Lime_Widget_MaxSize" data-uid="Lime.Widget.MaxSize">MaxSize</h4>
+
+  <h3 id="Lime_Widget_MaxSize" data-uid="Lime.Widget.MaxSize">
+  MaxSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 MaxSize { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MaxWidth_" data-uid="Lime.Widget.MaxWidth*"></a>
-  <h4 id="Lime_Widget_MaxWidth" data-uid="Lime.Widget.MaxWidth">MaxWidth</h4>
+
+  <h3 id="Lime_Widget_MaxWidth" data-uid="Lime.Widget.MaxWidth">
+  MaxWidth
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float MaxWidth { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MeasuredMaxSize_" data-uid="Lime.Widget.MeasuredMaxSize*"></a>
-  <h4 id="Lime_Widget_MeasuredMaxSize" data-uid="Lime.Widget.MeasuredMaxSize">MeasuredMaxSize</h4>
+
+  <h3 id="Lime_Widget_MeasuredMaxSize" data-uid="Lime.Widget.MeasuredMaxSize">
+  MeasuredMaxSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 MeasuredMaxSize { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MeasuredMinSize_" data-uid="Lime.Widget.MeasuredMinSize*"></a>
-  <h4 id="Lime_Widget_MeasuredMinSize" data-uid="Lime.Widget.MeasuredMinSize">MeasuredMinSize</h4>
+
+  <h3 id="Lime_Widget_MeasuredMinSize" data-uid="Lime.Widget.MeasuredMinSize">
+  MeasuredMinSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 MeasuredMinSize { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MinHeight_" data-uid="Lime.Widget.MinHeight*"></a>
-  <h4 id="Lime_Widget_MinHeight" data-uid="Lime.Widget.MinHeight">MinHeight</h4>
+
+  <h3 id="Lime_Widget_MinHeight" data-uid="Lime.Widget.MinHeight">
+  MinHeight
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float MinHeight { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MinMaxHeight_" data-uid="Lime.Widget.MinMaxHeight*"></a>
-  <h4 id="Lime_Widget_MinMaxHeight" data-uid="Lime.Widget.MinMaxHeight">MinMaxHeight</h4>
+
+  <h3 id="Lime_Widget_MinMaxHeight" data-uid="Lime.Widget.MinMaxHeight">
+  MinMaxHeight
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float MinMaxHeight { set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MinMaxSize_" data-uid="Lime.Widget.MinMaxSize*"></a>
-  <h4 id="Lime_Widget_MinMaxSize" data-uid="Lime.Widget.MinMaxSize">MinMaxSize</h4>
+
+  <h3 id="Lime_Widget_MinMaxSize" data-uid="Lime.Widget.MinMaxSize">
+  MinMaxSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 MinMaxSize { set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MinMaxWidth_" data-uid="Lime.Widget.MinMaxWidth*"></a>
-  <h4 id="Lime_Widget_MinMaxWidth" data-uid="Lime.Widget.MinMaxWidth">MinMaxWidth</h4>
+
+  <h3 id="Lime_Widget_MinMaxWidth" data-uid="Lime.Widget.MinMaxWidth">
+  MinMaxWidth
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float MinMaxWidth { set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MinSize_" data-uid="Lime.Widget.MinSize*"></a>
-  <h4 id="Lime_Widget_MinSize" data-uid="Lime.Widget.MinSize">MinSize</h4>
+
+  <h3 id="Lime_Widget_MinSize" data-uid="Lime.Widget.MinSize">
+  MinSize
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 MinSize { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_MinWidth_" data-uid="Lime.Widget.MinWidth*"></a>
-  <h4 id="Lime_Widget_MinWidth" data-uid="Lime.Widget.MinWidth">MinWidth</h4>
+
+  <h3 id="Lime_Widget_MinWidth" data-uid="Lime.Widget.MinWidth">
+  MinWidth
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float MinWidth { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Opacity_" data-uid="Lime.Widget.Opacity*"></a>
-  <h4 id="Lime_Widget_Opacity" data-uid="Lime.Widget.Opacity">Opacity</h4>
+
+  <h3 id="Lime_Widget_Opacity" data-uid="Lime.Widget.Opacity">
+  Opacity
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>0 - fully transparent. 1 - fully opaque.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float Opacity { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Padding_" data-uid="Lime.Widget.Padding*"></a>
-  <h4 id="Lime_Widget_Padding" data-uid="Lime.Widget.Padding">Padding</h4>
+
+  <h3 id="Lime_Widget_Padding" data-uid="Lime.Widget.Padding">
+  Padding
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets or sets the widget padding.
 Padding defines the white space between the widget content and the widget border.
 The widget presenter and layout should respect the padding.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[YuzuMember]
+    <pre><code class="lang-csharp hljs">[Validation.Range(-3.4028235E+38, 3.4028235E+38)]
+[YuzuMember]
 public Thickness Padding { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Thickness.html">Thickness</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Thickness.html">Thickness</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ParentWidget_" data-uid="Lime.Widget.ParentWidget*"></a>
-  <h4 id="Lime_Widget_ParentWidget" data-uid="Lime.Widget.ParentWidget">ParentWidget</h4>
+
+  <h3 id="Lime_Widget_ParentWidget" data-uid="Lime.Widget.ParentWidget">
+  ParentWidget
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Widget ParentWidget { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Pivot_" data-uid="Lime.Widget.Pivot*"></a>
-  <h4 id="Lime_Widget_Pivot" data-uid="Lime.Widget.Pivot">Pivot</h4>
+
+  <h3 id="Lime_Widget_Pivot" data-uid="Lime.Widget.Pivot">
+  Pivot
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Center point of rotation and scaling.
 (0, 0) is top-left corner, (1, 1) is bottom-right corner.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(6)]
 [TangerinePropertyDefaultValue(typeof(Widget), &quot;GetPivotDefaultValue&quot;)]
 public Vector2 Pivot { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Position_" data-uid="Lime.Widget.Position*"></a>
-  <h4 id="Lime_Widget_Position" data-uid="Lime.Widget.Position">Position</h4>
+
+  <h3 id="Lime_Widget_Position" data-uid="Lime.Widget.Position">
+  Position
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Parent-relative position.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(4)]
-[TangerineNumericEditBoxStep(1F)]
+[TangerineNumericEditBoxStep(1)]
 public Vector2 Position { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Rotation_" data-uid="Lime.Widget.Rotation*"></a>
-  <h4 id="Lime_Widget_Rotation" data-uid="Lime.Widget.Rotation">Rotation</h4>
+
+  <h3 id="Lime_Widget_Rotation" data-uid="Lime.Widget.Rotation">
+  Rotation
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Counter-clockwise rotation of this widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(3)]
-[TangerineNumericEditBoxStep(1F)]
+[TangerineNumericEditBoxStep(1)]
 public float Rotation { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Scale_" data-uid="Lime.Widget.Scale*"></a>
-  <h4 id="Lime_Widget_Scale" data-uid="Lime.Widget.Scale">Scale</h4>
+
+  <h3 id="Lime_Widget_Scale" data-uid="Lime.Widget.Scale">
+  Scale
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(5)]
 public Vector2 Scale { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Shader_" data-uid="Lime.Widget.Shader*"></a>
-  <h4 id="Lime_Widget_Shader" data-uid="Lime.Widget.Shader">Shader</h4>
+
+  <h3 id="Lime_Widget_Shader" data-uid="Lime.Widget.Shader">
+  Shader
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(18)]
 public ShaderId Shader { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ShaderId.html">ShaderId</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ShaderId.html">ShaderId</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_SilentSize_" data-uid="Lime.Widget.SilentSize*"></a>
-  <h4 id="Lime_Widget_SilentSize" data-uid="Lime.Widget.SilentSize">SilentSize</h4>
+
+  <h3 id="Lime_Widget_SilentSize" data-uid="Lime.Widget.SilentSize">
+  SilentSize
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>SilentSize is needed to prevent unwanted propagation of <code>OnSizeChanged</code>
 while deserializing with Yuzu.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember(&quot;Size&quot;)]
 public Vector2 SilentSize { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Size_" data-uid="Lime.Widget.Size*"></a>
-  <h4 id="Lime_Widget_Size" data-uid="Lime.Widget.Size">Size</h4>
+
+  <h3 id="Lime_Widget_Size" data-uid="Lime.Widget.Size">
+  Size
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[TangerineKeyframeColor(7)]
-[TangerineNumericEditBoxStep(1F)]
-[Validation.RatioInfo(new Type[]{typeof(Image), typeof(DistortionMesh), typeof(NineGrid)})]
-[Validation.SizeInfo(new Type[]{typeof(Image), typeof(DistortionMesh), typeof(NineGrid)})]
+[TangerineNumericEditBoxStep(1)]
+[Validation.RatioInfo(new Type[] { typeof(Image), typeof(DistortionMesh), typeof(NineGrid) })]
+[Validation.SizeInfo(new Type[] { typeof(Image), typeof(DistortionMesh), typeof(NineGrid) })]
 public Vector2 Size { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_SkinningWeights_" data-uid="Lime.Widget.SkinningWeights*"></a>
-  <h4 id="Lime_Widget_SkinningWeights" data-uid="Lime.Widget.SkinningWeights">SkinningWeights</h4>
+
+  <h3 id="Lime_Widget_SkinningWeights" data-uid="Lime.Widget.SkinningWeights">
+  SkinningWeights
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 public SkinningWeights SkinningWeights { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.SkinningWeights.html">SkinningWeights</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.SkinningWeights.html">SkinningWeights</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Sprite_" data-uid="Lime.Widget.Sprite*"></a>
-  <h4 id="Lime_Widget_Sprite" data-uid="Lime.Widget.Sprite">Sprite</h4>
-  <div class="markdown level1 summary"><p>Get or sets a texture upon the widget. For widgets which can not have a texture returns null.</p>
+
+  <h3 id="Lime_Widget_Sprite" data-uid="Lime.Widget.Sprite">
+  Sprite
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a texture upon the widget. For widgets which can not have a texture returns null.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual ISprite Sprite { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ISprite.html">ISprite</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ISprite.html">ISprite</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_TabTravesable_" data-uid="Lime.Widget.TabTravesable*"></a>
-  <h4 id="Lime_Widget_TabTravesable" data-uid="Lime.Widget.TabTravesable">TabTravesable</h4>
+
+  <h3 id="Lime_Widget_TabTravesable" data-uid="Lime.Widget.TabTravesable">
+  TabTravesable
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public TabTraversable TabTravesable { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TabTraversable.html">TabTraversable</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.TabTraversable.html">TabTraversable</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Text_" data-uid="Lime.Widget.Text*"></a>
-  <h4 id="Lime_Widget_Text" data-uid="Lime.Widget.Text">Text</h4>
+
+  <h3 id="Lime_Widget_Text" data-uid="Lime.Widget.Text">
+  Text
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Get or sets a label upon the widget. For widgets which can not have a label returns null.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual string Text { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Visible_" data-uid="Lime.Widget.Visible*"></a>
-  <h4 id="Lime_Widget_Visible" data-uid="Lime.Widget.Visible">Visible</h4>
+
+  <h3 id="Lime_Widget_Visible" data-uid="Lime.Widget.Visible">
+  Visible
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(19)]
 public bool Visible { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Width_" data-uid="Lime.Widget.Width*"></a>
-  <h4 id="Lime_Widget_Width" data-uid="Lime.Widget.Width">Width</h4>
+
+  <h3 id="Lime_Widget_Width" data-uid="Lime.Widget.Width">
+  Width
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float Width { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_X_" data-uid="Lime.Widget.X*"></a>
-  <h4 id="Lime_Widget_X" data-uid="Lime.Widget.X">X</h4>
+
+  <h3 id="Lime_Widget_X" data-uid="Lime.Widget.X">
+  X
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Parent-relative X position.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float X { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Y_" data-uid="Lime.Widget.Y*"></a>
-  <h4 id="Lime_Widget_Y" data-uid="Lime.Widget.Y">Y</h4>
+
+  <h3 id="Lime_Widget_Y" data-uid="Lime.Widget.Y">
+  Y
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Parent-relative Y position.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public float Y { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
   <a id="Lime_Widget_AddToRenderChain_" data-uid="Lime.Widget.AddToRenderChain*"></a>
-  <h4 id="Lime_Widget_AddToRenderChain_Lime_RenderChain_" data-uid="Lime.Widget.AddToRenderChain(Lime.RenderChain)">AddToRenderChain(RenderChain)</h4>
+
+  <h3 id="Lime_Widget_AddToRenderChain_Lime_RenderChain_" data-uid="Lime.Widget.AddToRenderChain(Lime.RenderChain)">
+  AddToRenderChain(RenderChain)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Adds widget and all its descendants to render chain.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override void AddToRenderChain(RenderChain chain)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.RenderChain.html">RenderChain</a></td>
-        <td><span class="parametername">chain</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_AddToRenderChain_Lime_RenderChain_">Node.AddToRenderChain(RenderChain)</a></div>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>chain</code> <a class="xref" href="Lime.RenderChain.html">RenderChain</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_BoundingRectHitTest_" data-uid="Lime.Widget.BoundingRectHitTest*"></a>
-  <h4 id="Lime_Widget_BoundingRectHitTest_Lime_Vector2_" data-uid="Lime.Widget.BoundingRectHitTest(Lime.Vector2)">BoundingRectHitTest(Vector2)</h4>
+
+  <h3 id="Lime_Widget_BoundingRectHitTest_Lime_Vector2_" data-uid="Lime.Widget.BoundingRectHitTest(Lime.Vector2)">
+  BoundingRectHitTest(Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool BoundingRectHitTest(Vector2 point)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">point</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>point</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcAABBInSpaceOf_" data-uid="Lime.Widget.CalcAABBInSpaceOf*"></a>
-  <h4 id="Lime_Widget_CalcAABBInSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcAABBInSpaceOf(Lime.Widget)">CalcAABBInSpaceOf(Widget)</h4>
+
+  <h3 id="Lime_Widget_CalcAABBInSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcAABBInSpaceOf(Lime.Widget)">
+  CalcAABBInSpaceOf(Widget)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Calculates the widget's AABB in the space of another widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Rectangle CalcAABBInSpaceOf(Widget widget)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td><span class="parametername">widget</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Rectangle.html">Rectangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>widget</code> <a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Rectangle.html">Rectangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcAABBInViewportSpace_" data-uid="Lime.Widget.CalcAABBInViewportSpace*"></a>
-  <h4 id="Lime_Widget_CalcAABBInViewportSpace_Lime_WindowRect_Lime_Matrix44_" data-uid="Lime.Widget.CalcAABBInViewportSpace(Lime.WindowRect,Lime.Matrix44)">CalcAABBInViewportSpace(WindowRect, Matrix44)</h4>
+
+  <h3 id="Lime_Widget_CalcAABBInViewportSpace_Lime_WindowRect_Lime_Matrix44_" data-uid="Lime.Widget.CalcAABBInViewportSpace(Lime.WindowRect,Lime.Matrix44)">
+  CalcAABBInViewportSpace(WindowRect, Matrix44)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public IntRectangle CalcAABBInViewportSpace(WindowRect viewport, Matrix44 worldViewProjection)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.WindowRect.html">WindowRect</a></td>
-        <td><span class="parametername">viewport</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td><span class="parametername">worldViewProjection</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.IntRectangle.html">IntRectangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>viewport</code> <a class="xref" href="Lime.WindowRect.html">WindowRect</a></dt>
+    <dd></dd>
+    <dt><code>worldViewProjection</code> <a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.IntRectangle.html">IntRectangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcAABBInWindowSpace_" data-uid="Lime.Widget.CalcAABBInWindowSpace*"></a>
-  <h4 id="Lime_Widget_CalcAABBInWindowSpace" data-uid="Lime.Widget.CalcAABBInWindowSpace">CalcAABBInWindowSpace()</h4>
+
+  <h3 id="Lime_Widget_CalcAABBInWindowSpace" data-uid="Lime.Widget.CalcAABBInWindowSpace">
+  CalcAABBInWindowSpace()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Rectangle CalcAABBInWindowSpace()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Rectangle.html">Rectangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Rectangle.html">Rectangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcContentSize_" data-uid="Lime.Widget.CalcContentSize*"></a>
-  <h4 id="Lime_Widget_CalcContentSize" data-uid="Lime.Widget.CalcContentSize">CalcContentSize()</h4>
+
+  <h3 id="Lime_Widget_CalcContentSize" data-uid="Lime.Widget.CalcContentSize">
+  CalcContentSize()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual Vector2 CalcContentSize()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcGlobalBoundingRect_" data-uid="Lime.Widget.CalcGlobalBoundingRect*"></a>
-  <h4 id="Lime_Widget_CalcGlobalBoundingRect" data-uid="Lime.Widget.CalcGlobalBoundingRect">CalcGlobalBoundingRect()</h4>
+
+  <h3 id="Lime_Widget_CalcGlobalBoundingRect" data-uid="Lime.Widget.CalcGlobalBoundingRect">
+  CalcGlobalBoundingRect()
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Gets the axis-aligned bounding rectangle based on LocalToWorldTransform.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Rectangle CalcGlobalBoundingRect()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Rectangle.html">Rectangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Rectangle.html">Rectangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcHull_" data-uid="Lime.Widget.CalcHull*"></a>
-  <h4 id="Lime_Widget_CalcHull" data-uid="Lime.Widget.CalcHull">CalcHull()</h4>
+
+  <h3 id="Lime_Widget_CalcHull_System_Nullable_Lime_Matrix32___" data-uid="Lime.Widget.CalcHull(System.Nullable{Lime.Matrix32}@)">
+  CalcHull(in Matrix32?)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Quadrangle CalcHull()</code></pre>
+    <pre><code class="lang-csharp hljs">public Quadrangle CalcHull(in Matrix32? transform = null)</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <a class="xref" href="Lime.Matrix32.html">Matrix32</a>?</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcHullInSpaceOf_" data-uid="Lime.Widget.CalcHullInSpaceOf*"></a>
-  <h4 id="Lime_Widget_CalcHullInSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcHullInSpaceOf(Lime.Widget)">CalcHullInSpaceOf(Widget)</h4>
+
+  <h3 id="Lime_Widget_CalcHullInSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcHullInSpaceOf(Lime.Widget)">
+  CalcHullInSpaceOf(Widget)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Calculates the widget's convex hull in the space of another widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Quadrangle CalcHullInSpaceOf(Widget widget)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td><span class="parametername">widget</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>widget</code> <a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcLocalToParentTransform_" data-uid="Lime.Widget.CalcLocalToParentTransform*"></a>
-  <h4 id="Lime_Widget_CalcLocalToParentTransform" data-uid="Lime.Widget.CalcLocalToParentTransform">CalcLocalToParentTransform()</h4>
+
+  <h3 id="Lime_Widget_CalcLocalToParentTransform" data-uid="Lime.Widget.CalcLocalToParentTransform">
+  CalcLocalToParentTransform()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Matrix32 CalcLocalToParentTransform()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcPositionInSpaceOf_" data-uid="Lime.Widget.CalcPositionInSpaceOf*"></a>
-  <h4 id="Lime_Widget_CalcPositionInSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcPositionInSpaceOf(Lime.Widget)">CalcPositionInSpaceOf(Widget)</h4>
+
+  <h3 id="Lime_Widget_CalcPositionInSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcPositionInSpaceOf(Lime.Widget)">
+  CalcPositionInSpaceOf(Widget)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 CalcPositionInSpaceOf(Widget widget)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td><span class="parametername">widget</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>widget</code> <a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CalcTransitionToSpaceOf_" data-uid="Lime.Widget.CalcTransitionToSpaceOf*"></a>
-  <h4 id="Lime_Widget_CalcTransitionToSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcTransitionToSpaceOf(Lime.Widget)">CalcTransitionToSpaceOf(Widget)</h4>
+
+  <h3 id="Lime_Widget_CalcTransitionToSpaceOf_Lime_Widget_" data-uid="Lime.Widget.CalcTransitionToSpaceOf(Lime.Widget)">
+  CalcTransitionToSpaceOf(Widget)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Calculates the widget's transition to the space of another widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Matrix32 CalcTransitionToSpaceOf(Widget widget)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td><span class="parametername">widget</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>widget</code> <a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_CenterOnParent_" data-uid="Lime.Widget.CenterOnParent*"></a>
-  <h4 id="Lime_Widget_CenterOnParent" data-uid="Lime.Widget.CenterOnParent">CenterOnParent()</h4>
+
+  <h3 id="Lime_Widget_CenterOnParent" data-uid="Lime.Widget.CenterOnParent">
+  CenterOnParent()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void CenterOnParent()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ClipRegionTest_" data-uid="Lime.Widget.ClipRegionTest*"></a>
-  <h4 id="Lime_Widget_ClipRegionTest_Lime_Rectangle_" data-uid="Lime.Widget.ClipRegionTest(Lime.Rectangle)">ClipRegionTest(Rectangle)</h4>
+
+  <h3 id="Lime_Widget_ClipRegionTest_Lime_Rectangle_" data-uid="Lime.Widget.ClipRegionTest(Lime.Rectangle)">
+  ClipRegionTest(Rectangle)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool ClipRegionTest(Rectangle clipRegion)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Rectangle.html">Rectangle</a></td>
-        <td><span class="parametername">clipRegion</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>clipRegion</code> <a class="xref" href="Lime.Rectangle.html">Rectangle</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_Dispose_" data-uid="Lime.Widget.Dispose*"></a>
-  <h4 id="Lime_Widget_Dispose" data-uid="Lime.Widget.Dispose">Dispose()</h4>
+
+  <h3 id="Lime_Widget_Dispose" data-uid="Lime.Widget.Dispose">
+  Dispose()
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Stops all tasks and calls Dispose of all descendants.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override void Dispose()</code></pre>
   </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_Dispose">Node.Dispose()</a></div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ExpandToContainerWithAnchors_" data-uid="Lime.Widget.ExpandToContainerWithAnchors*"></a>
-  <h4 id="Lime_Widget_ExpandToContainerWithAnchors" data-uid="Lime.Widget.ExpandToContainerWithAnchors">ExpandToContainerWithAnchors()</h4>
+
+  <h3 id="Lime_Widget_ExpandToContainerWithAnchors" data-uid="Lime.Widget.ExpandToContainerWithAnchors">
+  ExpandToContainerWithAnchors()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ExpandToContainerWithAnchors()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GetEffectiveLayer_" data-uid="Lime.Widget.GetEffectiveLayer*"></a>
-  <h4 id="Lime_Widget_GetEffectiveLayer" data-uid="Lime.Widget.GetEffectiveLayer">GetEffectiveLayer()</h4>
+
+  <h3 id="Lime_Widget_GetEffectiveLayer" data-uid="Lime.Widget.GetEffectiveLayer">
+  GetEffectiveLayer()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public int GetEffectiveLayer()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GetPivotDefaultValue_" data-uid="Lime.Widget.GetPivotDefaultValue*"></a>
-  <h4 id="Lime_Widget_GetPivotDefaultValue" data-uid="Lime.Widget.GetPivotDefaultValue">GetPivotDefaultValue()</h4>
+
+  <h3 id="Lime_Widget_GetPivotDefaultValue" data-uid="Lime.Widget.GetPivotDefaultValue">
+  GetPivotDefaultValue()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static object GetPivotDefaultValue()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_GetVisibilityIssues_" data-uid="Lime.Widget.GetVisibilityIssues*"></a>
-  <h4 id="Lime_Widget_GetVisibilityIssues" data-uid="Lime.Widget.GetVisibilityIssues">GetVisibilityIssues()</h4>
+
+  <h3 id="Lime_Widget_GetVisibilityIssues" data-uid="Lime.Widget.GetVisibilityIssues">
+  GetVisibilityIssues()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;string&gt; GetVisibilityIssues()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_HasInput_" data-uid="Lime.Widget.HasInput*"></a>
-  <h4 id="Lime_Widget_HasInput" data-uid="Lime.Widget.HasInput">HasInput()</h4>
+
+  <h3 id="Lime_Widget_HasInput" data-uid="Lime.Widget.HasInput">
+  HasInput()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool HasInput()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_IsFocused_" data-uid="Lime.Widget.IsFocused*"></a>
-  <h4 id="Lime_Widget_IsFocused" data-uid="Lime.Widget.IsFocused">IsFocused()</h4>
+
+  <h3 id="Lime_Widget_IsFocused" data-uid="Lime.Widget.IsFocused">
+  IsFocused()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsFocused()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_IsRenderedToTexture_" data-uid="Lime.Widget.IsRenderedToTexture*"></a>
-  <h4 id="Lime_Widget_IsRenderedToTexture" data-uid="Lime.Widget.IsRenderedToTexture">IsRenderedToTexture()</h4>
+
+  <h3 id="Lime_Widget_IsRenderedToTexture" data-uid="Lime.Widget.IsRenderedToTexture">
+  IsRenderedToTexture()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual bool IsRenderedToTexture()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_LocalHitTest_" data-uid="Lime.Widget.LocalHitTest*"></a>
-  <h4 id="Lime_Widget_LocalHitTest_Lime_HitTestArgs__" data-uid="Lime.Widget.LocalHitTest(Lime.HitTestArgs@)">LocalHitTest(ref HitTestArgs)</h4>
+
+  <h3 id="Lime_Widget_LocalHitTest_Lime_HitTestArgs__" data-uid="Lime.Widget.LocalHitTest(Lime.HitTestArgs@)">
+  LocalHitTest(ref HitTestArgs)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Performs hit test only for this widget and its descendants.
 Returns true if the widget or one of its decendants contains the given point.
 This method doesn't take in account if one of the widget's ancestors overlaps the widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool LocalHitTest(ref HitTestArgs args)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.HitTestArgs.html">HitTestArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>args</code> <a class="xref" href="Lime.HitTestArgs.html">HitTestArgs</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_LocalHitTest_" data-uid="Lime.Widget.LocalHitTest*"></a>
-  <h4 id="Lime_Widget_LocalHitTest_Lime_Vector2_" data-uid="Lime.Widget.LocalHitTest(Lime.Vector2)">LocalHitTest(Vector2)</h4>
+
+  <h3 id="Lime_Widget_LocalHitTest_Lime_Vector2_" data-uid="Lime.Widget.LocalHitTest(Lime.Vector2)">
+  LocalHitTest(Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Checks whether this widget or one of its descendents contains the given point.
 This method doesn't take in account if one of the widget's ancestors overlaps the widget.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool LocalHitTest(Vector2 point)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">point</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>point</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_LocalMousePosition_" data-uid="Lime.Widget.LocalMousePosition*"></a>
-  <h4 id="Lime_Widget_LocalMousePosition" data-uid="Lime.Widget.LocalMousePosition">LocalMousePosition()</h4>
+
+  <h3 id="Lime_Widget_LocalMousePosition" data-uid="Lime.Widget.LocalMousePosition">
+  LocalMousePosition()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 LocalMousePosition()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_OnParentChanged_" data-uid="Lime.Widget.OnParentChanged*"></a>
-  <h4 id="Lime_Widget_OnParentChanged_Lime_Node_" data-uid="Lime.Widget.OnParentChanged(Lime.Node)">OnParentChanged(Node)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="Lime_Widget_OnParentChanged_Lime_Node_" data-uid="Lime.Widget.OnParentChanged(Lime.Node)">
+  OnParentChanged(Node)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Occurs when Parent property changes.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override void OnParentChanged(Node oldParent)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Node.html">Node</a></td>
-        <td><span class="parametername">oldParent</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_OnParentChanged_Lime_Node_">Node.OnParentChanged(Node)</a></div>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>oldParent</code> <a class="xref" href="Lime.Node.html">Node</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_OnSizeChanged_" data-uid="Lime.Widget.OnSizeChanged*"></a>
-  <h4 id="Lime_Widget_OnSizeChanged_Lime_Vector2_" data-uid="Lime.Widget.OnSizeChanged(Lime.Vector2)">OnSizeChanged(Vector2)</h4>
+
+  <h3 id="Lime_Widget_OnSizeChanged_Lime_Vector2_" data-uid="Lime.Widget.OnSizeChanged(Lime.Vector2)">
+  OnSizeChanged(Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnSizeChanged(Vector2 sizeDelta)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">sizeDelta</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sizeDelta</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_PartialHitTest_" data-uid="Lime.Widget.PartialHitTest*"></a>
-  <h4 id="Lime_Widget_PartialHitTest_Lime_HitTestArgs__" data-uid="Lime.Widget.PartialHitTest(Lime.HitTestArgs@)">PartialHitTest(ref HitTestArgs)</h4>
+
+  <h3 id="Lime_Widget_PartialHitTest_Lime_HitTestArgs__" data-uid="Lime.Widget.PartialHitTest(Lime.HitTestArgs@)">
+  PartialHitTest(ref HitTestArgs)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Checks whether this widget contains the given point.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override bool PartialHitTest(ref HitTestArgs args)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.HitTestArgs.html">HitTestArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_PartialHitTest_Lime_HitTestArgs__">Node.PartialHitTest(ref HitTestArgs)</a></div>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>args</code> <a class="xref" href="Lime.HitTestArgs.html">HitTestArgs</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_PartialHitTestByContents_" data-uid="Lime.Widget.PartialHitTestByContents*"></a>
-  <h4 id="Lime_Widget_PartialHitTestByContents_Lime_HitTestArgs__" data-uid="Lime.Widget.PartialHitTestByContents(Lime.HitTestArgs@)">PartialHitTestByContents(ref HitTestArgs)</h4>
+
+  <h3 id="Lime_Widget_PartialHitTestByContents_Lime_HitTestArgs__" data-uid="Lime.Widget.PartialHitTestByContents(Lime.HitTestArgs@)">
+  PartialHitTestByContents(ref HitTestArgs)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual bool PartialHitTestByContents(ref HitTestArgs args)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.HitTestArgs.html">HitTestArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>args</code> <a class="xref" href="Lime.HitTestArgs.html">HitTestArgs</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_RaiseUpdated_" data-uid="Lime.Widget.RaiseUpdated*"></a>
-  <h4 id="Lime_Widget_RaiseUpdated_System_Single_" data-uid="Lime.Widget.RaiseUpdated(System.Single)">RaiseUpdated(Single)</h4>
+
+  <h3 id="Lime_Widget_RaiseUpdated_System_Single_" data-uid="Lime.Widget.RaiseUpdated(System.Single)">
+  RaiseUpdated(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Raises Updated event in respect of animation speed.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RaiseUpdated(float delta)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
-        <td><p>Time delta from last Update.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>delta</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Time delta from last Update.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_RaiseUpdating_" data-uid="Lime.Widget.RaiseUpdating*"></a>
-  <h4 id="Lime_Widget_RaiseUpdating_System_Single_" data-uid="Lime.Widget.RaiseUpdating(System.Single)">RaiseUpdating(Single)</h4>
+
+  <h3 id="Lime_Widget_RaiseUpdating_System_Single_" data-uid="Lime.Widget.RaiseUpdating(System.Single)">
+  RaiseUpdating(float)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Raises Updating event in respect of animation speed.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RaiseUpdating(float delta)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
-        <td><p>Time delta from last Update.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>delta</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Time delta from last Update.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_RecalcBoundingRect_" data-uid="Lime.Widget.RecalcBoundingRect*"></a>
-  <h4 id="Lime_Widget_RecalcBoundingRect" data-uid="Lime.Widget.RecalcBoundingRect">RecalcBoundingRect()</h4>
+
+  <h3 id="Lime_Widget_RecalcBoundingRect" data-uid="Lime.Widget.RecalcBoundingRect">
+  RecalcBoundingRect()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RecalcBoundingRect()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_RecalcGloballyFrozen_" data-uid="Lime.Widget.RecalcGloballyFrozen*"></a>
-  <h4 id="Lime_Widget_RecalcGloballyFrozen" data-uid="Lime.Widget.RecalcGloballyFrozen">RecalcGloballyFrozen()</h4>
+
+  <h3 id="Lime_Widget_RecalcGloballyFrozen" data-uid="Lime.Widget.RecalcGloballyFrozen">
+  RecalcGloballyFrozen()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override void RecalcGloballyFrozen()</code></pre>
   </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_RecalcGloballyFrozen">Node.RecalcGloballyFrozen()</a></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Widget_RecalcGloballyVisible_" data-uid="Lime.Widget.RecalcGloballyVisible*"></a>
+
+  <h3 id="Lime_Widget_RecalcGloballyVisible" data-uid="Lime.Widget.RecalcGloballyVisible">
+  RecalcGloballyVisible()
   
-  
-  <a id="Lime_Widget_RefreshLayout_" data-uid="Lime.Widget.RefreshLayout*"></a>
-  <h4 id="Lime_Widget_RefreshLayout" data-uid="Lime.Widget.RefreshLayout">RefreshLayout()</h4>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void RecalcGloballyVisible()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Widget_RefreshLayout_" data-uid="Lime.Widget.RefreshLayout*"></a>
+
+  <h3 id="Lime_Widget_RefreshLayout" data-uid="Lime.Widget.RefreshLayout">
+  RefreshLayout()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RefreshLayout()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_RevokeFocus_" data-uid="Lime.Widget.RevokeFocus*"></a>
-  <h4 id="Lime_Widget_RevokeFocus" data-uid="Lime.Widget.RevokeFocus">RevokeFocus()</h4>
+
+  <h3 id="Lime_Widget_RevokeFocus" data-uid="Lime.Widget.RevokeFocus">
+  RevokeFocus()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RevokeFocus()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_SetFocus_" data-uid="Lime.Widget.SetFocus*"></a>
-  <h4 id="Lime_Widget_SetFocus" data-uid="Lime.Widget.SetFocus">SetFocus()</h4>
+
+  <h3 id="Lime_Widget_SetFocus" data-uid="Lime.Widget.SetFocus">
+  SetFocus()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void SetFocus()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_StaticScale_" data-uid="Lime.Widget.StaticScale*"></a>
-  <h4 id="Lime_Widget_StaticScale_System_Single_System_Boolean_" data-uid="Lime.Widget.StaticScale(System.Single,System.Boolean)">StaticScale(Single, Boolean)</h4>
+
+  <h3 id="Lime_Widget_StaticScale_System_Single_System_Boolean_" data-uid="Lime.Widget.StaticScale(System.Single,System.Boolean)">
+  StaticScale(float, bool)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>TODO: Add summary</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override void StaticScale(float ratio, bool roundCoordinates)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">ratio</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">roundCoordinates</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_StaticScale_System_Single_System_Boolean_">Node.StaticScale(Single, Boolean)</a></div>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ratio</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>roundCoordinates</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_ToLocalMousePosition_" data-uid="Lime.Widget.ToLocalMousePosition*"></a>
-  <h4 id="Lime_Widget_ToLocalMousePosition_Lime_Vector2_" data-uid="Lime.Widget.ToLocalMousePosition(Lime.Vector2)">ToLocalMousePosition(Vector2)</h4>
+
+  <h3 id="Lime_Widget_ToLocalMousePosition_Lime_Vector2_" data-uid="Lime.Widget.ToLocalMousePosition(Lime.Vector2)">
+  ToLocalMousePosition(Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector2 ToLocalMousePosition(Vector2 mousePosition)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">mousePosition</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>mousePosition</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_UpdateAncestorBoundingRect_" data-uid="Lime.Widget.UpdateAncestorBoundingRect*"></a>
-  <h4 id="Lime_Widget_UpdateAncestorBoundingRect_Lime_Widget_" data-uid="Lime.Widget.UpdateAncestorBoundingRect(Lime.Widget)">UpdateAncestorBoundingRect(Widget)</h4>
+
+  <h3 id="Lime_Widget_UpdateAncestorBoundingRect_Lime_Widget_" data-uid="Lime.Widget.UpdateAncestorBoundingRect(Lime.Widget)">
+  UpdateAncestorBoundingRect(Widget)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override void UpdateAncestorBoundingRect(Widget ancestor)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
-        <td><span class="parametername">ancestor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_UpdateAncestorBoundingRect_Lime_Widget_">Node.UpdateAncestorBoundingRect(Widget)</a></div>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ancestor</code> <a class="xref" href="Lime.Widget.html">Widget</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_Widget_WasClicked_" data-uid="Lime.Widget.WasClicked*"></a>
-  <h4 id="Lime_Widget_WasClicked" data-uid="Lime.Widget.WasClicked">WasClicked()</h4>
+
+  <h3 id="Lime_Widget_WasClicked" data-uid="Lime.Widget.WasClicked">
+  WasClicked()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual bool WasClicked()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IAnimable.html">IAnimable</a>
-  </div>
-  <div>
-      <span class="xref">System.ICloneable</span>
-  </div>
-  <h3 id="extensionmethods">Extension Methods</h3>
-  <div>
-      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_GetAnimationHost_Lime_IAnimable_">IAnimableExtensions.GetAnimationHost(IAnimable)</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_UnbindAnimators_Lime_IAnimable_">IAnimableExtensions.UnbindAnimators(IAnimable)</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Clone__1_Lime_Node_">NodeCompatibilityExtensions.Clone&lt;T&gt;(Node)</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Clone_Lime_Node_">NodeCompatibilityExtensions.Clone(Node)</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_AdvanceAnimationsRecursive_Lime_Node_System_Single_">NodeCompatibilityExtensions.AdvanceAnimationsRecursive(Node, Single)</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.NodeCompatibilityExtensions.html#Lime_NodeCompatibilityExtensions_Update_Lime_Node_System_Single_">NodeCompatibilityExtensions.Update(Node, Single)</a>
-  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                </ul>
-              </div>
-              <div class="toggle-mode">
-                <div class="icon">
-                  <i aria-hidden="true">☀</i>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="switch-style">
-                  <span class="slider round"></span>
-                </label>
-                <div class="icon">
-                  <i aria-hidden="true">☾</i>
-                </div>
-              </div>
-          
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <h5>In This Article</h5>
-              <div></div>
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <div class="pull-left">
-              GameForest 2020
-              
-            </div>
-            <div class="toggle-mode pull-right visible-sm visible-xs">
-              <div class="icon">
-                <i aria-hidden="true">☀</i>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="switch-style-m">
-                <span class="slider round"></span>
-              </label>
-              <div class="icon">
-                <i aria-hidden="true">☾</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
-      </footer>    </div>
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
-    <script>
-        mermaid.initialize({
-            startOnLoad: false
-        });
-        mermaid.init(undefined, ".lang-mermaid");
-    </script>  </body>
+    </footer>
+  </body>
 </html>

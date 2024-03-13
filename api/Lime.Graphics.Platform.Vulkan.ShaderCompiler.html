@@ -1,0 +1,1396 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class ShaderCompiler
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class ShaderCompiler
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler">
+
+
+
+  <h1 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler" class="text-break">
+    Class ShaderCompiler
+  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Lime.html">Lime</a>.<a class="xref" href="Lime.Graphics.html">Graphics</a>.<a class="xref" href="Lime.Graphics.Platform.html">Platform</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.html">Vulkan</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class ShaderCompiler</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">ShaderCompiler</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_BindAttribLocation_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.BindAttribLocation*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_BindAttribLocation_System_IntPtr_System_String_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.BindAttribLocation(System.IntPtr,System.String,System.Int32)">
+  BindAttribLocation(nint, string, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void BindAttribLocation(nint programHandle, string name, int location)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>location</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_CompileShader_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.CompileShader*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_CompileShader_System_IntPtr_Lime_Graphics_Platform_Vulkan_ShaderCompiler_Stage_System_String_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.CompileShader(System.IntPtr,Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage,System.String)">
+  CompileShader(nint, Stage, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool CompileShader(nint shaderHandle, ShaderCompiler.Stage stage, string source)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>shaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>stage</code> <a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage.html">Stage</a></dt>
+    <dd></dd>
+    <dt><code>source</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_CreateProgram_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.CreateProgram*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_CreateProgram" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.CreateProgram">
+  CreateProgram()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern nint CreateProgram()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_CreateShader_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.CreateShader*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_CreateShader" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.CreateShader">
+  CreateShader()
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern nint CreateShader()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_DestroyProgram_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.DestroyProgram*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_DestroyProgram_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.DestroyProgram(System.IntPtr)">
+  DestroyProgram(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern void DestroyProgram(nint programHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_DestroyShader_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.DestroyShader*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_DestroyShader_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.DestroyShader(System.IntPtr)">
+  DestroyShader(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern void DestroyShader(nint shaderHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>shaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribCount_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribCount*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribCount_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribCount(System.IntPtr)">
+  GetActiveAttribCount(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveAttribCount(nint programHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribLocation_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribLocation*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribLocation_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribLocation(System.IntPtr,System.Int32)">
+  GetActiveAttribLocation(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveAttribLocation(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribName_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribName*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribName_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribName(System.IntPtr,System.Int32)">
+  GetActiveAttribName(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetActiveAttribName(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribType_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribType*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveAttribType_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveAttribType(System.IntPtr,System.Int32)">
+  GetActiveAttribType(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern ShaderCompiler.VariableType GetActiveAttribType(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.VariableType.html">VariableType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformArraySize_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformArraySize*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformArraySize_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformArraySize(System.IntPtr,System.Int32)">
+  GetActiveUniformArraySize(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformArraySize(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformArrayStride_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformArrayStride*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformArrayStride_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformArrayStride(System.IntPtr,System.Int32)">
+  GetActiveUniformArrayStride(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformArrayStride(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBinding_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBinding*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBinding_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBinding(System.IntPtr,System.Int32)">
+  GetActiveUniformBinding(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformBinding(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockBinding_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockBinding*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockBinding_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockBinding(System.IntPtr,System.Int32)">
+  GetActiveUniformBlockBinding(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformBlockBinding(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockCount_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockCount*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockCount_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockCount(System.IntPtr)">
+  GetActiveUniformBlockCount(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformBlockCount(nint programHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockIndex_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockIndex*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockIndex_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockIndex(System.IntPtr,System.Int32)">
+  GetActiveUniformBlockIndex(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformBlockIndex(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockOffset_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockOffset*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockOffset_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockOffset(System.IntPtr,System.Int32)">
+  GetActiveUniformBlockOffset(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformBlockOffset(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockSize_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockSize*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockSize_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockSize(System.IntPtr,System.Int32)">
+  GetActiveUniformBlockSize(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformBlockSize(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockStage_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockStage*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformBlockStage_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformBlockStage(System.IntPtr,System.Int32)">
+  GetActiveUniformBlockStage(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern ShaderCompiler.Stage GetActiveUniformBlockStage(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage.html">Stage</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformCount_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformCount*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformCount_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformCount(System.IntPtr)">
+  GetActiveUniformCount(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformCount(nint programHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformMatrixStride_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformMatrixStride*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformMatrixStride_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformMatrixStride(System.IntPtr,System.Int32)">
+  GetActiveUniformMatrixStride(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern int GetActiveUniformMatrixStride(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformName_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformName*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformName_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformName(System.IntPtr,System.Int32)">
+  GetActiveUniformName(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetActiveUniformName(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformNameInternal_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformNameInternal*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformNameInternal_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformNameInternal(System.IntPtr,System.Int32)">
+  GetActiveUniformNameInternal(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern nint GetActiveUniformNameInternal(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformStage_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformStage*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformStage_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformStage(System.IntPtr,System.Int32)">
+  GetActiveUniformStage(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern ShaderCompiler.Stage GetActiveUniformStage(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage.html">Stage</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformType_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformType*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetActiveUniformType_System_IntPtr_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetActiveUniformType(System.IntPtr,System.Int32)">
+  GetActiveUniformType(nint, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern ShaderCompiler.VariableType GetActiveUniformType(nint programHandle, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.VariableType.html">VariableType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetProgramInfoLog_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetProgramInfoLog*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetProgramInfoLog_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetProgramInfoLog(System.IntPtr)">
+  GetProgramInfoLog(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetProgramInfoLog(nint programHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetShaderInfoLog_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetShaderInfoLog*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetShaderInfoLog_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetShaderInfoLog(System.IntPtr)">
+  GetShaderInfoLog(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetShaderInfoLog(nint shaderHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>shaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetShaderSpv_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetShaderSpv*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetShaderSpv_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetShaderSpv(System.IntPtr)">
+  GetShaderSpv(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern nint GetShaderSpv(nint shaderHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>shaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetShaderSpvSize_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetShaderSpvSize*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetShaderSpvSize_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetShaderSpvSize(System.IntPtr)">
+  GetShaderSpvSize(nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern uint GetShaderSpvSize(nint shaderHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>shaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetSpv_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetSpv*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetSpv_System_IntPtr_Lime_Graphics_Platform_Vulkan_ShaderCompiler_Stage_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetSpv(System.IntPtr,Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage)">
+  GetSpv(nint, Stage)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern nint GetSpv(nint programHandle, ShaderCompiler.Stage stage)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>stage</code> <a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage.html">Stage</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetSpvSize_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetSpvSize*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_GetSpvSize_System_IntPtr_Lime_Graphics_Platform_Vulkan_ShaderCompiler_Stage_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.GetSpvSize(System.IntPtr,Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage)">
+  GetSpvSize(nint, Stage)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern uint GetSpvSize(nint programHandle, ShaderCompiler.Stage stage)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>stage</code> <a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.html">ShaderCompiler</a>.<a class="xref" href="Lime.Graphics.Platform.Vulkan.ShaderCompiler.Stage.html">Stage</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_LinkProgram_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.LinkProgram*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_LinkProgram_System_IntPtr_System_IntPtr_System_IntPtr_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.LinkProgram(System.IntPtr,System.IntPtr,System.IntPtr)">
+  LinkProgram(nint, nint, nint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool LinkProgram(nint programHandle, nint vertexShaderHandle, nint fragmentShaderHandle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>programHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>vertexShaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>fragmentShaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_SetShaderSpv_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.SetShaderSpv*"></a>
+
+  <h3 id="Lime_Graphics_Platform_Vulkan_ShaderCompiler_SetShaderSpv_System_IntPtr_System_IntPtr_System_UInt32_" data-uid="Lime.Graphics.Platform.Vulkan.ShaderCompiler.SetShaderSpv(System.IntPtr,System.IntPtr,System.UInt32)">
+  SetShaderSpv(nint, nint, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static extern nint SetShaderSpv(nint shaderHandle, nint spv, uint size)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>shaderHandle</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>spv</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.intptr">nint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,2890 +1,2695 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface IRenderer
-   | Citrus Engine </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface IRenderer
-   | Citrus Engine ">
-    <meta name="generator" content="docfx 2.58.9.0">
-    
-    <link rel="shortcut icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    
+      <title>Interface IRenderer
+ | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IRenderer
+ | Citrus Engine ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
         </div>
-      </header>
-      <div class="container body-content">
-        
-        <div id="search-results">
-          <div class="search-list">Search Results for <span></span></div>
-          <div class="sr-items">
-            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
         </div>
       </div>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.IRenderer">
+
+        <article data-uid="Lime.IRenderer">
+
+
+
+  <h1 id="Lime_IRenderer" data-uid="Lime.IRenderer" class="text-break">
+    Interface IRenderer
   
-  
-  <h1 id="Lime_IRenderer" data-uid="Lime.IRenderer" class="text-break">Interface IRenderer
   </h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
-  <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_IRenderer_syntax">Syntax</h5>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Lime.html">Lime</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Lime.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public interface IRenderer</code></pre>
   </div>
-  <h3 id="properties">Properties
-  </h3>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
   <a id="Lime_IRenderer_Blending_" data-uid="Lime.IRenderer.Blending*"></a>
-  <h4 id="Lime_IRenderer_Blending" data-uid="Lime.IRenderer.Blending">Blending</h4>
+
+  <h3 id="Lime_IRenderer_Blending" data-uid="Lime.IRenderer.Blending">
+  Blending
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Blending Blending { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Blending.html">Blending</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Blending.html">Blending</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_ColorFactor_" data-uid="Lime.IRenderer.ColorFactor*"></a>
-  <h4 id="Lime_IRenderer_ColorFactor" data-uid="Lime.IRenderer.ColorFactor">ColorFactor</h4>
+
+  <h3 id="Lime_IRenderer_ColorFactor" data-uid="Lime.IRenderer.ColorFactor">
+  ColorFactor
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Color4 ColorFactor { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_ColorWriteEnabled_" data-uid="Lime.IRenderer.ColorWriteEnabled*"></a>
-  <h4 id="Lime_IRenderer_ColorWriteEnabled" data-uid="Lime.IRenderer.ColorWriteEnabled">ColorWriteEnabled</h4>
+
+  <h3 id="Lime_IRenderer_ColorWriteEnabled" data-uid="Lime.IRenderer.ColorWriteEnabled">
+  ColorWriteEnabled
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">ColorWriteMask ColorWriteEnabled { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ColorWriteMask.html">ColorWriteMask</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ColorWriteMask.html">ColorWriteMask</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_CullMode_" data-uid="Lime.IRenderer.CullMode*"></a>
-  <h4 id="Lime_IRenderer_CullMode" data-uid="Lime.IRenderer.CullMode">CullMode</h4>
+
+  <h3 id="Lime_IRenderer_CullMode" data-uid="Lime.IRenderer.CullMode">
+  CullMode
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">CullMode CullMode { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.CullMode.html">CullMode</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.CullMode.html">CullMode</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DepthState_" data-uid="Lime.IRenderer.DepthState*"></a>
-  <h4 id="Lime_IRenderer_DepthState" data-uid="Lime.IRenderer.DepthState">DepthState</h4>
+
+  <h3 id="Lime_IRenderer_DepthState" data-uid="Lime.IRenderer.DepthState">
+  DepthState
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">DepthState DepthState { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.DepthState.html">DepthState</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.DepthState.html">DepthState</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawCalls_" data-uid="Lime.IRenderer.DrawCalls*"></a>
-  <h4 id="Lime_IRenderer_DrawCalls" data-uid="Lime.IRenderer.DrawCalls">DrawCalls</h4>
+
+  <h3 id="Lime_IRenderer_DrawCalls" data-uid="Lime.IRenderer.DrawCalls">
+  DrawCalls
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">int DrawCalls { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_GlobalShaderParams_" data-uid="Lime.IRenderer.GlobalShaderParams*"></a>
-  <h4 id="Lime_IRenderer_GlobalShaderParams" data-uid="Lime.IRenderer.GlobalShaderParams">GlobalShaderParams</h4>
+
+  <h3 id="Lime_IRenderer_GlobalShaderParams" data-uid="Lime.IRenderer.GlobalShaderParams">
+  GlobalShaderParams
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">ShaderParams GlobalShaderParams { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ShaderParams.html">ShaderParams</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ShaderParams.html">ShaderParams</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_PolyCount3d_" data-uid="Lime.IRenderer.PolyCount3d*"></a>
-  <h4 id="Lime_IRenderer_PolyCount3d" data-uid="Lime.IRenderer.PolyCount3d">PolyCount3d</h4>
+
+  <h3 id="Lime_IRenderer_PolyCount3d" data-uid="Lime.IRenderer.PolyCount3d">
+  PolyCount3d
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">int PolyCount3d { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Projection_" data-uid="Lime.IRenderer.Projection*"></a>
-  <h4 id="Lime_IRenderer_Projection" data-uid="Lime.IRenderer.Projection">Projection</h4>
+
+  <h3 id="Lime_IRenderer_Projection" data-uid="Lime.IRenderer.Projection">
+  Projection
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 Projection { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_RenderCycle_" data-uid="Lime.IRenderer.RenderCycle*"></a>
-  <h4 id="Lime_IRenderer_RenderCycle" data-uid="Lime.IRenderer.RenderCycle">RenderCycle</h4>
+
+  <h3 id="Lime_IRenderer_RenderCycle" data-uid="Lime.IRenderer.RenderCycle">
+  RenderCycle
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">int RenderCycle { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_ScissorState_" data-uid="Lime.IRenderer.ScissorState*"></a>
-  <h4 id="Lime_IRenderer_ScissorState" data-uid="Lime.IRenderer.ScissorState">ScissorState</h4>
+
+  <h3 id="Lime_IRenderer_ScissorState" data-uid="Lime.IRenderer.ScissorState">
+  ScissorState
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">ScissorState ScissorState { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ScissorState.html">ScissorState</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ScissorState.html">ScissorState</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Shader_" data-uid="Lime.IRenderer.Shader*"></a>
-  <h4 id="Lime_IRenderer_Shader" data-uid="Lime.IRenderer.Shader">Shader</h4>
+
+  <h3 id="Lime_IRenderer_Shader" data-uid="Lime.IRenderer.Shader">
+  Shader
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">ShaderId Shader { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ShaderId.html">ShaderId</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.ShaderId.html">ShaderId</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_StencilState_" data-uid="Lime.IRenderer.StencilState*"></a>
-  <h4 id="Lime_IRenderer_StencilState" data-uid="Lime.IRenderer.StencilState">StencilState</h4>
+
+  <h3 id="Lime_IRenderer_StencilState" data-uid="Lime.IRenderer.StencilState">
+  StencilState
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">StencilState StencilState { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.StencilState.html">StencilState</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.StencilState.html">StencilState</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Transform1_" data-uid="Lime.IRenderer.Transform1*"></a>
-  <h4 id="Lime_IRenderer_Transform1" data-uid="Lime.IRenderer.Transform1">Transform1</h4>
+
+  <h3 id="Lime_IRenderer_Transform1" data-uid="Lime.IRenderer.Transform1">
+  Transform1
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix32 Transform1 { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Transform2_" data-uid="Lime.IRenderer.Transform2*"></a>
-  <h4 id="Lime_IRenderer_Transform2" data-uid="Lime.IRenderer.Transform2">Transform2</h4>
+
+  <h3 id="Lime_IRenderer_Transform2" data-uid="Lime.IRenderer.Transform2">
+  Transform2
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix32 Transform2 { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix32.html">Matrix32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix32.html">Matrix32</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_View_" data-uid="Lime.IRenderer.View*"></a>
-  <h4 id="Lime_IRenderer_View" data-uid="Lime.IRenderer.View">View</h4>
+
+  <h3 id="Lime_IRenderer_View" data-uid="Lime.IRenderer.View">
+  View
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 View { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_IRenderer_Viewport_" data-uid="Lime.IRenderer.Viewport*"></a>
-  <h4 id="Lime_IRenderer_Viewport" data-uid="Lime.IRenderer.Viewport">Viewport</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Viewport Viewport { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Viewport.html">Viewport</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_ViewProjection_" data-uid="Lime.IRenderer.ViewProjection*"></a>
-  <h4 id="Lime_IRenderer_ViewProjection" data-uid="Lime.IRenderer.ViewProjection">ViewProjection</h4>
+
+  <h3 id="Lime_IRenderer_ViewProjection" data-uid="Lime.IRenderer.ViewProjection">
+  ViewProjection
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 ViewProjection { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_IRenderer_Viewport_" data-uid="Lime.IRenderer.Viewport*"></a>
+
+  <h3 id="Lime_IRenderer_Viewport" data-uid="Lime.IRenderer.Viewport">
+  Viewport
   
-  
-  <a id="Lime_IRenderer_World_" data-uid="Lime.IRenderer.World*"></a>
-  <h4 id="Lime_IRenderer_World" data-uid="Lime.IRenderer.World">World</h4>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Viewport Viewport { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Viewport.html">Viewport</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Lime_IRenderer_World_" data-uid="Lime.IRenderer.World*"></a>
+
+  <h3 id="Lime_IRenderer_World" data-uid="Lime.IRenderer.World">
+  World
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 World { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_WorldView_" data-uid="Lime.IRenderer.WorldView*"></a>
-  <h4 id="Lime_IRenderer_WorldView" data-uid="Lime.IRenderer.WorldView">WorldView</h4>
+
+  <h3 id="Lime_IRenderer_WorldView" data-uid="Lime.IRenderer.WorldView">
+  WorldView
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 WorldView { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_WorldViewProjection_" data-uid="Lime.IRenderer.WorldViewProjection*"></a>
-  <h4 id="Lime_IRenderer_WorldViewProjection" data-uid="Lime.IRenderer.WorldViewProjection">WorldViewProjection</h4>
+
+  <h3 id="Lime_IRenderer_WorldViewProjection" data-uid="Lime.IRenderer.WorldViewProjection">
+  WorldViewProjection
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 WorldViewProjection { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
   <a id="Lime_IRenderer_BeginFrame_" data-uid="Lime.IRenderer.BeginFrame*"></a>
-  <h4 id="Lime_IRenderer_BeginFrame" data-uid="Lime.IRenderer.BeginFrame">BeginFrame()</h4>
+
+  <h3 id="Lime_IRenderer_BeginFrame" data-uid="Lime.IRenderer.BeginFrame">
+  BeginFrame()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void BeginFrame()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Clear_" data-uid="Lime.IRenderer.Clear*"></a>
-  <h4 id="Lime_IRenderer_Clear_Lime_ClearOptions_" data-uid="Lime.IRenderer.Clear(Lime.ClearOptions)">Clear(ClearOptions)</h4>
+
+  <h3 id="Lime_IRenderer_Clear_Lime_ClearOptions_" data-uid="Lime.IRenderer.Clear(Lime.ClearOptions)">
+  Clear(ClearOptions)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void Clear(ClearOptions options)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ClearOptions.html">ClearOptions</a></td>
-        <td><span class="parametername">options</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="Lime.ClearOptions.html">ClearOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Clear_" data-uid="Lime.IRenderer.Clear*"></a>
-  <h4 id="Lime_IRenderer_Clear_Lime_ClearOptions_Lime_Color4_" data-uid="Lime.IRenderer.Clear(Lime.ClearOptions,Lime.Color4)">Clear(ClearOptions, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_Clear_Lime_ClearOptions_Lime_Color4_" data-uid="Lime.IRenderer.Clear(Lime.ClearOptions,Lime.Color4)">
+  Clear(ClearOptions, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void Clear(ClearOptions options, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ClearOptions.html">ClearOptions</a></td>
-        <td><span class="parametername">options</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="Lime.ClearOptions.html">ClearOptions</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Clear_" data-uid="Lime.IRenderer.Clear*"></a>
-  <h4 id="Lime_IRenderer_Clear_Lime_ClearOptions_Lime_Color4_System_Single_System_Byte_" data-uid="Lime.IRenderer.Clear(Lime.ClearOptions,Lime.Color4,System.Single,System.Byte)">Clear(ClearOptions, Color4, Single, Byte)</h4>
+
+  <h3 id="Lime_IRenderer_Clear_Lime_ClearOptions_Lime_Color4_System_Single_System_Byte_" data-uid="Lime.IRenderer.Clear(Lime.ClearOptions,Lime.Color4,System.Single,System.Byte)">
+  Clear(ClearOptions, Color4, float, byte)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void Clear(ClearOptions options, Color4 color, float depth, byte stencil)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ClearOptions.html">ClearOptions</a></td>
-        <td><span class="parametername">options</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">depth</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Byte</span></td>
-        <td><span class="parametername">stencil</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="Lime.ClearOptions.html">ClearOptions</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>depth</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>stencil</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Clear_" data-uid="Lime.IRenderer.Clear*"></a>
-  <h4 id="Lime_IRenderer_Clear_Lime_Color4_" data-uid="Lime.IRenderer.Clear(Lime.Color4)">Clear(Color4)</h4>
+
+  <h3 id="Lime_IRenderer_Clear_Lime_Color4_" data-uid="Lime.IRenderer.Clear(Lime.Color4)">
+  Clear(Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void Clear(Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawCircle_" data-uid="Lime.IRenderer.DrawCircle*"></a>
-  <h4 id="Lime_IRenderer_DrawCircle_Lime_Vector2_System_Single_System_Int32_Lime_Color4_" data-uid="Lime.IRenderer.DrawCircle(Lime.Vector2,System.Single,System.Int32,Lime.Color4)">DrawCircle(Vector2, Single, Int32, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawCircle_Lime_Vector2_System_Single_System_Int32_Lime_Color4_" data-uid="Lime.IRenderer.DrawCircle(Lime.Vector2,System.Single,System.Int32,Lime.Color4)">
+  DrawCircle(Vector2, float, int, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawCircle(Vector2 center, float radius, int numSegments, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">center</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radius</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numSegments</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>center</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>radius</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>numSegments</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawDashedLine_" data-uid="Lime.IRenderer.DrawDashedLine*"></a>
-  <h4 id="Lime_IRenderer_DrawDashedLine_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Vector2_" data-uid="Lime.IRenderer.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)">DrawDashedLine(Vector2, Vector2, Color4, Vector2)</h4>
+
+  <h3 id="Lime_IRenderer_DrawDashedLine_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Vector2_" data-uid="Lime.IRenderer.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)">
+  DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawDashedLine(Vector2 a, Vector2 b, Color4 color, Vector2 dashSize)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">dashSize</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>dashSize</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawGlyphList_" data-uid="Lime.IRenderer.DrawGlyphList*"></a>
-  <h4 id="Lime_IRenderer_DrawGlyphList_System_Collections_Generic_List_Lime_Glyph__Lime_Color4_" data-uid="Lime.IRenderer.DrawGlyphList(System.Collections.Generic.List{Lime.Glyph},Lime.Color4)">DrawGlyphList(List&lt;Glyph&gt;, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawGlyphList_System_Collections_Generic_List_Lime_Glyph__Lime_Color4_" data-uid="Lime.IRenderer.DrawGlyphList(System.Collections.Generic.List{Lime.Glyph},Lime.Color4)">
+  DrawGlyphList(List&lt;Glyph&gt;, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawGlyphList(List&lt;Glyph&gt; glyphList, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Glyph.html">Glyph</a>&gt;</td>
-        <td><span class="parametername">glyphList</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>glyphList</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="Lime.Glyph.html">Glyph</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawHorizontalGradientRect_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawHorizontalGradientRect_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Color4)">DrawHorizontalGradientRect(Vector2, Vector2, Color4, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawHorizontalGradientRect_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Color4)">
+  DrawHorizontalGradientRect(Vector2, Vector2, Color4, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawHorizontalGradientRect(Vector2 a, Vector2 b, Color4 topColor, Color4 bottomColor)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">topColor</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">bottomColor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>topColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>bottomColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawHorizontalGradientRect_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawHorizontalGradientRect_Lime_Vector2_Lime_Vector2_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect(Lime.Vector2,Lime.Vector2,Lime.ColorGradient)">DrawHorizontalGradientRect(Vector2, Vector2, ColorGradient)</h4>
+
+  <h3 id="Lime_IRenderer_DrawHorizontalGradientRect_Lime_Vector2_Lime_Vector2_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect(Lime.Vector2,Lime.Vector2,Lime.ColorGradient)">
+  DrawHorizontalGradientRect(Vector2, Vector2, ColorGradient)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawHorizontalGradientRect(Vector2 a, Vector2 b, ColorGradient gradient)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></td>
-        <td><span class="parametername">gradient</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>gradient</code> <a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawHorizontalGradientRect_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawHorizontalGradientRect_System_Single_System_Single_System_Single_System_Single_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect(System.Single,System.Single,System.Single,System.Single,Lime.ColorGradient)">DrawHorizontalGradientRect(Single, Single, Single, Single, ColorGradient)</h4>
+
+  <h3 id="Lime_IRenderer_DrawHorizontalGradientRect_System_Single_System_Single_System_Single_System_Single_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawHorizontalGradientRect(System.Single,System.Single,System.Single,System.Single,Lime.ColorGradient)">
+  DrawHorizontalGradientRect(float, float, float, float, ColorGradient)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawHorizontalGradientRect(float x0, float y0, float x1, float y1, ColorGradient gradient)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></td>
-        <td><span class="parametername">gradient</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>gradient</code> <a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawLine_" data-uid="Lime.IRenderer.DrawLine*"></a>
-  <h4 id="Lime_IRenderer_DrawLine_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_Lime_LineCap_" data-uid="Lime.IRenderer.DrawLine(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single,Lime.LineCap)">DrawLine(Vector2, Vector2, Color4, Single, LineCap)</h4>
+
+  <h3 id="Lime_IRenderer_DrawLine_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_Lime_LineCap_" data-uid="Lime.IRenderer.DrawLine(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single,Lime.LineCap)">
+  DrawLine(Vector2, Vector2, Color4, float, LineCap)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1F, LineCap cap = LineCap.Butt)</code></pre>
+    <pre><code class="lang-csharp hljs">void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">thickness</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.LineCap.html">LineCap</a></td>
-        <td><span class="parametername">cap</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>thickness</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>cap</code> <a class="xref" href="Lime.LineCap.html">LineCap</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawLine_" data-uid="Lime.IRenderer.DrawLine*"></a>
-  <h4 id="Lime_IRenderer_DrawLine_System_Single_System_Single_System_Single_System_Single_Lime_Color4_System_Single_Lime_LineCap_" data-uid="Lime.IRenderer.DrawLine(System.Single,System.Single,System.Single,System.Single,Lime.Color4,System.Single,Lime.LineCap)">DrawLine(Single, Single, Single, Single, Color4, Single, LineCap)</h4>
+
+  <h3 id="Lime_IRenderer_DrawLine_System_Single_System_Single_System_Single_System_Single_Lime_Color4_System_Single_Lime_LineCap_" data-uid="Lime.IRenderer.DrawLine(System.Single,System.Single,System.Single,System.Single,Lime.Color4,System.Single,Lime.LineCap)">
+  DrawLine(float, float, float, float, Color4, float, LineCap)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void DrawLine(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1F, LineCap cap = LineCap.Butt)</code></pre>
+    <pre><code class="lang-csharp hljs">void DrawLine(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">thickness</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.LineCap.html">LineCap</a></td>
-        <td><span class="parametername">cap</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>thickness</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>cap</code> <a class="xref" href="Lime.LineCap.html">LineCap</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawQuadrangle_" data-uid="Lime.IRenderer.DrawQuadrangle*"></a>
-  <h4 id="Lime_IRenderer_DrawQuadrangle_Lime_Quadrangle_Lime_Color4_" data-uid="Lime.IRenderer.DrawQuadrangle(Lime.Quadrangle,Lime.Color4)">DrawQuadrangle(Quadrangle, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawQuadrangle_Lime_Quadrangle_Lime_Color4_" data-uid="Lime.IRenderer.DrawQuadrangle(Lime.Quadrangle,Lime.Color4)">
+  DrawQuadrangle(Quadrangle, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Draws the quadrangle</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawQuadrangle(Quadrangle q, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></td>
-        <td><span class="parametername">q</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>q</code> <a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawQuadrangleOutline_" data-uid="Lime.IRenderer.DrawQuadrangleOutline*"></a>
-  <h4 id="Lime_IRenderer_DrawQuadrangleOutline_Lime_Quadrangle_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawQuadrangleOutline(Lime.Quadrangle,Lime.Color4,System.Single)">DrawQuadrangleOutline(Quadrangle, Color4, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawQuadrangleOutline_Lime_Quadrangle_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawQuadrangleOutline(Lime.Quadrangle,Lime.Color4,System.Single)">
+  DrawQuadrangleOutline(Quadrangle, Color4, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Draws the quadrangle outline inscribed within the given bounds.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void DrawQuadrangleOutline(Quadrangle q, Color4 color, float thickness = 1F)</code></pre>
+    <pre><code class="lang-csharp hljs">void DrawQuadrangleOutline(Quadrangle q, Color4 color, float thickness = 1)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></td>
-        <td><span class="parametername">q</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">thickness</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>q</code> <a class="xref" href="Lime.Quadrangle.html">Quadrangle</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>thickness</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawRect_" data-uid="Lime.IRenderer.DrawRect*"></a>
-  <h4 id="Lime_IRenderer_DrawRect_Lime_Vector2_Lime_Vector2_Lime_Color4_" data-uid="Lime.IRenderer.DrawRect(Lime.Vector2,Lime.Vector2,Lime.Color4)">DrawRect(Vector2, Vector2, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawRect_Lime_Vector2_Lime_Vector2_Lime_Color4_" data-uid="Lime.IRenderer.DrawRect(Lime.Vector2,Lime.Vector2,Lime.Color4)">
+  DrawRect(Vector2, Vector2, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawRect(Vector2 a, Vector2 b, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawRect_" data-uid="Lime.IRenderer.DrawRect*"></a>
-  <h4 id="Lime_IRenderer_DrawRect_System_Single_System_Single_System_Single_System_Single_Lime_Color4_" data-uid="Lime.IRenderer.DrawRect(System.Single,System.Single,System.Single,System.Single,Lime.Color4)">DrawRect(Single, Single, Single, Single, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawRect_System_Single_System_Single_System_Single_System_Single_Lime_Color4_" data-uid="Lime.IRenderer.DrawRect(System.Single,System.Single,System.Single,System.Single,Lime.Color4)">
+  DrawRect(float, float, float, float, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawRect(float x0, float y0, float x1, float y1, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawRectOutline_" data-uid="Lime.IRenderer.DrawRectOutline*"></a>
-  <h4 id="Lime_IRenderer_DrawRectOutline_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawRectOutline(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single)">DrawRectOutline(Vector2, Vector2, Color4, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawRectOutline_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawRectOutline(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single)">
+  DrawRectOutline(Vector2, Vector2, Color4, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Draws the rectangle outline inscribed within the given bounds.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void DrawRectOutline(Vector2 a, Vector2 b, Color4 color, float thickness = 1F)</code></pre>
+    <pre><code class="lang-csharp hljs">void DrawRectOutline(Vector2 a, Vector2 b, Color4 color, float thickness = 1)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">thickness</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>thickness</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawRectOutline_" data-uid="Lime.IRenderer.DrawRectOutline*"></a>
-  <h4 id="Lime_IRenderer_DrawRectOutline_System_Single_System_Single_System_Single_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawRectOutline(System.Single,System.Single,System.Single,System.Single,Lime.Color4,System.Single)">DrawRectOutline(Single, Single, Single, Single, Color4, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawRectOutline_System_Single_System_Single_System_Single_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawRectOutline(System.Single,System.Single,System.Single,System.Single,Lime.Color4,System.Single)">
+  DrawRectOutline(float, float, float, float, Color4, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"><p>Draws the rectangle outline inscribed within the given bounds.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void DrawRectOutline(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1F)</code></pre>
+    <pre><code class="lang-csharp hljs">void DrawRectOutline(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">thickness</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>thickness</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawRound_" data-uid="Lime.IRenderer.DrawRound*"></a>
-  <h4 id="Lime_IRenderer_DrawRound_Lime_Vector2_System_Single_System_Int32_Lime_Color4_" data-uid="Lime.IRenderer.DrawRound(Lime.Vector2,System.Single,System.Int32,Lime.Color4)">DrawRound(Vector2, Single, Int32, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawRound_Lime_Vector2_System_Single_System_Int32_Lime_Color4_" data-uid="Lime.IRenderer.DrawRound(Lime.Vector2,System.Single,System.Int32,Lime.Color4)">
+  DrawRound(Vector2, float, int, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawRound(Vector2 center, float radius, int numSegments, Color4 color)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">center</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radius</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numSegments</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>center</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>radius</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>numSegments</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawRound_" data-uid="Lime.IRenderer.DrawRound*"></a>
-  <h4 id="Lime_IRenderer_DrawRound_Lime_Vector2_System_Single_System_Int32_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawRound(Lime.Vector2,System.Single,System.Int32,Lime.Color4,Lime.Color4)">DrawRound(Vector2, Single, Int32, Color4, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawRound_Lime_Vector2_System_Single_System_Int32_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawRound(Lime.Vector2,System.Single,System.Int32,Lime.Color4,Lime.Color4)">
+  DrawRound(Vector2, float, int, Color4, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawRound(Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">center</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">radius</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numSegments</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">innerColor</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">outerColor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>center</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>radius</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>numSegments</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>innerColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>outerColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawSprite_" data-uid="Lime.IRenderer.DrawSprite*"></a>
-  <h4 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</h4>
+
+  <h3 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">
+  DrawSprite(ITexture, Color4, Vector2, Vector2, Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv0</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv1</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawSprite_" data-uid="Lime.IRenderer.DrawSprite*"></a>
-  <h4 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2)</h4>
+
+  <h3 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">
+  DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv0</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv1</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawSprite_" data-uid="Lime.IRenderer.DrawSprite*"></a>
-  <h4 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</h4>
+
+  <h3 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">
+  DrawSprite(ITexture, ITexture, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t2</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv0t1</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv1t1</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv0t2</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv1t2</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawSprite_" data-uid="Lime.IRenderer.DrawSprite*"></a>
-  <h4 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">DrawSprite(ITexture, ITexture, IMaterial, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)</h4>
+
+  <h3 id="Lime_IRenderer_DrawSprite_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Color4_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.DrawSprite(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Color4,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)">
+  DrawSprite(ITexture, ITexture, IMaterial, Color4, Vector2, Vector2, Vector2, Vector2, Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
-        <td><span class="parametername">material</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">size</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv0t2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">uv1t2</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>material</code> <a class="xref" href="Lime.IMaterial.html">IMaterial</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv0t1</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv1t1</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv0t2</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>uv1t2</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTextLine_" data-uid="Lime.IRenderer.DrawTextLine*"></a>
-  <h4 id="Lime_IRenderer_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_Lime_Color4_System_Single_System_Int32_System_Int32_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(Lime.IFont,Lime.Vector2,System.String,Lime.Color4,System.Single,System.Int32,System.Int32,System.Single)">DrawTextLine(IFont, Vector2, String, Color4, Single, Int32, Int32, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_Lime_Color4_System_Single_System_Int32_System_Int32_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(Lime.IFont,Lime.Vector2,System.String,Lime.Color4,System.Single,System.Int32,System.Int32,System.Single)">
+  DrawTextLine(IFont, Vector2, string, Color4, float, int, int, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.IFont.html">IFont</a></td>
-        <td><span class="parametername">font</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">start</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">length</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>font</code> <a class="xref" href="Lime.IFont.html">IFont</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>start</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTextLine_" data-uid="Lime.IRenderer.DrawTextLine*"></a>
-  <h4 id="Lime_IRenderer_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_Lime_Color4_System_Single_System_Int32_System_Int32_System_Single_Lime_GlyphList_System_Action_System_Int32_Lime_Vector2_Lime_Vector2__System_Int32_" data-uid="Lime.IRenderer.DrawTextLine(Lime.IFont,Lime.Vector2,System.String,Lime.Color4,System.Single,System.Int32,System.Int32,System.Single,Lime.GlyphList,System.Action{System.Int32,Lime.Vector2,Lime.Vector2},System.Int32)">DrawTextLine(IFont, Vector2, String, Color4, Single, Int32, Int32, Single, GlyphList, Action&lt;Int32, Vector2, Vector2&gt;, Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_Lime_Color4_System_Single_System_Int32_System_Int32_System_Single_Lime_GlyphList_System_Action_System_Int32_Lime_Vector2_Lime_Vector2__System_Int32_" data-uid="Lime.IRenderer.DrawTextLine(Lime.IFont,Lime.Vector2,System.String,Lime.Color4,System.Single,System.Int32,System.Int32,System.Single,Lime.GlyphList,System.Action{System.Int32,Lime.Vector2,Lime.Vector2},System.Int32)">
+  DrawTextLine(IFont, Vector2, string, Color4, float, int, int, float, GlyphList, Action&lt;int, Vector2, Vector2&gt;, int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing, GlyphList list, Action&lt;int, Vector2, Vector2&gt; onDrawChar = null, int tag = -1)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.IFont.html">IFont</a></td>
-        <td><span class="parametername">font</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">start</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">length</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.GlyphList.html">GlyphList</a></td>
-        <td><span class="parametername">list</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Action</span>&lt;<span class="xref">System.Int32</span>, <a class="xref" href="Lime.Vector2.html">Vector2</a>, <a class="xref" href="Lime.Vector2.html">Vector2</a>&gt;</td>
-        <td><span class="parametername">onDrawChar</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>font</code> <a class="xref" href="Lime.IFont.html">IFont</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>start</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>list</code> <a class="xref" href="Lime.GlyphList.html">GlyphList</a></dt>
+    <dd></dd>
+    <dt><code>onDrawChar</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-3">Action</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, <a class="xref" href="Lime.Vector2.html">Vector2</a>, <a class="xref" href="Lime.Vector2.html">Vector2</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>tag</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTextLine_" data-uid="Lime.IRenderer.DrawTextLine*"></a>
-  <h4 id="Lime_IRenderer_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(Lime.IFont,Lime.Vector2,System.String,System.Single,Lime.Color4,System.Single)">DrawTextLine(IFont, Vector2, String, Single, Color4, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTextLine_Lime_IFont_Lime_Vector2_System_String_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(Lime.IFont,Lime.Vector2,System.String,System.Single,Lime.Color4,System.Single)">
+  DrawTextLine(IFont, Vector2, string, float, Color4, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTextLine(IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.IFont.html">IFont</a></td>
-        <td><span class="parametername">font</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>font</code> <a class="xref" href="Lime.IFont.html">IFont</a></dt>
+    <dd></dd>
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTextLine_" data-uid="Lime.IRenderer.DrawTextLine*"></a>
-  <h4 id="Lime_IRenderer_DrawTextLine_Lime_Vector2_System_String_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(Lime.Vector2,System.String,System.Single,Lime.Color4,System.Single)">DrawTextLine(Vector2, String, Single, Color4, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTextLine_Lime_Vector2_System_String_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(Lime.Vector2,System.String,System.Single,Lime.Color4,System.Single)">
+  DrawTextLine(Vector2, string, float, Color4, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTextLine(Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>position</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTextLine_" data-uid="Lime.IRenderer.DrawTextLine*"></a>
-  <h4 id="Lime_IRenderer_DrawTextLine_System_Single_System_Single_System_String_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(System.Single,System.Single,System.String,System.Single,Lime.Color4,System.Single)">DrawTextLine(Single, Single, String, Single, Color4, Single)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTextLine_System_Single_System_Single_System_String_System_Single_Lime_Color4_System_Single_" data-uid="Lime.IRenderer.DrawTextLine(System.Single,System.Single,System.String,System.Single,Lime.Color4,System.Single)">
+  DrawTextLine(float, float, string, float, Color4, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTextLine(float x, float y, string text, float fontHeight, Color4 color, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">color</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleFan_" data-uid="Lime.IRenderer.DrawTriangleFan*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)">DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)">
+  DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">RenderBatch&lt;Vertex&gt; DrawTriangleFan(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)</code></pre>
+    <pre><code class="lang-csharp hljs">RenderBatchRegion DrawTriangleFan(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
-        <td><span class="parametername">material</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.RenderBatch-1.html">RenderBatch</a>&lt;<a class="xref" href="Lime.Vertex.html">Vertex</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>material</code> <a class="xref" href="Lime.IMaterial.html">IMaterial</a></dt>
+    <dd></dd>
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.RenderBatchRegion.html">RenderBatchRegion</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleFan_" data-uid="Lime.IRenderer.DrawTriangleFan*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.Vertex[],System.Int32)">DrawTriangleFan(ITexture, ITexture, Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.Vertex[],System.Int32)">
+  DrawTriangleFan(ITexture, ITexture, Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTriangleFan(ITexture texture1, ITexture texture2, Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleFan_" data-uid="Lime.IRenderer.DrawTriangleFan*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleFan_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.ITexture,Lime.Vertex[],System.Int32)">DrawTriangleFan(ITexture, Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleFan_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.ITexture,Lime.Vertex[],System.Int32)">
+  DrawTriangleFan(ITexture, Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTriangleFan(ITexture texture1, Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleFan_" data-uid="Lime.IRenderer.DrawTriangleFan*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleFan_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.Vertex[],System.Int32)">DrawTriangleFan(Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleFan_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleFan(Lime.Vertex[],System.Int32)">
+  DrawTriangleFan(Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTriangleFan(Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleStrip_" data-uid="Lime.IRenderer.DrawTriangleStrip*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)">DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)">
+  DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">RenderBatch&lt;Vertex&gt; DrawTriangleStrip(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)</code></pre>
+    <pre><code class="lang-csharp hljs">RenderBatchRegion DrawTriangleStrip(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
-        <td><span class="parametername">material</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.RenderBatch-1.html">RenderBatch</a>&lt;<a class="xref" href="Lime.Vertex.html">Vertex</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>material</code> <a class="xref" href="Lime.IMaterial.html">IMaterial</a></dt>
+    <dd></dd>
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.RenderBatchRegion.html">RenderBatchRegion</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleStrip_" data-uid="Lime.IRenderer.DrawTriangleStrip*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.Vertex[],System.Int32)">DrawTriangleStrip(ITexture, ITexture, Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.Vertex[],System.Int32)">
+  DrawTriangleStrip(ITexture, ITexture, Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTriangleStrip(ITexture texture1, ITexture texture2, Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture2</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>texture2</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleStrip_" data-uid="Lime.IRenderer.DrawTriangleStrip*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleStrip_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.ITexture,Lime.Vertex[],System.Int32)">DrawTriangleStrip(ITexture, Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleStrip_Lime_ITexture_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.ITexture,Lime.Vertex[],System.Int32)">
+  DrawTriangleStrip(ITexture, Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTriangleStrip(ITexture texture1, Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
-        <td><span class="parametername">texture1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture1</code> <a class="xref" href="Lime.ITexture.html">ITexture</a></dt>
+    <dd></dd>
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawTriangleStrip_" data-uid="Lime.IRenderer.DrawTriangleStrip*"></a>
-  <h4 id="Lime_IRenderer_DrawTriangleStrip_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.Vertex[],System.Int32)">DrawTriangleStrip(Vertex[], Int32)</h4>
+
+  <h3 id="Lime_IRenderer_DrawTriangleStrip_Lime_Vertex___System_Int32_" data-uid="Lime.IRenderer.DrawTriangleStrip(Lime.Vertex[],System.Int32)">
+  DrawTriangleStrip(Vertex[], int)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawTriangleStrip(Vertex[] vertices, int numVertices)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vertex.html">Vertex</a>[]</td>
-        <td><span class="parametername">vertices</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">numVertices</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>vertices</code> <a class="xref" href="Lime.Vertex.html">Vertex</a>[]</dt>
+    <dd></dd>
+    <dt><code>numVertices</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawVerticalGradientRect_" data-uid="Lime.IRenderer.DrawVerticalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawVerticalGradientRect_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Color4)">DrawVerticalGradientRect(Vector2, Vector2, Color4, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawVerticalGradientRect_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Color4)">
+  DrawVerticalGradientRect(Vector2, Vector2, Color4, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawVerticalGradientRect(Vector2 a, Vector2 b, Color4 topColor, Color4 bottomColor)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">topColor</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">bottomColor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>topColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>bottomColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawVerticalGradientRect_" data-uid="Lime.IRenderer.DrawVerticalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawVerticalGradientRect_Lime_Vector2_Lime_Vector2_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(Lime.Vector2,Lime.Vector2,Lime.ColorGradient)">DrawVerticalGradientRect(Vector2, Vector2, ColorGradient)</h4>
+
+  <h3 id="Lime_IRenderer_DrawVerticalGradientRect_Lime_Vector2_Lime_Vector2_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(Lime.Vector2,Lime.Vector2,Lime.ColorGradient)">
+  DrawVerticalGradientRect(Vector2, Vector2, ColorGradient)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawVerticalGradientRect(Vector2 a, Vector2 b, ColorGradient gradient)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">a</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">b</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></td>
-        <td><span class="parametername">gradient</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>a</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>b</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>gradient</code> <a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawVerticalGradientRect_" data-uid="Lime.IRenderer.DrawVerticalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawVerticalGradientRect_System_Single_System_Single_System_Single_System_Single_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)">DrawVerticalGradientRect(Single, Single, Single, Single, Color4, Color4)</h4>
+
+  <h3 id="Lime_IRenderer_DrawVerticalGradientRect_System_Single_System_Single_System_Single_System_Single_Lime_Color4_Lime_Color4_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)">
+  DrawVerticalGradientRect(float, float, float, float, Color4, Color4)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawVerticalGradientRect(float x0, float y0, float x1, float y1, Color4 topColor, Color4 bottomColor)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">topColor</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Color4.html">Color4</a></td>
-        <td><span class="parametername">bottomColor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>topColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+    <dt><code>bottomColor</code> <a class="xref" href="Lime.Color4.html">Color4</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_DrawVerticalGradientRect_" data-uid="Lime.IRenderer.DrawVerticalGradientRect*"></a>
-  <h4 id="Lime_IRenderer_DrawVerticalGradientRect_System_Single_System_Single_System_Single_System_Single_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(System.Single,System.Single,System.Single,System.Single,Lime.ColorGradient)">DrawVerticalGradientRect(Single, Single, Single, Single, ColorGradient)</h4>
+
+  <h3 id="Lime_IRenderer_DrawVerticalGradientRect_System_Single_System_Single_System_Single_System_Single_Lime_ColorGradient_" data-uid="Lime.IRenderer.DrawVerticalGradientRect(System.Single,System.Single,System.Single,System.Single,Lime.ColorGradient)">
+  DrawVerticalGradientRect(float, float, float, float, ColorGradient)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void DrawVerticalGradientRect(float x0, float y0, float x1, float y1, ColorGradient gradient)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y0</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">x1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">y1</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></td>
-        <td><span class="parametername">gradient</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>x0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y0</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>x1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>y1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>gradient</code> <a class="xref" href="Lime.ColorGradient.html">ColorGradient</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_EndFrame_" data-uid="Lime.IRenderer.EndFrame*"></a>
-  <h4 id="Lime_IRenderer_EndFrame" data-uid="Lime.IRenderer.EndFrame">EndFrame()</h4>
+
+  <h3 id="Lime_IRenderer_EndFrame" data-uid="Lime.IRenderer.EndFrame">
+  EndFrame()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void EndFrame()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_FixupWVP_" data-uid="Lime.IRenderer.FixupWVP*"></a>
-  <h4 id="Lime_IRenderer_FixupWVP_Lime_Matrix44_" data-uid="Lime.IRenderer.FixupWVP(Lime.Matrix44)">FixupWVP(Matrix44)</h4>
+
+  <h3 id="Lime_IRenderer_FixupWVP_Lime_Matrix44_" data-uid="Lime.IRenderer.FixupWVP(Lime.Matrix44)">
+  FixupWVP(Matrix44)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Matrix44 FixupWVP(Matrix44 projection)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td><span class="parametername">projection</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Matrix44.html">Matrix44</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>projection</code> <a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Matrix44.html">Matrix44</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_Flush_" data-uid="Lime.IRenderer.Flush*"></a>
-  <h4 id="Lime_IRenderer_Flush" data-uid="Lime.IRenderer.Flush">Flush()</h4>
+
+  <h3 id="Lime_IRenderer_Flush" data-uid="Lime.IRenderer.Flush">
+  Flush()
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void Flush()</code></pre>
   </div>
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_MeasureTextLine_" data-uid="Lime.IRenderer.MeasureTextLine*"></a>
-  <h4 id="Lime_IRenderer_MeasureTextLine_Lime_IFont_System_String_System_Single_System_Int32_System_Int32_System_Single_" data-uid="Lime.IRenderer.MeasureTextLine(Lime.IFont,System.String,System.Single,System.Int32,System.Int32,System.Single)">MeasureTextLine(IFont, String, Single, Int32, Int32, Single)</h4>
+
+  <h3 id="Lime_IRenderer_MeasureTextLine_Lime_IFont_System_String_System_Single_System_Int32_System_Int32_System_Single_" data-uid="Lime.IRenderer.MeasureTextLine(Lime.IFont,System.String,System.Single,System.Int32,System.Int32,System.Single)">
+  MeasureTextLine(IFont, string, float, int, int, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Vector2 MeasureTextLine(IFont font, string text, float fontHeight, int start, int length, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.IFont.html">IFont</a></td>
-        <td><span class="parametername">font</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">start</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">length</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>font</code> <a class="xref" href="Lime.IFont.html">IFont</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>start</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_MeasureTextLine_" data-uid="Lime.IRenderer.MeasureTextLine*"></a>
-  <h4 id="Lime_IRenderer_MeasureTextLine_Lime_IFont_System_String_System_Single_System_Single_" data-uid="Lime.IRenderer.MeasureTextLine(Lime.IFont,System.String,System.Single,System.Single)">MeasureTextLine(IFont, String, Single, Single)</h4>
+
+  <h3 id="Lime_IRenderer_MeasureTextLine_Lime_IFont_System_String_System_Single_System_Single_" data-uid="Lime.IRenderer.MeasureTextLine(Lime.IFont,System.String,System.Single,System.Single)">
+  MeasureTextLine(IFont, string, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Vector2 MeasureTextLine(IFont font, string text, float fontHeight, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.IFont.html">IFont</a></td>
-        <td><span class="parametername">font</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>font</code> <a class="xref" href="Lime.IFont.html">IFont</a></dt>
+    <dd></dd>
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_MeasureTextLine_" data-uid="Lime.IRenderer.MeasureTextLine*"></a>
-  <h4 id="Lime_IRenderer_MeasureTextLine_System_String_System_Single_System_Single_" data-uid="Lime.IRenderer.MeasureTextLine(System.String,System.Single,System.Single)">MeasureTextLine(String, Single, Single)</h4>
+
+  <h3 id="Lime_IRenderer_MeasureTextLine_System_String_System_Single_System_Single_" data-uid="Lime.IRenderer.MeasureTextLine(System.String,System.Single,System.Single)">
+  MeasureTextLine(string, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">Vector2 MeasureTextLine(string text, float fontHeight, float letterSpacing)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">text</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fontHeight</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">letterSpacing</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>fontHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>letterSpacing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_SetOrthogonalProjection_" data-uid="Lime.IRenderer.SetOrthogonalProjection*"></a>
-  <h4 id="Lime_IRenderer_SetOrthogonalProjection_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.SetOrthogonalProjection(Lime.Vector2,Lime.Vector2)">SetOrthogonalProjection(Vector2, Vector2)</h4>
+
+  <h3 id="Lime_IRenderer_SetOrthogonalProjection_Lime_Vector2_Lime_Vector2_" data-uid="Lime.IRenderer.SetOrthogonalProjection(Lime.Vector2,Lime.Vector2)">
+  SetOrthogonalProjection(Vector2, Vector2)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void SetOrthogonalProjection(Vector2 leftTop, Vector2 rightBottom)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">leftTop</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">rightBottom</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>leftTop</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>rightBottom</code> <a class="xref" href="Lime.Vector2.html">Vector2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Lime_IRenderer_SetOrthogonalProjection_" data-uid="Lime.IRenderer.SetOrthogonalProjection*"></a>
-  <h4 id="Lime_IRenderer_SetOrthogonalProjection_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.IRenderer.SetOrthogonalProjection(System.Single,System.Single,System.Single,System.Single)">SetOrthogonalProjection(Single, Single, Single, Single)</h4>
+
+  <h3 id="Lime_IRenderer_SetOrthogonalProjection_System_Single_System_Single_System_Single_System_Single_" data-uid="Lime.IRenderer.SetOrthogonalProjection(System.Single,System.Single,System.Single,System.Single)">
+  SetOrthogonalProjection(float, float, float, float)
+  
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void SetOrthogonalProjection(float left, float top, float right, float bottom)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">left</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">top</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">right</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">bottom</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>left</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>top</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>right</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>bottom</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                </ul>
-              </div>
-              <div class="toggle-mode">
-                <div class="icon">
-                  <i aria-hidden="true">☀</i>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="switch-style">
-                  <span class="slider round"></span>
-                </label>
-                <div class="icon">
-                  <i aria-hidden="true">☾</i>
-                </div>
-              </div>
-          
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <h5>In This Article</h5>
-              <div></div>
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <div class="pull-left">
-              GameForest 2020
-              
-            </div>
-            <div class="toggle-mode pull-right visible-sm visible-xs">
-              <div class="icon">
-                <i aria-hidden="true">☀</i>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="switch-style-m">
-                <span class="slider round"></span>
-              </label>
-              <div class="icon">
-                <i aria-hidden="true">☾</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
-      </footer>    </div>
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
-    <script>
-        mermaid.initialize({
-            startOnLoad: false
-        });
-        mermaid.init(undefined, ".lang-mermaid");
-    </script>  </body>
+    </footer>
+  </body>
 </html>
