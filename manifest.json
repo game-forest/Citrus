@@ -12548,6 +12548,69 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/changelog/1.0.0.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/changelog/1.0.0.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/changelog/2.0.0.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/changelog/2.0.0.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/changelog/2.1.0.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/changelog/2.1.0.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/changelog/2.2.0.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/changelog/2.2.0.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/changelog/master.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/changelog/master.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/changelog/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/changelog/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/changelog/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/citrus_project/citrus_project_configuration.md",
       "output": {
         ".html": {

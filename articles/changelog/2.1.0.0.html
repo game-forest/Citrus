@@ -1,0 +1,498 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Version 2.1.0.0 | Citrus Engine </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Version 2.1.0.0 | Citrus Engine ">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="version-2100">Version 2.1.0.0</h1>
+
+<details>
+<summary>Legend</summary>
+<h1 id="legend">Legend</h1>
+<ul>
+<li>📝 jira issue link</li>
+<li>🧪 gitlab merge request link</li>
+<li>🐞 bug fix</li>
+<li>⚡️ improve performance</li>
+<li>✨ new feature</li>
+<li>💥 breaking change</li>
+<li>♻️ refactoring</li>
+<li>🧹 chore</li>
+<li>✅ test</li>
+</ul>
+</details>
+<!-- trunk_commit:7a2507f2cf52affb84056c21290d6f6a57314fff -->
+<h3 id="-fix-mathf-normal-methods"><a href="https://jira.game-forest.com:2000/browse/CIT-2513">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1030">🧪</a> Fix Mathf Normal Methods</h3>
+<ul>
+<li>🐞(lime): Fix <code>Mathf.NormalRandom()</code> methods returning <code>-Infinity</code> with about <code>1 / 2^24</code> probability due to <code>Log(RandomFloat())</code></li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:4c9a553150be95da992edb29649e2c38d24bbc47 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/4c9a553150be95da992edb29649e2c38d24bbc47">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2513">📝</a> cosmetics</li>
+</ul>
+<!-- sub_commit:4154f494ec4fdf0b89c6607558fb05d4b044ead6 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/4154f494ec4fdf0b89c6607558fb05d4b044ead6">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2513">📝</a> Fix <code>Mathf.NormalRandom()</code> methods returning <code>-Infinity</code> due to <code>Log(0)</code></li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:c0ba8146ca9d4d39470ac6531f4ef939528856b9 -->
+<h3 id="-update-tangerine-minimized-dock-windows"><a href="https://jira.game-forest.com:2000/browse/CIT-2508">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1028">🧪</a> Update Tangerine minimized dock windows</h3>
+<ul>
+<li>✨(lime): New window option <code>UpdateMinimized</code>. Windows only. Window will be updating even in minimized state.</li>
+<li>🐞(tangerine): Make all tangerine windows update when minimized so console and remote scripting won't accumulate unprocessed messages in a large bulk.</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:a1040344bb4ab4ea0ad9f027e59436dac3fd239e -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/a1040344bb4ab4ea0ad9f027e59436dac3fd239e">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2508">📝</a> Update Tangerine dock windows while in minimized state</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:dce757d94ca58150e80c56fedae9868cf84f3a32 -->
+<h3 id="-fix-memory-leaks-during-tangerine-console-operation"><a href="https://jira.game-forest.com:2000/browse/CIT-2509">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1029">🧪</a> Fix memory leaks during tangerine console operation</h3>
+<ul>
+<li>🐞(tangerine): Memory leak in console panel.</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:ec197febbddbf94123a40a2e8458d7763bcfbbd1 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/ec197febbddbf94123a40a2e8458d7763bcfbbd1">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2509">📝</a> Fix memory leaks during Tangerine console operation</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:f24ef87ec4614068c4146129a492fde521c0417c -->
+<h3 id="-fix-sprite-pool-get-texture-dead-lock"><a href="https://jira.game-forest.com:2000/browse/CIT-2506">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1026">🧪</a> Fix sprite pool get texture dead lock</h3>
+<ul>
+<li>🐞(lime): fix dead lock in <code>SpritePool.GetSprite()</code></li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:659cdf3fa8672417c8cd24e0bfd09eed2e369ecd -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/659cdf3fa8672417c8cd24e0bfd09eed2e369ecd">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2506">📝</a> Fix dead lock in method <code>SpritePool.GetSprite(string)</code></li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:7baaca84c8a061fb9404eabb645c0dfefd14cd93 -->
+<h3 id="-revert-android-separate-game-thread"><a href="https://jira.game-forest.com:2000/browse/CIT-2499">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1024">🧪</a> Revert android separate game thread</h3>
+<ul>
+<li>♻️(lime): don't separate UI and game threads</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:c7ea75aba963cc75932235ad46f6f4daccd6ac84 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/c7ea75aba963cc75932235ad46f6f4daccd6ac84">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2499">📝</a> Fix after rebase</li>
+</ul>
+<!-- sub_commit:6d8b7d4ed729300a9f9de4c78476e90a24322ba9 -->
+<ul>
+<li><p><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/6d8b7d4ed729300a9f9de4c78476e90a24322ba9">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2499">📝</a> Revert &quot;Merge branch 'CIT/2451_AndroidSeparatedGameThread' into 'master'&quot;</p>
+<p>This reverts commit 3119e42dea02c6f463feca018d6dd46170283d3b, reversing
+changes made to d49327adaa676e52b5a862bb076d97b28a82a02c.</p>
+</li>
+</ul>
+<!-- sub_commit:2d8f18051f63b46d141e1c4279f9d1ed5ab58898 -->
+<ul>
+<li><p><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/2d8f18051f63b46d141e1c4279f9d1ed5ab58898">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2499">📝</a> Revert &quot;Merge branch 'CIT/2486_GameThreadFix' into 'master'&quot;</p>
+<p>This reverts commit 0c4139d1f721e115e96af7668253e7c0629e4feb, reversing
+changes made to f3560120a912f41dd484893e6f03465d93064b20.</p>
+</li>
+</ul>
+<!-- sub_commit:c79bbb0214a4611e245d821030f050ef596c41fa -->
+<ul>
+<li><p><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/c79bbb0214a4611e245d821030f050ef596c41fa">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2499">📝</a> Revert &quot;Merge branch 'CIT/2483_fix_android_initialization' into 'master'&quot;</p>
+<p>This reverts commit 65c56ad4e64e9f969f59189a716a402cceaf33b7, reversing
+changes made to 0c4139d1f721e115e96af7668253e7c0629e4feb.</p>
+</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:65637a56949fb8e2926bce8f1e5f8add8ae132bb -->
+<h3 id="-ninegrid-texture-scale"><a href="https://jira.game-forest.com:2000/browse/CIT-2498">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1023">🧪</a> Ninegrid texture scale</h3>
+<ul>
+<li>✨(lime): Add <code>NineGrid.TextureScale</code> setting. It gives more flexibility instead of hard dependence on the physical Sprite size in pixels.</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:667740f45d1f0062e0aec3580456dc62daea91be -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/667740f45d1f0062e0aec3580456dc62daea91be">🧪</a>Update yuzu generated binary deserializers and cloners. Update lime v6 schema.</li>
+</ul>
+<!-- sub_commit:644b7506c01f307f4f820e0e413161a463717b18 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/644b7506c01f307f4f820e0e413161a463717b18">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2498">📝</a>🍊 Fix dragging nine grid offsets in tangerine when texture scale is not 1.0f</li>
+</ul>
+<!-- sub_commit:a47590e9ed22cc5e1f9f298f00e2de0e36352d8f -->
+<ul>
+<li><p><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/a47590e9ed22cc5e1f9f298f00e2de0e36352d8f">🧪</a><a href="https://jira.game-forest.com:2000/browse/CTI-2498">📝</a>🍋 Add <code>NineGrid.TextureScale</code> setting</p>
+<ul>
+<li>Gives more flexibility instead of hard dependence on the physical Sprite size in pixels</li>
+<li>HitTest can be broken for non-default <code>TextureScale</code>, not tested</li>
+<li>Shift-drag in Tangerine is broken for non-default <code>TextureScale</code> (FIXME)</li>
+</ul>
+<p>temp</p>
+</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:96b1fcba11c255cea752415b7f49d8d7600d0602 -->
+<h3 id="-fix-disabled-editbox"><a href="https://jira.game-forest.com:2000/browse/CIT-2497">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1022">🧪</a> Fix disabled editbox</h3>
+<ul>
+<li>🐞(lime): Edit boxes with <code>Enabled == false</code> were processing <code>Delete</code>, <code>DeleteWord*</code>, <code>Submit</code>, <code>Cancel</code>, <code>Cut</code>, <code>Paste</code> commands.</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:e4eaef45aff7ae8f2609ddf7973e841929f374eb -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/e4eaef45aff7ae8f2609ddf7973e841929f374eb">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2497">📝</a>[Editor] Fix editor with <code>Enabled == false</code> processing <code>Delete</code>, <code>DeleteWord*</code>, <code>Submit</code>, <code>Cancel</code>, <code>Cut</code>, <code>Paste</code> commands.</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:89a2688d6206cdff997b89ba00a40afb804a19a4 -->
+<h3 id="-caret-fix"><a href="https://jira.game-forest.com:2000/browse/CIT-2496">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1021">🧪</a> Caret fix</h3>
+<ul>
+<li>🐞(lime): Caret position in edit box was slightly off in Tangerine and very noticeably off when using SDF fonts.</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:7469e472a3ea4f816947f285d02caf210e2e45f2 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/7469e472a3ea4f816947f285d02caf210e2e45f2">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2496">📝</a>[Editor] Fix caret position for text input fields with SDF fonts</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:b252add87afa7f2201b2977f3745c7c2b8ee274a -->
+<h3 id="-high-dpi"><a href="https://jira.game-forest.com:2000/browse/CIT-2426">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/971">🧪</a> High dpi</h3>
+<ul>
+<li>✨: Improve high DPI support on windows.</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:e4877994195324e3e32b0cac73637480493781e7 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/e4877994195324e3e32b0cac73637480493781e7">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2426">📝</a> Fix position of <code>SystemShellContextMenu</code> in tangerine for high dpi; Fix drop down list menu position when mouse transform is not identity.</li>
+</ul>
+<!-- sub_commit:803692a51414d6b2c4040fb48fa7e7236bfaee14 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/803692a51414d6b2c4040fb48fa7e7236bfaee14">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2426">📝</a>🍋 Round logical sizes to physical pixels</li>
+</ul>
+<!-- sub_commit:a3088b50a085d8e1120af1f473825c1b8dea979f -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/a3088b50a085d8e1120af1f473825c1b8dea979f">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2426">📝</a>🍋 Fix <code>LocalToDesktop</code> to return logical coordinates; Fix windows implementation of Menu</li>
+</ul>
+<!-- sub_commit:b3330725f704dade8cabbe9b975022c9675bcc26 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/b3330725f704dade8cabbe9b975022c9675bcc26">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2426">📝</a>🍋 Fix appearance on high dpi displays</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:86a408c92932bcddb261f716f7a48671de7a0cbd -->
+<h3 id="-fixup"><a href="https://jira.game-forest.com:2000/browse/CIT-2494">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1020">🧪</a> Fixup</h3>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:199d94468913ee67c7ddf126d9cad224b6dc1b89 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/199d94468913ee67c7ddf126d9cad224b6dc1b89">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2494">📝</a> Fix Tangerine cant open EmptyProject</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:7bfd5e6c80676c77c014f77de4c4f2fc28dd90e3 -->
+<h3 id="-refactor-op-processors"><a href="https://jira.game-forest.com:2000/browse/CIT-2368">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/909">🧪</a> Refactor op processors</h3>
+<ul>
+<li>♻️(tangerine, lime): Refactor operations and exception handling:</li>
+<li>🐞(Docs): Catch up with updated docfx.</li>
+<li>doc(tangerine): Write internal documentation for operation history.</li>
+<li>rename <code>DocumentHistory</code> -&gt; <code>OperationHistory</code></li>
+<li>extract <code>OperationProcessors</code> class and make it non static</li>
+<li>extract operations glued together into separate files</li>
+<li>split operation processors into categories</li>
+<li>change namespace Tangerine.UI.Timeline -&gt; Tangerine.Timeline</li>
+<li>rename <code>Lime.Exception</code> -&gt;  <code>Lime.LimeExcepion</code></li>
+<li>change signature of <code>LimeException</code>: no longer accepts arguments for formatting message, but accepts innerException instead</li>
+<li>improve exception handling in Tangerine</li>
+<li>move operations into different tangerine projects depending on which project using which operation</li>
+<li>rename <code>Panel</code> -&gt; <code>DockingPanel</code></li>
+<li>get rid of <code>Pane</code> in identifiers as a suffix. Use <code>Panel</code> instead.</li>
+<li>rename <code>RollPane</code> -&gt; <code>SceneTreePanel</code></li>
+<li>Move all operations in Tangerine into <code>Tangerine.Operations</code> namespace</li>
+<li>Basic classes for implementing new operations and processors reside in <code>Tangerine.Core</code></li>
+<li>Keep all separate operation processors in <code>Tangerine.Processors</code></li>
+</ul>
+<p>So now when instantiating <code>OperationHistory</code> you must pass instance of <code>OperationProcessors</code> to the constructor. Meaning now you can create multiple operation histories which process different sets of operations.</p>
+<p>When creating new operation history you most likely would like to add operations from <code>Tangerine.Core.OperationProvider.NaturalOperationProcessorTypes</code> which provide most basic operations on properties and collections.</p>
+<p>Remember that order in operations processors matters. If operation can be processed by multiple processors it will be done in order in which processors where added.</p>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:49fc184dc1a9eeeffd25d69e1af7e474df089d55 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/49fc184dc1a9eeeffd25d69e1af7e474df089d55">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2368">📝</a> Update docs</li>
+</ul>
+<!-- sub_commit:ea0a328cd83e429bace540ffdd2674960c06d5b7 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/ea0a328cd83e429bace540ffdd2674960c06d5b7">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2368">📝</a> Rebuild RemoteScripting.dll</li>
+</ul>
+<!-- sub_commit:df73fe5dc6a8c61b614193b8e9fa66c795419976 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/df73fe5dc6a8c61b614193b8e9fa66c795419976">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2368">📝</a> Rename Lime.Exception -&gt; Lime.LimeException to resolve ambiguity with System.Exception</li>
+</ul>
+<!-- sub_commit:272b041a90dcf87a74bb0e7c8a0a9763e5e7d383 -->
+<ul>
+<li><p><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/272b041a90dcf87a74bb0e7c8a0a9763e5e7d383">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2368">📝</a>🍊 Refactor operations in tangerine:</p>
+<ul>
+<li>extract operations glued together into separate files</li>
+<li>change namespace Tangerine.UI.Timeline -&gt; Tangerine.Timeline</li>
+<li>move operations into different tangerine projects depending on which project using which operation</li>
+<li>rename <code>Panel</code> -&gt; <code>DockingPanel</code></li>
+<li>get rid of <code>Pane</code> in identifiers as a suffix. Use <code>Panel</code> instead.</li>
+<li>rename <code>RollPane</code> -&gt; <code>SceneTreePanel</code></li>
+</ul>
+</li>
+</ul>
+<!-- sub_commit:a15c8cf2b6e0ecc25a9a5d0a486e0594d1fe4cdf -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/a15c8cf2b6e0ecc25a9a5d0a486e0594d1fe4cdf">🧪</a>🍊🍋 Improve exception handling. Add innerException argument to Lime.Exception.</li>
+</ul>
+<!-- sub_commit:94d6c9da8572ea5dd0546936c9c8ac2c6026e3b1 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/94d6c9da8572ea5dd0546936c9c8ac2c6026e3b1">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2368">📝</a> Rename DocumentHistory =&gt; OperationHistory. Extract OperationProcessors class and make it non static. Split operation processors into categories</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:23122e45aa286f650bddb14a50ac339f1e713be7 -->
+<h3 id="-model-attachment-fix"><a href="https://jira.game-forest.com:2000/browse/CIT-2489">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1019">🧪</a> Model attachment fix</h3>
+<ul>
+<li>✨(lime, orange, tangerine): Add <code>MergeMeshes</code> option to model 3d attachment; Don't merge meshes by default</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:f2c1a2625a2fb27114e5a32c5220660c2c52bcfa -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/f2c1a2625a2fb27114e5a32c5220660c2c52bcfa">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2489">📝</a> Update <code>TangerineAssetBundle</code> version; <code>SyncModels.StageVersion</code></li>
+</ul>
+<!-- sub_commit:0013bd325b558c30e9629544fa07a733a6a786bb -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/0013bd325b558c30e9629544fa07a733a6a786bb">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2489">📝</a> Update persistence schema</li>
+</ul>
+<!-- sub_commit:173b5de8e8bbbb1b78fd8ce480cfb6e4b75e34d1 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/173b5de8e8bbbb1b78fd8ce480cfb6e4b75e34d1">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2489">📝</a> Add <code>Model3DAttachment.MergeMeshes</code> property</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:1e99cd8f2fd7a0f4e1304499bf178f716698e8c1 -->
+<h3 id="-fix-restore-original-size"><a href="https://jira.game-forest.com:2000/browse/CIT-2492">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1018">🧪</a> Fix restore original size</h3>
+<ul>
+<li>🐞(tangerine): <code>Restore Original Size</code> for image widgets not working</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:b0f92254e6d9a58f1290ee928d84c21099c7f322 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/b0f92254e6d9a58f1290ee928d84c21099c7f322">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2492">📝</a>[Sprite] Invalidate sprite in tangerine when it's texture's source image changes on disk</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:d46267aeb14c2fb45f1e319a2e29d39e40f7c3b2 -->
+<h3 id="-optimize-animation-component"><a href="https://jira.game-forest.com:2000/browse/CIT-2469">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1004">🧪</a> Optimize animation component</h3>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:d9e1bd90d1223d590b1d11c8342c947e34198b6a -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/d9e1bd90d1223d590b1d11c8342c947e34198b6a">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2469">📝</a> Move animation events from component to AnimationSystem</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:2655c965da6bcb921a31fd35bbcb0d84cc83da86 -->
+<h3 id="-swappy-target-framerate"><a href="https://jira.game-forest.com:2000/browse/CIT-2474">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1011">🧪</a> Swappy target framerate</h3>
+<ul>
+<li>✨(lime, android): add ability to limit the frame rate</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:fc37f71ebea494805efa3f060f697f253a0636c6 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/fc37f71ebea494805efa3f060f697f253a0636c6">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2474">📝</a> Remove <code>Window.SetTargetFps</code>; Add <code>ApplicationOptions.TargetFrameRate</code></li>
+</ul>
+<!-- sub_commit:b7b3f1c056886b5169a21f66d40db05b5ba29a37 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/b7b3f1c056886b5169a21f66d40db05b5ba29a37">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2474">📝</a>🍋 Add support for Swappy frame pacing library on Android</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:ba6694c5e0cc2c973d7ad7b9999561bf63479819 -->
+<h3 id="-avoid-extra-copy-of-texture"><a href="https://jira.game-forest.com:2000/browse/CIT-2485">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1014">🧪</a> Avoid extra copy of texture</h3>
+<ul>
+<li>⚡(lime): optimize texture loading for performance and GC pressure</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:d618c5f291bab5a60a0a484a65500938a420912d -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/d618c5f291bab5a60a0a484a65500938a420912d">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2485">📝</a>🍋 Avoid extra copy of texture by considering file's extension</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:65c56ad4e64e9f969f59189a716a402cceaf33b7 -->
+<h3 id="-fix-android-initialization"><a href="https://jira.game-forest.com:2000/browse/CIT-2483">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1017">🧪</a> Fix android initialization</h3>
+<ul>
+<li>🐞(lime, android): Fix application initialization</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:46a32f00e81a17fc1a0bd5a7af8ff11d0cd90f90 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/46a32f00e81a17fc1a0bd5a7af8ff11d0cd90f90">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2483">📝</a> Fix initialization on android</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:0c4139d1f721e115e96af7668253e7c0629e4feb -->
+<h3 id="-gamethreadfix"><a href="https://jira.game-forest.com:2000/browse/CIT-2486">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1015">🧪</a> GameThreadFix</h3>
+<ul>
+<li>🐞(lime): don't invoke callbacks queued by <code>Application.InvokeOnGameThread</code> when the game thread is paused, instead defer these calls until the thread is resumed</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:71c0b25ee6a1ac8f5dfddd8fa78d7adbdcdf0fd2 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/71c0b25ee6a1ac8f5dfddd8fa78d7adbdcdf0fd2">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2486">📝</a> Invoke user game events only if game thread isn't paused</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:f3560120a912f41dd484893e6f03465d93064b20 -->
+<h3 id="-update-android-sdk"><a href="https://jira.game-forest.com:2000/browse/CIT-2484">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1013">🧪</a> Update android sdk</h3>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:e98c1837fa1b921d5fc3ebdab9e049880a181f12 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/e98c1837fa1b921d5fc3ebdab9e049880a181f12">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2484">📝</a>[Yuzu]🍋 Update Android <code>TargetFrameworkVersion</code> to 13.0</li>
+</ul>
+</details>
+<hr>
+<!-- trunk_commit:56f892b4cf5540c5ad2ed07a996fbd9786b00657 -->
+<h3 id="-legacy-particle-linkage"><a href="https://jira.game-forest.com:2000/browse/CIT-2476">📝</a><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/merge_requests/1005">🧪</a> Legacy particle linkage</h3>
+<ul>
+<li>✨(lime): add <code>ParticlesLinkage.RootLegacy</code> for compatibility reason and engine upgrade simplification</li>
+</ul>
+<details>
+<summary>Commits:</summary>
+<!-- sub_commit:f120402ab549bfe0fd38c217ebfaafad0c3b9dfe -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/f120402ab549bfe0fd38c217ebfaafad0c3b9dfe">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2476">📝</a> Update Lime persistence schema</li>
+</ul>
+<!-- sub_commit:bfce1710204babec95f2dc5c9fbef36611c4bc90 -->
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/commit/bfce1710204babec95f2dc5c9fbef36611c4bc90">🧪</a><a href="https://jira.game-forest.com:2000/browse/CIT-2476">📝</a>🍋 Add <code>ParticlesLinkage.RootLegacy</code></li>
+</ul>
+</details>
+<hr>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          GameForest 2024
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
